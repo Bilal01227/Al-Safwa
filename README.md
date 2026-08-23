@@ -31,7 +31,8 @@ src/
     seo.ts               ← per-page title / meta / canonical
     data/
       types.ts           ← Product / Brand / Category / RentalItem / Service models
-      products.ts        ← product records + fetch adapters (swap for Supabase later)
+      products/          ← one file per division (power-tools, safety, motors…)
+        index.ts         ← aggregates records + fetch adapters (swap for Supabase later)
       brands.ts
       categories.ts
       rental.ts
@@ -75,11 +76,33 @@ All unverified details live in **`src/lib/business.ts`** (search `TODO(verify)`)
 WhatsApp · Phone call · Request a Quote · Request Rental Quote · Request Repair ·
 Request Maintenance — every product, rental item and service page wires into these.
 
-## Deployment (GitHub Pages)
+## Deployment (GitHub Pages) — push to go live
 
-1. `npm run build`
-2. Publish `dist/` (e.g. `gh-pages` branch or GitHub Actions).
-3. Hash routing means deep links such as `#/products` work without server rewrites.
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) builds and publishes
+the site automatically on every push to `main`.
+
+**One-time setup:**
+
+1. Create a new (empty) repository on GitHub, e.g. `al-safwa-trading`.
+2. In your project folder:
+
+   ```bash
+   git init
+   git add .
+   git commit -m "Al Safwa Trading website MVP"
+   git branch -M main
+   git remote add origin https://github.com/YOUR-USERNAME/al-safwa-trading.git
+   git push -u origin main
+   ```
+
+3. On GitHub: **Settings → Pages → Build and deployment → Source: "GitHub Actions"**.
+4. After the workflow finishes, the site is live at
+   `https://YOUR-USERNAME.github.io/al-safwa-trading` (hash routing means
+   `#/products`, `#/rental`, etc. work with no server rewrites).
+5. Later, add your own domain: **Pages → Custom domain**.
+
+**Adding inventory:** see [`INVENTORY_GUIDE.md`](./INVENTORY_GUIDE.md) — paste a
+record into the matching division file and push; the site updates automatically.
 
 ## Security
 
