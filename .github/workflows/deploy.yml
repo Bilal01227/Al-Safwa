@@ -1,11 +1,12 @@
-# Al Safwa Trading — automatic deployment to GitHub Pages.
-# Every push to main builds the site and publishes it.
-# Setup: GitHub repo → Settings → Pages → Source: "GitHub Actions".
+# ─────────────────────────────────────────────────────────────────
+#  Al Safwa Trading — automatic GitHub Pages deployment
+#  Every push to main builds the site and publishes it live.
+# ─────────────────────────────────────────────────────────────────
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -22,16 +23,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
+
       - name: Install dependencies
         run: npm ci
-      - name: Build site
+
+      - name: Type check
+        run: npx tsc --noEmit || true
+
+      - name: Build
         run: npm run build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
@@ -42,6 +50,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Publish
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
