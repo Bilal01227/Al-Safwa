@@ -1,0 +1,252 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Barlow", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --color-coal: #10141a;
+  --color-ink: #171b20;
+  --color-steel: #1e242c;
+  --color-steel-2: #29323c;
+  --color-steel-3: #3a4550;
+  --color-mist: #a9b1b9;
+  --color-smoke: #5d6873;
+  --color-paper: #f0f1ed;
+  --color-paper-2: #e4e6e0;
+  --color-card: #f8f9f6;
+  --color-safety: #e8491a;
+  --color-safety-deep: #c23a12;
+  --color-caution: #f0a50e;
+  --color-wa: #1da851;
+  --color-wa-deep: #178a42;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--color-steel-3) var(--color-coal);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-safety);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-safety);
+  outline-offset: 2px;
+}
+
+/* ── Film-grain overlay ─────────────────────────────────────── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ── Hazard stripes ─────────────────────────────────────────── */
+.hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-caution) 0 14px,
+    var(--color-ink) 14px 28px
+  );
+}
+.hazard-thin {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--color-caution) 0 8px,
+    transparent 8px 16px
+  );
+}
+
+/* ── Blueprint grids ────────────────────────────────────────── */
+.grid-light {
+  background-image: linear-gradient(rgba(23, 27, 32, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 27, 32, 0.055) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.grid-dark {
+  background-image: linear-gradient(rgba(240, 241, 237, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 241, 237, 0.05) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+/* ── Hard-shadow industrial cards ───────────────────────────── */
+.card-hard {
+  background: var(--color-card);
+  border: 1px solid rgba(23, 27, 32, 0.16);
+  box-shadow: 4px 4px 0 rgba(23, 27, 32, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hard:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 rgba(23, 27, 32, 0.16);
+  border-color: rgba(23, 27, 32, 0.55);
+}
+
+.card-steel {
+  background: var(--color-steel);
+  border: 1px solid var(--color-steel-3);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.card-steel:hover {
+  border-color: var(--color-safety);
+  transform: translateY(-3px);
+}
+
+/* ── Nav underline slide ────────────────────────────────────── */
+.navlink {
+  position: relative;
+}
+.navlink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  height: 2px;
+  width: 100%;
+  background: var(--color-safety);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s ease;
+}
+.navlink:hover::after,
+.navlink.active::after {
+  transform: scaleX(1);
+}
+
+/* ── Scroll reveal ──────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Brand marquee ──────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── WhatsApp pulse ring ────────────────────────────────────── */
+@keyframes waping {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+.wa-ping::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-wa);
+  animation: waping 2.2s ease-out infinite;
+  z-index: -1;
+}
+
+/* ── Skeleton loading ───────────────────────────────────────── */
+.skel {
+  background: linear-gradient(90deg, #e3e5df 25%, #eff0eb 50%, #e3e5df 75%);
+  background-size: 200% 100%;
+  animation: skel 1.3s linear infinite;
+}
+@keyframes skel {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ── Forms ──────────────────────────────────────────────────── */
+.flabel {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-smoke);
+  margin-bottom: 6px;
+}
+.field {
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(23, 27, 32, 0.22);
+  padding: 0.68rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--color-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.field::placeholder {
+  color: #9aa3ab;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-safety);
+  box-shadow: 0 0 0 3px rgba(232, 73, 26, 0.16);
+}
+.field-err {
+  border-color: #c0392b;
+}
+
+/* ── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  .wa-ping::before {
+    animation: none !important;
+    display: none;
+  }
+  .skel {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

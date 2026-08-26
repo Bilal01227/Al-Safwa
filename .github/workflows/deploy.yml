@@ -1,0 +1,74 @@
+# ─────────────────────────────────────────────────────────────────
+#  Al Safwa Trading — production deployment to GitHub Pages
+#  Custom domain: alsafwaoman.com (kept by public/CNAME)
+#
+#  WHAT THIS DEPLOYS: the compiled Vite/React build (dist/),
+#  NEVER the repository root / README.
+#
+#  IMPORTANT — this is the ONLY workflow that may exist in
+#  .github/workflows/. Any Jekyll workflow (jekyll-gh-pages.yml
+#  or similar) must be DELETED from the repository, and
+#  Settings → Pages → Source must be set to "GitHub Actions"
+#  (not "Deploy from a branch"), otherwise GitHub's built-in
+#  pages-build-deployment job serves the README instead.
+# ─────────────────────────────────────────────────────────────────
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Build production app (base "/" for alsafwaoman.com)
+        run: npm run build -- --base=/
+
+      - name: Verify build output (fail loudly, never deploy README)
+        run: |
+          echo "── dist/ contents ──────────────────────────"
+          ls -la dist
+          echo "────────────────────────────────────────────"
+          test -f dist/index.html || { echo "ERROR: dist/index.html missing — build did not run"; exit 1; }
+          test -d dist/assets    || { echo "ERROR: dist/assets missing — JS/CSS not built"; exit 1; }
+          grep -q '<div id="root">' dist/index.html || { echo "ERROR: dist/index.html is not the Vite app shell"; exit 1; }
+          echo "Build output verified: compiled Vite/React application."
+
+      - name: Upload production artifact (dist/ ONLY)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
