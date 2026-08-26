@@ -1,13 +1,16 @@
 # ─────────────────────────────────────────────────────────────────
 #  Al Safwa Trading — production deployment to GitHub Pages
+#  Custom domain: alsafwaoman.com (kept by public/CNAME)
 #
-#  Pipeline:  source → npm ci → vite build (--base=/) → dist/ → Pages
-#  The artifact uploaded is ONLY the compiled application (dist/):
-#  index.html + assets/ (JS, CSS, images). The repository root and
-#  README.md are never deployed.
+#  WHAT THIS DEPLOYS: the compiled Vite/React build (dist/),
+#  NEVER the repository root / README.
 #
-#  Custom domain: https://alsafwaoman.com (see public/CNAME)
-#  REQUIRED repo setting: Settings → Pages → Source → "GitHub Actions"
+#  IMPORTANT — this is the ONLY workflow that may exist in
+#  .github/workflows/. Any Jekyll workflow (jekyll-gh-pages.yml
+#  or similar) must be DELETED from the repository, and
+#  Settings → Pages → Source must be set to "GitHub Actions"
+#  (not "Deploy from a branch"), otherwise GitHub's built-in
+#  pages-build-deployment job serves the README instead.
 # ─────────────────────────────────────────────────────────────────
 name: Deploy to GitHub Pages
 
@@ -29,32 +32,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
       - name: Install dependencies
-        run: npm ci
+        run: npm ci || npm install
 
-      - name: Build production bundle
-        # --base=/ is required for the custom domain https://alsafwaoman.com/
+      - name: Build production app (base "/" for alsafwaoman.com)
         run: npm run build -- --base=/
 
-      - name: Verify build output (must contain index.html + assets/)
+      - name: Verify build output (fail loudly, never deploy README)
         run: |
-          test -f dist/index.html || (echo "BUILD FAILED: dist/index.html missing" && exit 1)
-          test -d dist/assets || (echo "BUILD FAILED: dist/assets missing" && exit 1)
-          ls -la dist dist/assets
+          echo "── dist/ contents ──────────────────────────"
+          ls -la dist
+          echo "────────────────────────────────────────────"
+          test -f dist/index.html || { echo "ERROR: dist/index.html missing — build did not run"; exit 1; }
+          test -d dist/assets    || { echo "ERROR: dist/assets missing — JS/CSS not built"; exit 1; }
+          grep -q '<div id="root">' dist/index.html || { echo "ERROR: dist/index.html is not the Vite app shell"; exit 1; }
+          echo "Build output verified: compiled Vite/React application."
 
-      - name: Upload Pages artifact (dist/ only)
+      - name: Upload production artifact (dist/ ONLY)
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
