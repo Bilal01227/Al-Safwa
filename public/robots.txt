@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap: add the verified production domain before launch, e.g.
-# Sitemap: https://YOUR-VERIFIED-DOMAIN/sitemap.xml
+Sitemap: https://alsafwaoman.com/sitemap.xml
