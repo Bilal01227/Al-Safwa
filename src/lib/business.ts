@@ -13,11 +13,9 @@ export const business = {
   descriptor:
     "Industrial equipment supply, rental, repair and maintenance for contractors, workshops and industrial businesses across Oman.",
 
-  // TODO(verify): official Oman business phone
-  phone: "+968 9200 0000",
-
-  // TODO(verify): official WhatsApp number — digits only, with country code
-  whatsappNumber: "96892000000",
+  // Official Oman business phone / WhatsApp
+  phone: "+968 90167345",
+  whatsappNumber: "96890167345",
 
   // TODO(verify): official business email
   email: "sales@alsafwa-trading.example",
