@@ -89,7 +89,7 @@ export function ProductsPage() {
       />
 
       {/* Filter toolbar */}
-      <div className="sticky top-16 z-30 border-b border-ink/10 bg-paper/95 py-4 backdrop-blur">
+      <div className="border-b border-ink/10 bg-paper/95 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 sm:px-6">
           <label className="relative min-w-[220px] flex-1">
             <IcSearch width={16} height={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-smoke" />
@@ -337,104 +337,77 @@ export function ProductDetailPage() {
                 </div>
                 <p className="mt-5 max-w-xl leading-relaxed text-smoke">{p.shortDescription}</p>
               </Reveal>
-
-              <Reveal delay={100}>
-                <div className="mt-6 border border-ink/15 bg-card p-5">
-                  {showPrice ? (
-                    <div className="flex items-baseline justify-between">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-smoke">Verified price</span>
-                      <span className="font-display text-4xl font-semibold">
-                        {p.currency} {p.price}
-                      </span>
-                    </div>
-                  ) : (
-                    <>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-smoke">Pricing</span>
-                        <span className="font-display text-3xl font-semibold uppercase">Quoted per order</span>
-                      </div>
-                      <p className="mt-2 text-sm text-smoke">
-                        No public price is shown until it is verified. Request a quote for current {p.currency} pricing
-                        and availability from {business.name}.
+              <Reveal delay={80}>
+                <div className="mt-8 border-y border-ink/10 py-6">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Price</p>
+                      <p className="mt-1 font-display text-2xl font-semibold uppercase">
+                        {showPrice ? `${p.currency} ${p.price}` : "Price on request"}
                       </p>
-                    </>
-                  )}
+                    </div>
+                    <div>
+                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Availability</p>
+                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability}</p>
+                    </div>
+                  </div>
                 </div>
               </Reveal>
-
-              <Reveal delay={160}>
-                <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                  <CTAButton href={waHref(waProductMessage(p))} variant="wa" className="h-12">
-                    <IcWhatsApp /> WhatsApp
+              <Reveal delay={120}>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <CTAButton href={waHref(waProductMessage(p))} variant="wa">
+                    <IcWhatsApp /> Request on WhatsApp
                   </CTAButton>
-                  <CTAButton
-                    to={`/request-quote?product=${encodeURIComponent(p.productName)}&model=${encodeURIComponent(p.modelNumber)}`}
-                    variant="safety"
-                    className="h-12"
-                  >
-                    Request quote
-                  </CTAButton>
-                  <CTAButton href={telHref} variant="outlineDark" className="h-12">
-                    <IcPhone /> Call
+                  <CTAButton to={`/request-quote?product=${encodeURIComponent(p.slug)}`} variant="safety">
+                    Request a quote <IcArrowRight width={16} height={16} />
                   </CTAButton>
                 </div>
-                <p className="mt-5 border-l-2 border-caution pl-3 font-mono text-[10.5px] uppercase leading-relaxed tracking-[0.08em] text-smoke">
-                  Information compiled from {p.sourceCompany.toLowerCase()}. Confirm final specifications with{" "}
-                  {business.name} before ordering.
-                </p>
               </Reveal>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Specifications */}
-          <Reveal>
-            <div className="mt-14">
-              <h2 className="mb-4 flex items-center gap-3 font-display text-3xl font-semibold uppercase">
-                <span className="h-2.5 w-2.5 bg-safety" /> Technical specifications
-              </h2>
-              <div className="overflow-x-auto border border-ink/15 bg-card">
-                <table className="w-full min-w-[480px] text-left">
-                  <tbody>
-                    {Object.entries(p.specifications).map(([k, v], i) => (
-                      <tr key={k} className={i % 2 ? "bg-paper-2/50" : ""}>
-                        <th className="w-1/3 border-r border-ink/10 px-5 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-smoke">
-                          {k}
-                        </th>
-                        <td className="px-5 py-3.5 font-medium text-ink">{v}</td>
-                      </tr>
-                    ))}
-                    <tr className="border-t border-ink/10">
-                      <th className="border-r border-ink/10 px-5 py-3.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-smoke">
-                        Availability
-                      </th>
-                      <td className="px-5 py-3.5">
-                        <AvailabilityBadge text={p.availability} />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+      <section className="bg-paper-2 py-14">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <SectionHead eyebrow="Product details" title="Specifications" />
+          <div className="mt-8 grid gap-6 lg:grid-cols-3">
+            <div className="border border-ink/10 bg-card p-6 lg:col-span-2">
+              <p className="leading-relaxed text-smoke">{p.description}</p>
+              {p.specifications?.length ? (
+                <dl className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
+                  {p.specifications.map(([label, value]) => (
+                    <div key={label} className="grid gap-2 py-4 sm:grid-cols-3">
+                      <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-smoke">{label}</dt>
+                      <dd className="sm:col-span-2">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
             </div>
-          </Reveal>
+            <aside className="border border-ink/10 bg-card p-6">
+              <MonoTag tone="neutral">Supply note</MonoTag>
+              <h2 className="mt-4 font-display text-2xl font-semibold uppercase">Need a bulk quantity?</h2>
+              <p className="mt-2 text-smoke">Send the model, quantity and delivery requirement. We will confirm commercial terms and lead time.</p>
+              <CTAButton className="mt-6 w-full" to={`/request-quote?product=${encodeURIComponent(p.slug)}`} variant="dark">
+                Request a quote
+              </CTAButton>
+              <CTAButton className="mt-3 w-full" href={telHref()} variant="light">
+                <IcPhone /> Call us
+              </CTAButton>
+            </aside>
+          </div>
         </div>
       </section>
 
       {related.length > 0 && (
-        <section className="border-t border-ink/10 bg-paper-2/50 py-16">
+        <section className="bg-paper py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <SectionHead
-              index="+"
-              title="Related Products"
-              right={
-                <CTAButton to="/products" variant="outlineDark" className="h-10 px-4 text-[15px]">
-                  Full catalogue <IcArrowRight width={16} height={16} />
-                </CTAButton>
-              }
-            />
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-              {related.map((r, i) => (
-                <Reveal key={r.slug} delay={i * 70}>
-                  <ProductCard product={r} index={i} />
+            <SectionHead eyebrow="Related products" title="You may also need" />
+            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {related.map((item, i) => (
+                <Reveal key={item.slug} delay={(i % 4) * 60}>
+                  <ProductCard product={item} index={i} />
                 </Reveal>
               ))}
             </div>
