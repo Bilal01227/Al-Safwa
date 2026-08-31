@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { HashRouter, Routes, Route, useLocation, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Link } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import { ProductsPage, ProductDetailPage } from "./pages/Products";
@@ -29,24 +29,22 @@ function NotFound() {
 }
 
 export default function App() {
-  return <HashRouter>
+  return <BrowserRouter>
     <ScrollToTop />
     <Routes>
       <Route path="/admin/*" element={<Admin />} />
-      <Route path="*" element={<Layout><Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/products/:slug" element={<ProductDetailPage />} />
-        <Route path="/brands" element={<BrandsPage />} />
-        <Route path="/brands/:brand" element={<BrandDetailPage />} />
-        <Route path="/rental" element={<RentalPage />} />
-        <Route path="/services" element={<ServicesPage />} />
-        <Route path="/services/:slug" element={<ServiceDetailPage />} />
-        <Route path="/repair" element={<RepairPage />} />
-        <Route path="/request-quote" element={<RequestQuotePage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes></Layout>} />
+      <Route path="/" element={<Layout><Home /></Layout>} />
+      <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
+      <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
+      <Route path="/brands" element={<Layout><BrandsPage /></Layout>} />
+      <Route path="/brands/:brand" element={<Layout><BrandDetailPage /></Layout>} />
+      <Route path="/rental" element={<Layout><RentalPage /></Layout>} />
+      <Route path="/services" element={<Layout><ServicesPage /></Layout>} />
+      <Route path="/services/:slug" element={<Layout><ServiceDetailPage /></Layout>} />
+      <Route path="/repair" element={<Layout><RepairPage /></Layout>} />
+      <Route path="/request-quote" element={<Layout><RequestQuotePage /></Layout>} />
+      <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
-  </HashRouter>;
+  </BrowserRouter>;
 }
