@@ -1,4 +1,5 @@
 import type { Brand } from "../types";
+import "./brands-home.css";
 
 /**
  * Brands supplied by Al Safwa Trading.
