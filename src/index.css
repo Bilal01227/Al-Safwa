@@ -223,6 +223,64 @@ body::after {
   border-color: #c0392b;
 }
 
+/* ── Admin-only dark mode ───────────────────────────────────── */
+.admin-portal {
+  min-height: 100vh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.admin-portal.admin-dark {
+  background: #0d1117;
+  color: #e6e9ed;
+}
+.admin-dark .admin-surface {
+  background: #151b23 !important;
+  border-color: #303844 !important;
+  color: #e6e9ed;
+}
+.admin-dark .admin-control,
+.admin-dark .admin-theme-toggle {
+  background: #151b23;
+  border-color: #3b4552;
+  color: #e6e9ed;
+}
+.admin-dark .admin-control:hover,
+.admin-dark .admin-theme-toggle:hover {
+  border-color: var(--color-safety);
+}
+.admin-dark .field {
+  background: #0f141b;
+  border-color: #3b4552;
+  color: #e6e9ed;
+}
+.admin-dark .field::placeholder {
+  color: #7f8a97;
+}
+.admin-dark .admin-muted {
+  color: #9aa5b1;
+}
+.admin-dark .border-black\/10,
+.admin-dark .border-black\/20 {
+  border-color: #303844 !important;
+}
+.admin-dark .bg-white {
+  background: #151b23 !important;
+}
+.admin-dark .bg-paper,
+.admin-dark .bg-paper-2 {
+  background: #11171f !important;
+}
+.admin-dark .text-ink {
+  color: #e6e9ed !important;
+}
+.admin-dark .text-smoke {
+  color: #9aa5b1 !important;
+}
+.admin-dark input[type="checkbox"] {
+  accent-color: var(--color-safety);
+}
+
 /* ── Reduced motion ─────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html {
