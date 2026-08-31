@@ -35,7 +35,7 @@ jobs:
         env:
           VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
           VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_1e9TK7R2CSPP7190qxO2jg_9emlfwgy
-        run: npm run build -- --base=/Al-Safwa/
+        run: npm run build -- --base=/
 
       - name: Prepare GitHub Pages SPA fallback
         run: cp dist/index.html dist/404.html
