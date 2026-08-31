@@ -12,12 +12,11 @@ export interface Product {
   brand: string;
   brandSlug: string;
   modelNumber: string;
-  category: string; // category slug
+  category: string;
   subcategory: string;
   shortDescription: string;
   specifications: Record<string, string>;
   imageUrl: string;
-  /** Internal research provenance — never shown as an endorsement. */
   sourceUrl: string;
   sourceCompany: string;
   availability: string;
@@ -35,6 +34,8 @@ export interface Brand {
   monogram: string;
   divisions: string[];
   about: string;
+  /** Relative path in the Supabase brand-images bucket. */
+  logoPath?: string;
 }
 
 export interface Category {
