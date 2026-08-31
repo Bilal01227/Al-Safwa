@@ -1,0 +1,9 @@
+/* Live brand-logo override for the homepage Featured Brands cards.
+   Keeps the existing card UI/spacing while showing uploaded Supabase logos. */
+a[href="/brands/makita"] > div:first-child > span.grid {
+  font-size: 0;
+  background-image: url("https://wdxjlfxepiqvklxlxwkw.supabase.co/storage/v1/object/public/brand-images/brands/e9397bd2-0e39-4d72-aca3-41dd2cb41849.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
