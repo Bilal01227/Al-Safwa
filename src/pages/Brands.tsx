@@ -9,6 +9,7 @@ import type { Product } from "../lib/types";
 import { Reveal, CTAButton, PageHeader, SectionHead } from "../components/kit";
 import { IcArrowUpRight, IcWhatsApp, IcPhone, IcArrowRight } from "../components/icons";
 import ProductCard from "../components/ProductCard";
+import BrandLogo from "../components/BrandLogo";
 import { Link } from "react-router-dom";
 
 export function BrandsPage() {
@@ -24,7 +25,7 @@ export function BrandsPage() {
       <PageHeader
         crumb="Brands"
         title="Brands We Supply"
-        lead="Thirteen brands across power tools, safety equipment and motors & pumps. Text monograms are used in place of third-party logos."
+        lead="Thirteen brands across power tools, safety equipment and motors & pumps. Brand logos are loaded from the live catalogue when available."
         ghost="BR"
       />
       <section className="grid-light bg-paper py-16 md:py-20">
@@ -36,8 +37,8 @@ export function BrandsPage() {
                 <Reveal key={b.slug} delay={(i % 3) * 80}>
                   <Link to={`/brands/${b.slug}`} className="card-hard group flex h-full flex-col p-6">
                     <div className="flex items-start justify-between">
-                      <span className="grid h-14 w-14 place-items-center bg-ink font-display text-2xl font-semibold text-safety transition-colors group-hover:bg-safety group-hover:text-paper">
-                        {b.monogram}
+                      <span className="grid h-14 w-14 place-items-center overflow-hidden bg-ink font-display text-2xl font-semibold text-safety transition-colors group-hover:bg-safety group-hover:text-paper">
+                        <BrandLogo slug={b.slug} name={b.name} monogram={b.monogram} />
                       </span>
                       <span className="border border-ink/15 bg-paper-2 px-2 py-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-smoke">
                         {count > 0 ? `${count} listed` : "On request"}
@@ -117,8 +118,8 @@ export function BrandDetailPage() {
           </p>
           <div className="flex flex-wrap items-end justify-between gap-8">
             <div className="flex items-center gap-6">
-              <span className="grid h-20 w-20 shrink-0 place-items-center border border-steel-3 bg-steel font-display text-4xl font-semibold text-safety md:h-24 md:w-24">
-                {brand.monogram}
+              <span className="grid h-20 w-20 shrink-0 place-items-center overflow-hidden border border-steel-3 bg-steel font-display text-4xl font-semibold text-safety md:h-24 md:w-24">
+                <BrandLogo slug={brand.slug} name={brand.name} monogram={brand.monogram} />
               </span>
               <div>
                 <h1 className="font-display text-5xl font-semibold uppercase leading-none text-paper md:text-7xl">
