@@ -1,104 +1,58 @@
 import type { Brand } from "../types";
+import { supabase } from "../supabase";
 import "./brands-home.css";
 
-/**
- * Brands supplied by Al Safwa Trading.
- * Text-based monograms are used intentionally: third-party logos are not
- * reproduced unless usage is verified as legally appropriate.
- */
+/** Local fallback while the live Supabase catalogue is loading/unavailable. */
 export const brands: Brand[] = [
-  {
-    slug: "bosch",
-    name: "Bosch",
-    monogram: "BO",
-    divisions: ["Power Tools"],
-    about: "German manufacturer of professional power tools, accessories and measuring equipment.",
-  },
-  {
-    slug: "makita",
-    name: "Makita",
-    monogram: "MA",
-    divisions: ["Power Tools"],
-    about: "Japanese manufacturer of professional-grade corded and cordless power tools.",
-  },
-  {
-    slug: "dewalt",
-    name: "DeWalt",
-    monogram: "DW",
-    divisions: ["Power Tools"],
-    about: "American brand of professional power tools and accessories for heavy trade use.",
-  },
-  {
-    slug: "stanley",
-    name: "Stanley",
-    monogram: "ST",
-    divisions: ["Power Tools", "Hand Tools"],
-    about: "American manufacturer of hand tools and professional trade equipment.",
-  },
-  {
-    slug: "dongcheng",
-    name: "Dongcheng",
-    monogram: "DC",
-    divisions: ["Power Tools"],
-    about: "Chinese manufacturer of professional power tools widely used across Gulf construction sites.",
-  },
-  {
-    slug: "ongco",
-    name: "Ongco",
-    monogram: "ON",
-    divisions: ["Power Tools"],
-    about: "Tools and equipment brand supplied across Oman and regional Gulf markets.",
-  },
-  {
-    slug: "dalilee",
-    name: "Dalilee",
-    monogram: "DA",
-    divisions: ["Power Tools"],
-    about: "Equipment brand supplying drilling and construction tools to regional distributors.",
-  },
-  {
-    slug: "ideal",
-    name: "Ideal",
-    monogram: "ID",
-    divisions: ["Power Tools", "Hand Tools"],
-    about: "Trade tools brand covering hand tools and power tools for workshops and contractors.",
-  },
-  {
-    slug: "imperial",
-    name: "Imperial",
-    monogram: "IM",
-    divisions: ["Safety Equipment"],
-    about: "Supplier of personal protective equipment and industrial safety products.",
-  },
-  {
-    slug: "haible-export",
-    name: "Haible Export",
-    monogram: "HE",
-    divisions: ["Safety Equipment"],
-    about: "Export house supplying safety equipment and industrial consumables.",
-  },
-  {
-    slug: "american-safety",
-    name: "American Safety",
-    monogram: "AS",
-    divisions: ["Safety Equipment"],
-    about: "Brand of personal protective equipment for industrial and construction environments.",
-  },
-  {
-    slug: "prakash",
-    name: "Prakash",
-    monogram: "PR",
-    divisions: ["Safety Equipment"],
-    about: "Manufacturer of safety footwear and protective workwear.",
-  },
-  {
-    slug: "texmo",
-    name: "Texmo",
-    monogram: "TX",
-    divisions: ["Motors & Pumps"],
-    about: "Indian manufacturer of electric motors and water pumps for industrial and agricultural use.",
-  },
+  { slug: "bosch", name: "Bosch", monogram: "BO", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
+  { slug: "makita", name: "Makita", monogram: "MA", divisions: ["Power Tools"], about: "Japanese manufacturer of professional-grade corded and cordless power tools." },
+  { slug: "dewalt", name: "DeWalt", monogram: "DW", divisions: ["Power Tools"], about: "American brand of professional power tools and accessories for heavy trade use." },
+  { slug: "stanley", name: "Stanley", monogram: "ST", divisions: ["Power Tools", "Hand Tools"], about: "American manufacturer of hand tools and professional trade equipment." },
+  { slug: "dongcheng", name: "Dongcheng", monogram: "DC", divisions: ["Power Tools"], about: "Chinese manufacturer of professional power tools widely used across Gulf construction sites." },
+  { slug: "ongco", name: "Ongco", monogram: "ON", divisions: ["Power Tools"], about: "Tools and equipment brand supplied across Oman and regional Gulf markets." },
+  { slug: "dalilee", name: "Dalilee", monogram: "DA", divisions: ["Power Tools"], about: "Equipment brand supplying drilling and construction tools to regional distributors." },
+  { slug: "ideal", name: "Ideal", monogram: "ID", divisions: ["Power Tools", "Hand Tools"], about: "Trade tools brand covering hand tools and power tools for workshops and contractors." },
+  { slug: "imperial", name: "Imperial", monogram: "IM", divisions: ["Safety Equipment"], about: "Supplier of personal protective equipment and industrial safety products." },
+  { slug: "haible-export", name: "Haible Export", monogram: "HE", divisions: ["Safety Equipment"], about: "Export house supplying safety equipment and industrial consumables." },
+  { slug: "american-safety", name: "American Safety", monogram: "AS", divisions: ["Safety Equipment"], about: "Brand of personal protective equipment for industrial and construction environments." },
+  { slug: "prakash", name: "Prakash", monogram: "PR", divisions: ["Safety Equipment"], about: "Manufacturer of safety footwear and protective workwear." },
+  { slug: "texmo-motors", name: "Texmo Motors", monogram: "TX", divisions: ["Motors & Pumps"], about: "Indian manufacturer of electric motors and water pumps for industrial and agricultural use." },
 ];
+
+function mapLiveBrand(row: any): Brand {
+  const fallback = brands.find((b) => b.slug === row.slug);
+  return {
+    slug: row.slug,
+    name: row.name,
+    monogram: fallback?.monogram || row.name.slice(0, 2).toUpperCase(),
+    divisions: fallback?.divisions || ["Industrial Equipment"],
+    about: row.description || fallback?.about || `${row.name} products supplied by Al Safwa Trading in Oman.`,
+    logoPath: row.logo_path || undefined,
+  };
+}
+
+export async function fetchBrands(): Promise<Brand[]> {
+  const { data, error } = await supabase
+    .from("brands")
+    .select("name,slug,logo_path,description,active,sort_order")
+    .eq("active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
+
+  return error || !data?.length ? brands : data.map(mapLiveBrand);
+}
+
+export async function fetchBrand(slug: string): Promise<Brand | undefined> {
+  const { data, error } = await supabase
+    .from("brands")
+    .select("name,slug,logo_path,description,active,sort_order")
+    .eq("slug", slug)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error || !data) return brands.find((b) => b.slug === slug);
+  return mapLiveBrand(data);
+}
 
 export const getBrand = (slug: string): Brand | undefined =>
   brands.find((b) => slug !== undefined && b.slug === slug);
