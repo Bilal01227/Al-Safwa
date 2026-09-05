@@ -54,6 +54,46 @@ export async function fetchBrand(slug: string): Promise<Brand | undefined> {
   return mapLiveBrand(data);
 }
 
+/**
+ * The homepage still renders its existing brand cards from the legacy fallback
+ * array. Keep that UI intact, but replace the monogram visually with the
+ * currently uploaded Supabase logo whenever one exists. This makes logo
+ * changes in Admin immediately reflected after the next page load without
+ * hardcoding a particular brand or storage path.
+ */
+async function syncHomepageBrandLogos() {
+  const { data, error } = await supabase
+    .from("brands")
+    .select("slug,logo_path")
+    .eq("active", true)
+    .not("logo_path", "is", null);
+
+  if (error || !data?.length || typeof document === "undefined") return;
+
+  const styleId = "live-homepage-brand-logos";
+  document.getElementById(styleId)?.remove();
+
+  const rules = data
+    .filter((row) => row.slug && row.logo_path)
+    .map((row) => {
+      const publicUrl = supabase.storage.from("brand-images").getPublicUrl(row.logo_path).data.publicUrl;
+      if (!publicUrl) return "";
+      const slug = CSS.escape(row.slug);
+      const url = JSON.stringify(publicUrl);
+      return `a[href$="/brands/${slug}"] > div:first-child > span.grid{font-size:0;background-image:url(${url});background-repeat:no-repeat;background-position:center;background-size:contain;}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  if (!rules) return;
+  const style = document.createElement("style");
+  style.id = styleId;
+  style.textContent = rules;
+  document.head.appendChild(style);
+}
+
+void syncHomepageBrandLogos();
+
 export const getBrand = (slug: string): Brand | undefined =>
   brands.find((b) => slug !== undefined && b.slug === slug);
 
