@@ -35,17 +35,18 @@ export async function fetchBrand(slug: string): Promise<Brand | undefined> {
   return mapLiveBrand(data);
 }
 
+/** One live logo layer for the legacy homepage cards. !important deliberately wins over any older cached/static logo rule. */
 async function syncHomepageBrandLogos() {
-  const { data, error } = await supabase.from("brands").select("slug,logo_path").eq("active", true).not("logo_path", "is", null);
+  const { data, error } = await supabase.from("brands").select("slug,logo_path").eq("active", true);
   if (error || !data?.length || typeof document === "undefined") return;
   const styleId = "live-homepage-brand-logos";
   document.getElementById(styleId)?.remove();
   const rules = data.filter((row) => row.slug && row.logo_path).map((row) => {
-    const publicUrl = supabase.storage.from("brand-images").getPublicUrl(row.logo_path).data.publicUrl;
+    const publicUrl = supabase.storage.from("brand-images").getPublicUrl(row.logo_path!).data.publicUrl;
     if (!publicUrl) return "";
     const slug = CSS.escape(row.slug);
     const url = JSON.stringify(publicUrl);
-    return `a[href*="/brands/${slug}"] span.grid{font-size:0;background-image:url(${url});background-repeat:no-repeat;background-position:center;background-size:contain;}`;
+    return `a[href*="/brands/${slug}"] span.grid{font-size:0!important;color:transparent!important;background-image:url(${url})!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;background-color:transparent!important;}a[href*="/brands/${slug}"] span.grid>img{display:none!important;}`;
   }).filter(Boolean).join("\n");
   if (!rules) return;
   const style = document.createElement("style");
