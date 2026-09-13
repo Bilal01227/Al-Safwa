@@ -45,11 +45,23 @@ type Ref = { id: string; name: string; slug: string };
 type ImageRef = { product_id: string; storage_path: string; is_primary: boolean; sort_order: number };
 
 const fallbackImage = (category: string) => {
-  if (category === "power-tools") return IMG.drill;
-  if (category === "safety-equipment") return IMG.safety;
-  if (category === "motors-pumps") return IMG.motor;
-  if (category === "hand-tools") return IMG.hands;
-  if (category === "spare-parts") return IMG.grinder;
+  if (category === "power-tools" || category === "drills") return IMG.drill;
+  if (category === "cutting-tools" || category === "grinders" || category === "circular-saws") return IMG.cutting;
+  if (category === "welding-equipment") return IMG.welder;
+  if (category === "generators") return IMG.generator;
+  if (category === "air-compressors") return IMG.compressor;
+  if (category === "safety-equipment" || category === "helmets" || category === "gloves" || category === "safety-shoes" || category === "eye-protection" || category === "ear-protection" || category === "respiratory" || category === "fall-protection" || category === "high-vis-vests") return IMG.safety;
+  if (category === "motors-pumps" || category === "motors") return IMG.motor;
+  if (category === "water-pumps" || category === "sewage-pumps" || category === "pressure-pumps" || category === "diesel-pumps" || category === "pumps") return IMG.pump;
+  if (category === "hand-tools" || category === "wrenches" || category === "screwdrivers" || category === "hammers" || category === "pliers") return IMG.hands;
+  if (category === "spare-parts") return IMG.spareParts;
+  if (category === "measuring-tools") return IMG.measuring;
+  if (category === "lifting-equipment") return IMG.lifting;
+  if (category === "cleaning-equipment") return IMG.cleaning;
+  if (category === "electrical-equipment") return IMG.electrical;
+  if (category === "agricultural-equipment") return IMG.agricultural;
+  if (category === "heavy-machinery") return IMG.machinery;
+  if (category === "rental-equipment") return IMG.generator;
   return IMG.hero;
 };
 
