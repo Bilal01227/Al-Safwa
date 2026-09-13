@@ -30,9 +30,9 @@ export const IMG = {
   measuring: commons("All multimeters.jpg"),
 
   // Broader catalogue divisions
-  cutting: commons("Cordless Electric Drill.jpg"),
+  cutting: "https://images.unsplash.com/photo-1530939027401-cca9976c77f7?auto=format&fit=crop&w=1600&q=82",
   lifting: commons("Construction site excavator and truck.jpg"),
-  cleaning: img("photo-1527515637462-cff94eecc1ac"),
+  cleaning: commons("Jetmaster pressure washer cleaning gate.webp"),
   electrical: commons("All multimeters.jpg"),
-  agricultural: commons("Construction site excavator and truck.jpg"),
+  agricultural: commons("Tractor-agricultural-machine-cultivating-field.jpg"),
 } as const;
