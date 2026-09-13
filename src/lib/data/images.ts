@@ -1,24 +1,38 @@
 /**
  * Durable public image registry.
  *
- * The previous catalogue used Qwen-generated image URLs. Those generated
- * result URLs are temporary, so they were unsuitable for a production site.
- * Product-specific images are now managed through Supabase Storage; these
- * URLs are only the durable visual fallback for pages/items without an
- * uploaded image yet.
+ * Product-specific images are managed through Supabase Storage. These URLs
+ * are durable visual fallbacks for catalogue/category items that do not have
+ * an uploaded image yet. Each fallback is deliberately matched to the
+ * equipment type so a drill never falls back to a hammer/rotary tool image.
  */
 const img = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=82`;
 
+const commons = (file: string) =>
+  `https://commons.wikimedia.org/wiki/Special:Redirect/file/${encodeURIComponent(file)}`;
+
 export const IMG = {
   hero: img("photo-1504307651254-35680f356dfd"),
-  drill: img("photo-1586864387967-d02ef85d93e8"),
-  grinder: img("photo-1581092160607-ee22621dd758"),
-  safety: img("photo-1541888946425-d81bb19240f5"),
-  motor: img("photo-1518770660439-4636190af475"),
-  machinery: img("photo-1504307651254-35680f356dfd"),
-  generator: img("photo-1509390144018-eeaf65052242"),
-  welder: img("photo-1504917595217-d4dc5ebe6122"),
-  compressor: img("photo-1581094794329-c8112a89af12"),
-  hands: img("photo-1581092160562-40aa08e78837"),
+
+  // Exact equipment fallbacks
+  drill: commons("Cordless Electric Drill.jpg"),
+  grinder: "https://images.unsplash.com/photo-1530939027401-cca9976c77f7?auto=format&fit=crop&w=1600&q=82",
+  safety: commons("Industrial helmet.jpg"),
+  motor: commons("Industrial Electric Motor and Drive Mechanism.jpg"),
+  pump: commons("Water pump.png"),
+  machinery: commons("Construction site excavator and truck.jpg"),
+  generator: commons("Dieselgenerator.jpg"),
+  welder: commons("CO2 welding machine.jpg"),
+  compressor: commons("Air Compressor.JPG"),
+  hands: "https://images.unsplash.com/photo-1497218770144-3fea6dbc33fe?auto=format&fit=crop&w=1600&q=82",
+  spareParts: commons("Heavy-machinery-parts.jpg"),
+  measuring: commons("All multimeters.jpg"),
+
+  // Broader catalogue divisions
+  cutting: commons("Cordless Electric Drill.jpg"),
+  lifting: commons("Construction site excavator and truck.jpg"),
+  cleaning: img("photo-1527515637462-cff94eecc1ac"),
+  electrical: commons("All multimeters.jpg"),
+  agricultural: commons("Construction site excavator and truck.jpg"),
 } as const;
