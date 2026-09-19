@@ -1,38 +1,22 @@
-/**
- * Durable public image registry.
- *
- * Product-specific images are managed through Supabase Storage. These URLs
- * are durable visual fallbacks for catalogue/category items that do not have
- * an uploaded image yet. Each fallback is deliberately matched to the
- * equipment type so a drill never falls back to a hammer/rotary tool image.
- */
-const img = (id: string) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=82`;
-
-const commons = (file: string) =>
-  `https://commons.wikimedia.org/wiki/Special:Redirect/file/${encodeURIComponent(file)}`;
-
-export const IMG = {
-  hero: img("photo-1504307651254-35680f356dfd"),
-
-  // Exact equipment fallbacks
-  drill: commons("Cordless Electric Drill.jpg"),
-  grinder: "https://images.unsplash.com/photo-1530939027401-cca9976c77f7?auto=format&fit=crop&w=1600&q=82",
-  safety: commons("Industrial helmet.jpg"),
-  motor: commons("Industrial Electric Motor and Drive Mechanism.jpg"),
-  pump: commons("Water pump.png"),
-  machinery: commons("Construction site excavator and truck.jpg"),
-  generator: commons("Dieselgenerator.jpg"),
-  welder: commons("CO2 welding machine.jpg"),
-  compressor: commons("Air Compressor.JPG"),
-  hands: "https://images.unsplash.com/photo-1497218770144-3fea6dbc33fe?auto=format&fit=crop&w=1600&q=82",
-  spareParts: commons("Heavy-machinery-parts.jpg"),
-  measuring: commons("All multimeters.jpg"),
-
-  // Broader catalogue divisions
-  cutting: "https://images.unsplash.com/photo-1530939027401-cca9976c77f7?auto=format&fit=crop&w=1600&q=82",
-  lifting: commons("Construction site excavator and truck.jpg"),
-  cleaning: commons("Jetmaster pressure washer cleaning gate.webp"),
-  electrical: commons("All multimeters.jpg"),
-  agricultural: commons("Tractor-agricultural-machine-cultivating-field.jpg"),
+/** Local, durable image registry. No critical catalogue image depends on a third-party URL. */
+const local=(name:string)=>`/images/${name}`;
+export const IMG={
+ hero:local("al-safwa-hero.svg"),
+ drill:local("category-drill.svg"),
+ grinder:local("category-grinding.svg"),
+ safety:local("category-safety.svg"),
+ motor:local("category-pump.svg"),
+ pump:local("category-pump.svg"),
+ machinery:local("category-machinery.svg"),
+ generator:local("category-generator.svg"),
+ welder:local("category-welding.svg"),
+ compressor:local("category-compressor.svg"),
+ hands:local("category-hand-tools.svg"),
+ spareParts:local("category-parts.svg"),
+ measuring:local("category-measuring.svg"),
+ cutting:local("category-grinding.svg"),
+ lifting:local("category-machinery.svg"),
+ cleaning:local("category-safety.svg"),
+ electrical:local("category-measuring.svg"),
+ agricultural:local("category-agriculture.svg"),
 } as const;
