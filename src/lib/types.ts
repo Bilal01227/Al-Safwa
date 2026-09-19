@@ -1,4 +1,4 @@
-/** Shared data-model types — mirrors the future Supabase schema. */
+/** Shared data-model types — mirrors the Supabase catalogue schema. */
 
 export type PriceType =
   | "fixed"
@@ -44,6 +44,8 @@ export interface Category {
   blurb: string;
   imageUrl: string;
   icon: IconKey;
+  homepageVisible?: boolean;
+  parentId?: string | null;
 }
 
 export interface RentalItem {
