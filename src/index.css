@@ -369,3 +369,107 @@ body::after {
   background: linear-gradient(90deg, #202833 25%, #2b3542 50%, #202833 75%);
   background-size: 200% 100%;
 }
+
+
+/* ── Public theme switch: motion polish, brand palette preserved ── */
+.public-site .theme-toggle {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  gap: 0.55rem;
+  border-color: rgba(169, 177, 185, 0.45);
+  background: rgba(16, 20, 26, 0.04);
+  color: var(--color-ink);
+  box-shadow: 0 0 0 0 rgba(232, 73, 26, 0);
+  transition:
+    background-color 280ms ease,
+    color 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease,
+    transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.public-site .theme-toggle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 20%, rgba(232, 73, 26, 0.12) 48%, transparent 76%);
+  transform: translateX(-120%);
+  transition: transform 500ms ease;
+}
+.public-site .theme-toggle:hover {
+  border-color: var(--color-safety);
+  box-shadow: 0 4px 18px rgba(232, 73, 26, 0.12);
+  transform: translateY(-1px);
+}
+.public-site .theme-toggle:hover::before {
+  transform: translateX(120%);
+}
+.public-site .theme-toggle:active {
+  transform: translateY(0) scale(0.97);
+}
+.public-site .theme-toggle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-safety);
+  animation: theme-icon-arrive 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.public-site .theme-toggle-indicator {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 999px;
+  background: var(--color-safety);
+  box-shadow: 0 0 0 3px rgba(232, 73, 26, 0.11);
+  transition: transform 280ms ease, box-shadow 280ms ease, background-color 280ms ease;
+}
+.public-site .theme-toggle-dark .theme-toggle-indicator {
+  background: #f0a50e;
+  box-shadow: 0 0 0 3px rgba(240, 165, 14, 0.14), 0 0 12px rgba(240, 165, 14, 0.35);
+}
+.public-site.theme-dark .theme-toggle {
+  color: #e6e9ed;
+  background: rgba(230, 233, 237, 0.045);
+  border-color: #3b4552;
+}
+.public-site.theme-dark .theme-toggle:hover {
+  border-color: var(--color-safety);
+}
+.public-site .theme-toggle-label {
+  transition: color 220ms ease;
+}
+
+/* Smoothly blend only the surfaces that participate in the theme.
+   Existing layout, component geometry and brand styling are unchanged. */
+.public-site,
+.public-site .bg-paper,
+.public-site .bg-paper-2,
+.public-site .bg-card,
+.public-site .bg-white,
+.public-site .text-ink,
+.public-site .text-smoke,
+.public-site .card-hard,
+.public-site .field,
+.public-site [class~="border-black/10"],
+.public-site [class~="border-black/20"] {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+@keyframes theme-icon-arrive {
+  0% { opacity: 0; transform: rotate(-55deg) scale(0.55); }
+  70% { opacity: 1; transform: rotate(12deg) scale(1.12); }
+  100% { opacity: 1; transform: rotate(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .public-site .theme-toggle,
+  .public-site .theme-toggle::before,
+  .public-site .theme-toggle-icon,
+  .public-site .theme-toggle-indicator {
+    animation: none !important;
+    transition: none !important;
+  }
+}
