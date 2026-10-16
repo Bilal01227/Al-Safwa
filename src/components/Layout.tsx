@@ -113,7 +113,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
               <span key={theme} className="theme-toggle-icon" aria-hidden="true">
                 {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
               </span>
-              <span className="theme-toggle-label hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+              <span className="theme-toggle-label">{theme === "dark" ? "Light" : "Dark"}</span>
               <span className="theme-toggle-indicator" aria-hidden="true" />
             </button>
             <CTAButton to="/request-quote" variant="safety" className="hidden h-10 px-4 text-[15px] md:inline-flex">
