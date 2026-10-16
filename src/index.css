@@ -308,3 +308,64 @@ body::after {
     animation-duration: 0.01ms !important;
   }
 }
+
+
+/* ── Public website theme toggle (isolated from admin + SEO) ─── */
+/* Light mode intentionally keeps the existing Al Safwa palette. */
+.public-site {
+  min-height: 100vh;
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.public-site.theme-dark {
+  background-color: #0d1117;
+  color: #e6e9ed;
+}
+
+.public-site.theme-dark .bg-paper {
+  background-color: #11171f !important;
+}
+.public-site.theme-dark .bg-paper-2 {
+  background-color: #1a222c !important;
+}
+.public-site.theme-dark .bg-card,
+.public-site.theme-dark .bg-white {
+  background-color: #151b23 !important;
+}
+.public-site.theme-dark .text-ink {
+  color: #e6e9ed !important;
+}
+.public-site.theme-dark .text-smoke {
+  color: #a0aab6 !important;
+}
+.public-site.theme-dark .grid-light {
+  background-image: linear-gradient(rgba(230, 233, 237, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(230, 233, 237, 0.055) 1px, transparent 1px);
+}
+.public-site.theme-dark .card-hard {
+  background: #151b23;
+  border-color: #303844;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.22);
+}
+.public-site.theme-dark .card-hard:hover {
+  border-color: var(--color-safety);
+  box-shadow: 9px 9px 0 rgba(0, 0, 0, 0.32);
+}
+.public-site.theme-dark .field {
+  background: #0f141b;
+  border-color: #3b4552;
+  color: #e6e9ed;
+}
+.public-site.theme-dark .field::placeholder {
+  color: #8793a1;
+}
+.public-site.theme-dark [class~="border-black/10"],
+.public-site.theme-dark [class~="border-black/20"] {
+  border-color: #303844 !important;
+}
+.public-site.theme-dark .skel {
+  background: linear-gradient(90deg, #202833 25%, #2b3542 50%, #202833 75%);
+  background-size: 200% 100%;
+}
