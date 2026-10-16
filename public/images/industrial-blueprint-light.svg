@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+  <title>Subtle industrial workshop blueprint</title>
+  <g stroke="#29323c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity=".13">
+    <path d="M760 260h530v470H760z"/>
+    <path d="M730 260l295-150 295 150"/>
+    <path d="M815 310v365m110-365v365m110-365v365m110-365v365"/>
+    <path d="M775 380h485M775 475h485M775 570h485M775 665h485"/>
+    <path d="M690 730h650M735 765h590"/>
+    <path d="M890 260v-95h270v95M930 165v-48h190v48"/>
+    <circle cx="1120" cy="520" r="95"/>
+    <circle cx="1120" cy="520" r="61"/>
+    <circle cx="1120" cy="520" r="18"/>
+    <path d="M1120 408v-22m0 246v-22m-112-90h-22m246 0h-22m-169-79-16-16m174 174-16-16m0-142 16-16m-174 174 16-16"/>
+    <path d="M280 740h365l55-80h70v110H280z"/>
+    <path d="M330 740v-85h150v85m35 0V625h100v115"/>
+    <circle cx="365" cy="790" r="35"/><circle cx="620" cy="790" r="35"/>
+    <path d="M385 655l35-45h90l30 45M420 610v-50h95v50"/>
+    <path d="M200 840h1160M250 870h1060"/>
+    <path d="M250 220h300m-250-35h200m-150-35h100"/>
+    <path d="M1320 190h90v70h-90zM1340 170h50v20m-25 90v70"/>
+    <path d="M1370 350h100v150h-100zM1390 375h60m-60 30h60m-60 30h60"/>
+    <path d="M205 310h280v220H205zM235 340h220v160H235z"/>
+    <path d="M275 375h140v90H275zM300 405h90m-90 25h90"/>
+    <path d="M190 560h300m-260 25h220"/>
+    <path d="M900 810v70m-25-35h50m-25-25-20 20m20-20 20 20"/>
+  </g>
+  <g stroke="#e8491a" stroke-width="4" opacity=".14">
+    <path d="M790 285h160m-160 12h95"/>
+    <path d="M330 630h120"/>
+    <circle cx="1120" cy="520" r="130" stroke-dasharray="12 18"/>
+    <path d="M1230 345l60-60m-25 0h25v25"/>
+  </g>
+</svg>
