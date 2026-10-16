@@ -7,6 +7,7 @@ import { brands } from "../lib/data/brands";
 import { services } from "../lib/data/services";
 import { CTAButton, HazardBar } from "./kit";
 import { IcWhatsApp, IcPhone, IcMenu, IcX, IcArrowUpRight, IcMail } from "./icons";
+import { Moon, Sun } from "lucide-react";
 
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
@@ -28,7 +29,7 @@ const navItems = [
   { to: "/contact", label: "Contact" },
 ];
 
-function Header() {
+function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleTheme: () => void }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -100,7 +101,18 @@ function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={onToggleTheme}
+              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-pressed={theme === "dark"}
+              className="inline-flex h-10 items-center justify-center gap-2 border border-white/20 px-2.5 font-mono text-[10px] uppercase tracking-[0.12em] text-paper transition-colors hover:border-safety hover:text-safety sm:px-3"
+            >
+              {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
+              <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+            </button>
             <CTAButton to="/request-quote" variant="safety" className="hidden h-10 px-4 text-[15px] md:inline-flex">
               Request Quote
             </CTAButton>
@@ -281,9 +293,27 @@ function FloatingWhatsApp() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    try {
+      return localStorage.getItem("al-safwa-public-theme") === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("al-safwa-public-theme", theme);
+    } catch {
+      // Theme still works for this visit when storage is unavailable.
+    }
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
+    <div className={`public-site flex min-h-screen flex-col ${theme === "dark" ? "theme-dark" : ""}`}>
+      <Header theme={theme} onToggleTheme={toggleTheme} />
       <main className="flex-1">{children}</main>
       <Footer />
       <FloatingWhatsApp />
