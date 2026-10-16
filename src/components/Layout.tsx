@@ -108,10 +108,13 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
               title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               aria-pressed={theme === "dark"}
-              className="inline-flex h-10 items-center justify-center gap-2 border border-white/20 px-2.5 font-mono text-[10px] uppercase tracking-[0.12em] text-paper transition-colors hover:border-safety hover:text-safety sm:px-3"
+              className={`theme-toggle inline-flex h-10 items-center justify-center gap-2 border px-2.5 font-mono text-[10px] uppercase tracking-[0.12em] sm:px-3 ${theme === "dark" ? "theme-toggle-dark" : "theme-toggle-light"}`}
             >
-              {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
-              <span className="hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+              <span key={theme} className="theme-toggle-icon" aria-hidden="true">
+                {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+              </span>
+              <span className="theme-toggle-label hidden sm:inline">{theme === "dark" ? "Light" : "Dark"}</span>
+              <span className="theme-toggle-indicator" aria-hidden="true" />
             </button>
             <CTAButton to="/request-quote" variant="safety" className="hidden h-10 px-4 text-[15px] md:inline-flex">
               Request Quote
