@@ -296,21 +296,9 @@ function FloatingWhatsApp() {
 }
 
 export default function Layout({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    try {
-      return localStorage.getItem("al-safwa-public-theme") === "dark" ? "dark" : "light";
-    } catch {
-      return "light";
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("al-safwa-public-theme", theme);
-    } catch {
-      // Theme still works for this visit when storage is unavailable.
-    }
-  }, [theme]);
+  // Always start each fresh page load in light mode. Visitors can still
+  // switch to dark mode for the current visit using the header toggle.
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
 
