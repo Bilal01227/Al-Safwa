@@ -442,6 +442,10 @@ body::after {
 
 /* Smoothly blend only the surfaces that participate in the theme.
    Existing layout, component geometry and brand styling are unchanged. */
+.public-site .card-hard {
+  transition: transform 250ms ease, background-color 300ms ease, color 300ms ease,
+    border-color 300ms ease, box-shadow 300ms ease;
+}
 .public-site,
 .public-site .bg-paper,
 .public-site .bg-paper-2,
