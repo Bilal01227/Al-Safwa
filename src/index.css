@@ -476,3 +476,44 @@ body::after {
     transition: none !important;
   }
 }
+
+
+/* ── Light-mode industrial artwork + always-visible theme label ── */
+/* The label is deliberately visible on phones as well as desktop. */
+.public-site .theme-toggle-label {
+  display: inline !important;
+  white-space: nowrap;
+}
+
+@media (max-width: 639px) {
+  .public-site .theme-toggle {
+    gap: 0.3rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+  }
+  .public-site .theme-toggle-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+  .public-site .theme-toggle-indicator {
+    width: 4px;
+    height: 4px;
+    flex-basis: 4px;
+  }
+  .public-site .theme-toggle-label {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
+}
+
+/* A restrained industrial line-art image joins the blueprint grid in light mode.
+   Dark mode and the site's existing component/layout styling remain unchanged. */
+.public-site:not(.theme-dark) .grid-light {
+  background-image:
+    linear-gradient(rgba(23, 27, 32, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23, 27, 32, 0.055) 1px, transparent 1px),
+    url("/images/industrial-blueprint-light.svg");
+  background-size: 36px 36px, 36px 36px, min(900px, 85vw) auto;
+  background-position: center, center, right 12% center;
+  background-repeat: repeat, repeat, no-repeat;
+}
