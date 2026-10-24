@@ -22,6 +22,24 @@ export const categories: Category[] = [
   { slug: "rental-equipment", name: "Rental Equipment", blurb: "Generators, welding sets, power tools and site equipment available for rent.", imageUrl: IMG.generator, icon: "hook" },
 ];
 
+const uploadedCategoryImages: Record<string, string> = {
+  "drills": "categories/acc65516-f66a-4e30-a93e-b76863d147e3.jpg",
+  "helmets": "categories/592bcd3f-0290-412e-853b-8c732f39d034.jpg",
+  "motors-pumps": "categories/f51de95c-32a0-4c1a-b2ba-057a2414ef0f.jpg",
+  "water-pumps": "categories/6fd03fcc-1b44-445b-b408-49ef761f75e4.jpg",
+};
+
+function categoryImage(slug: string, fallback: string) {
+  const path = uploadedCategoryImages[slug];
+  return path ? supabase.storage.from("category-images").getPublicUrl(path).data.publicUrl : fallback;
+}
+
+// Keep the existing public layout and styling; only replace the image source for
+// category images that have already been uploaded through Admin.
+for (const category of categories) {
+  category.imageUrl = categoryImage(category.slug, category.imageUrl);
+}
+
 function mapLiveCategory(row: any): Category {
   const fallback = categories.find((c) => c.slug === row.slug);
   const icon = (row.icon || fallback?.icon || "gear") as IconKey;
