@@ -41,7 +41,7 @@ type DbProduct = {
   active: boolean;
 };
 
-type Ref = { id: string; name: string; slug: string };
+type Ref = { id: string; name: string; slug: string; image_path?: string | null };
 type ImageRef = { product_id: string; storage_path: string; is_primary: boolean; sort_order: number };
 
 const fallbackImage = (category: string) => {
@@ -74,7 +74,7 @@ async function fromSupabase(): Promise<Product[]> {
       )
       .eq("active", true),
     supabase.from("brands").select("id,name,slug"),
-    supabase.from("categories").select("id,name,slug"),
+    supabase.from("categories").select("id,name,slug,image_path"),
     supabase.from("product_images").select("product_id,storage_path,is_primary,sort_order").order("sort_order"),
   ]);
 
@@ -94,9 +94,14 @@ async function fromSupabase(): Promise<Product[]> {
       .filter((v) => v.product_id === x.id)
       .sort((a, z) => Number(z.is_primary) - Number(a.is_primary) || a.sort_order - z.sort_order)[0];
 
+    // Exact product photo wins. Otherwise use the image managed on its category
+    // in Admin > Categories, then fall back to the existing local category art.
+    const categoryImage = category?.image_path
+      ? supabase.storage.from("category-images").getPublicUrl(category.image_path).data.publicUrl
+      : null;
     const imageUrl = image
       ? supabase.storage.from("product-images").getPublicUrl(image.storage_path).data.publicUrl
-      : fallbackImage(category?.slug || "");
+      : categoryImage || fallbackImage(category?.slug || "");
 
     return {
       slug: x.slug,
