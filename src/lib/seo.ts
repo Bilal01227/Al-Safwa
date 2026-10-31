@@ -31,7 +31,7 @@ export function usePageMeta({ title, description, path, image, type = "website",
     upsertMeta('meta[property="og:title"]', { property: "og:title" }, title);
     upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
     upsertMeta('meta[property="og:type"]', { property: "og:type" }, type === "product" ? "product" : type);
-    upsertMeta('meta[property="og:url"]', { property: "og:url" }, `${window.location.origin}${path === "/" ? "/" : `${path.replace(/\\/$/, "")}/`}`);
+    upsertMeta('meta[property="og:url"]', { property: "og:url" }, `${window.location.origin}${path === "/" ? "/" : `${path(/\\/$/, "")}/`}`);
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, business.name);
     upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "en_OM");
     if (image) upsertMeta('meta[property="og:image"]', { property: "og:image" }, image);
@@ -47,7 +47,7 @@ export function usePageMeta({ title, description, path, image, type = "website",
       canonical.rel = "canonical";
       document.head.appendChild(canonical);
     }
-    canonical.href = `${window.location.origin}${path === "/" ? "/" : `${path.replace(/\\/$/, "")}/`}`;
+    canonical.href = `${window.location.origin}${path === "/" ? "/" : `${path(/\\/$/, "")}/`}`;
 
     const oldLd = document.getElementById("route-jsonld");
     oldLd?.remove();
