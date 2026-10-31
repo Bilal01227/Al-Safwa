@@ -30,6 +30,10 @@ async function collectSlugs(dir) {
   }
   return slugs;
 }
+async function collectOneFile(file) {
+  const source = await readFile(file, "utf8");
+  return new Set(Array.from(source.matchAll(/\bslug\s*:\s*["']([a-z0-9-]+)["']/g), (match) => match[1]));
+}
 async function fetchSlugs(table) {
   const base = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -45,43 +49,50 @@ async function fetchSlugs(table) {
       headers: { apikey: key, Authorization: "Bearer " + key, Accept: "application/json" },
       signal: AbortSignal.timeout(15000),
     });
-    if (!response.ok) throw new Error(table + " returned HTTP " + response.status);
+    if (!response.ok) throw new Error(table + " HTTP " + response.status);
     const rows = await response.json();
     result.push(...rows.map((row) => row.slug).filter((slug) => typeof slug === "string" && /^[a-z0-9-]+$/.test(slug)));
     if (rows.length < 1000) break;
   }
   return result;
 }
+
 const humanize = (slug) => slug.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
-const brands = await collectSlugs(path.resolve("src/lib/data/brands.ts").replace(/brands\.ts$/, ""));
-const services = await collectSlugs(path.resolve("src/lib/data/services.ts").replace(/services\.ts$/, ""));
-const products = await collectSlugs(path.resolve("src/lib/data/products"));
+const brands = await collectOneFile("src/lib/data/brands.ts");
+const services = await collectOneFile("src/lib/data/services.ts");
+const products = await collectSlugs("src/lib/data/products");
 for (const [table, target] of [["brands", brands], ["products", products]]) {
-  try { for (const slug of await fetchSlugs(table)) target.add(slug); console.log("Loaded active " + table + " slugs."); }
-  catch (error) { console.warn("Could not fetch " + table + " slugs; using repository fallback: " + error.message); }
+  try {
+    for (const slug of await fetchSlugs(table)) target.add(slug);
+    console.log("Loaded active " + table + " slugs.");
+  } catch (error) {
+    console.warn("Could not fetch " + table + " slugs; using local fallback: " + error.message);
+  }
 }
 for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Request pricing and availability."]);
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
 for (const slug of products) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Request product pricing and availability."]);
 
 const rootHtml = await readFile(path.join(dist, "index.html"), "utf8");
-const esc = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
-function meta(html, key, value, attr = "name") {
-  const expression = new RegExp('(<meta\\s+[^>]*' + attr + '=["\\']' + key + '["\\'][^>]*content=["\\'])[^"\\']*(["\\'][^>]*>)', "i");
-  return html.replace(expression, "$1" + esc(value) + "$2");
+const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
+function replaceMeta(html, key, value, attribute = "name") {
+  const expression = new RegExp('(<meta[^>]*' + attribute + '="' + key + '"[^>]*content=")[^"]*(")', "i");
+  return html.replace(expression, "$1" + escapeHtml(value) + "$2");
 }
-for (const [route, [title, description]] of pages) {
+for (const [route, details] of pages) {
+  const title = details[0];
+  const description = details[1];
   const output = path.join(dist, route.slice(1), "index.html");
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
-  let html = rootHtml.replace(/<title>[\\s\\S]*?<\\/title>/i, "<title>" + esc(title) + "</title>");
-  html = html.replace(/<link\\s+rel=["']canonical["']\\s+href=["'][^"']*["']\\s*\\/?\\s*>/i, '<link rel="canonical" href="' + canonical + '" />');
-  html = meta(html, "description", description);
-  html = meta(html, "og:title", title, "property");
-  html = meta(html, "og:description", description, "property");
-  html = meta(html, "og:url", canonical, "property");
-  html = meta(html, "twitter:title", title);
-  html = meta(html, "twitter:description", description);
+  let html = rootHtml.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(title) + "</title>");
+  html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?\s*>/i, '<link rel="canonical" href="' + canonical + '" />');
+  html = replaceMeta(html, "description", description);
+  html = replaceMeta(html, "og:title", title, "property");
+  html = replaceMeta(html, "og:description", description, "property");
+  html = replaceMeta(html, "og:url", canonical, "property");
+  html = replaceMeta(html, "twitter:title", title);
+  html = replaceMeta(html, "twitter:description", description);
   await writeFile(output, html, "utf8");
 }
 const urls = [site + "/", ...Array.from(pages.keys(), (route) => site + route + "/")];
