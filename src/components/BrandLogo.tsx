@@ -35,7 +35,7 @@ export default function BrandLogo({
         if (live) setUrl(null);
         return;
       }
-      const publicUrl = supabase.storage.from("brand-images").getPublicUrl(path).data.publicUrl;
+      const publicUrl = path.startsWith("https://") || path.startsWith("http://") ? path : supabase.storage.from("brand-images").getPublicUrl(path).data.publicUrl;
       if (live) setUrl(publicUrl || null);
     };
     load();
