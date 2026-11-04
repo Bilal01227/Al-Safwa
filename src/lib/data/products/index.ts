@@ -100,7 +100,7 @@ async function fromSupabase(): Promise<Product[]> {
       ? supabase.storage.from("category-images").getPublicUrl(category.image_path).data.publicUrl
       : null;
     const imageUrl = image
-      ? supabase.storage.from("product-images").getPublicUrl(image.storage_path).data.publicUrl
+      ? (/^https?:\\/\\//i.test(image.storage_path) ? image.storage_path : supabase.storage.from("product-images").getPublicUrl(image.storage_path).data.publicUrl)
       : categoryImage || fallbackImage(category?.slug || "");
 
     return {
