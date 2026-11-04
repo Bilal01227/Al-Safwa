@@ -3,8 +3,8 @@ import { supabase } from "../lib/supabase";
 
 type Product={id:string;name:string;model_number?:string|null;sku?:string|null};
 type ImageRow={id:string;product_id:string;storage_path:string;alt_text:string|null;sort_order:number;is_primary:boolean};
-const imageUrl=(value:string)=>/^https?:\/\//i.test(value)?value:supabase.storage.from("product-images").getPublicUrl(value).data.publicUrl;
-const isExternal=(value:string)=>/^https?:\/\//i.test(value);
+const imageUrl=(value:string)=>(value.startsWith("https://")||value.startsWith("http://"))?value:supabase.storage.from("product-images").getPublicUrl(value).data.publicUrl;
+const isExternal=(value:string)=>value.startsWith("https://")||value.startsWith("http://");
 
 export default function AdminProductImages(){
  const[products,setProducts]=useState<Product[]>([]),[productId,setProductId]=useState(""),[images,setImages]=useState<ImageRow[]>([]),[files,setFiles]=useState<File[]>([]),[imageLink,setImageLink]=useState(""),[altText,setAltText]=useState(""),[busy,setBusy]=useState(false),[msg,setMsg]=useState(""),[err,setErr]=useState(""),[previewError,setPreviewError]=useState(false);
