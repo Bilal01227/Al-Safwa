@@ -1,6 +1,5 @@
 import type { Brand } from "../types";
 import { supabase } from "../supabase";
-import "./brands-home.css";
 
 export const brands: Brand[] = [
   { slug: "bosch", name: "Bosch", monogram: "BO", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
@@ -36,28 +35,6 @@ export async function fetchBrand(slug: string): Promise<Brand | undefined> {
   if (error || !data) return brands.find((b) => b.slug === slug);
   return mapLiveBrand(data);
 }
-
-/** One live logo layer for the legacy homepage cards. !important deliberately wins over any older cached/static logo rule. */
-async function syncHomepageBrandLogos() {
-  const { data, error } = await supabase.from("brands").select("slug,logo_path").eq("active", true);
-  if (error || !data?.length || typeof document === "undefined") return;
-  const styleId = "live-homepage-brand-logos";
-  document.getElementById(styleId)?.remove();
-  const rules = data.filter((row) => row.slug && row.logo_path).map((row) => {
-    const publicUrl = getBrandLogoUrl(row.logo_path!);
-    if (!publicUrl) return "";
-    const slug = CSS.escape(row.slug);
-    const url = JSON.stringify(publicUrl);
-    return `a[href*="/brands/${slug}"] span.grid{font-size:0!important;color:transparent!important;background-image:url(${url})!important;background-repeat:no-repeat!important;background-position:center!important;background-size:contain!important;background-color:transparent!important;}a[href*="/brands/${slug}"] span.grid>img{display:none!important;}`;
-  }).filter(Boolean).join("\n");
-  if (!rules) return;
-  const style = document.createElement("style");
-  style.id = styleId;
-  style.textContent = rules;
-  document.head.appendChild(style);
-}
-
-void syncHomepageBrandLogos();
 
 export const getBrand = (slug: string): Brand | undefined => brands.find((b) => slug !== undefined && b.slug === slug);
 
