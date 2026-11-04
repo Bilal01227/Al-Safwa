@@ -5,7 +5,7 @@ import { waHref, waGeneralMessage } from "../lib/whatsapp";
 import { usePageMeta } from "../lib/seo";
 import { siteTitle } from "../lib/seo";
 import { categories } from "../lib/data/categories";
-import { brands } from "../lib/data/brands";
+import { brands, fetchBrands, getBrandLogoUrl } from "../lib/data/brands";
 import { products, fetchFeaturedProducts } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
@@ -39,6 +39,12 @@ export default function Home() {
   });
 
   const [featured, setFeatured] = useState<Product[] | null>(null);
+  const [liveBrands, setLiveBrands] = useState(brands);
+  useEffect(() => {
+    let live = true;
+    fetchBrands().then((items) => live && setLiveBrands(items));
+    return () => { live = false; };
+  }, []);
   useEffect(() => {
     let live = true;
     fetchFeaturedProducts().then((f) => live && setFeatured(f));
@@ -96,7 +102,7 @@ export default function Home() {
             <Reveal delay={340}>
               <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/10 pt-6">
                 {[
-                  [String(brands.length), "Brands supplied"],
+                  [String(liveBrands.length), "Brands supplied"],
                   [String(products.length), "Catalogue items"],
                   [String(rentalItems.length), "Rental fleet classes"],
                 ].map(([n, label]) => (
@@ -233,14 +239,15 @@ export default function Home() {
             }
           />
         </div>
-        <Marquee items={brands.map((b) => b.name)} />
+        <Marquee items={liveBrands.map((b) => b.name)} />
         <div className="mx-auto mt-8 grid max-w-7xl grid-cols-2 gap-4 px-4 sm:px-6 md:grid-cols-4">
-          {brands.map((b, i) => (
+          {liveBrands.map((b, i) => (
             <Reveal key={b.slug} delay={(i % 4) * 70}>
               <Link to={`/brands/${b.slug}`} className="card-steel group flex h-full flex-col p-5">
                 <div className="flex items-start justify-between">
-                  <span className="grid h-12 w-12 place-items-center border border-steel-3 font-display text-xl font-semibold text-caution transition-colors group-hover:border-safety group-hover:text-safety">
+                  <span className="relative grid h-12 w-12 place-items-center border border-steel-3 font-display text-xl font-semibold text-caution transition-colors group-hover:border-safety group-hover:text-safety">
                     {b.monogram}
+                    {b.logoPath && <img src={getBrandLogoUrl(b.logoPath)} alt={`${b.name} logo`} loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full bg-white p-1 object-contain" />}
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mist">
                     {products.filter((pr) => pr.brandSlug === b.slug).length || "—"} items
