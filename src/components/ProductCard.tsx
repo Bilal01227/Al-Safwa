@@ -12,8 +12,9 @@ export default function ProductCard({ product, index }: { product: Product; inde
       <Link to={`/products/${product.slug}`} className="relative block overflow-hidden bg-paper-2" tabIndex={-1} aria-hidden="true">
         <div className="aspect-[4/3] overflow-hidden">
           <img src={product.imageUrl} alt={product.productName} loading="lazy" width={900} height={700}
-            onError={(e)=>{const img=e.currentTarget;if(img.dataset.fallback)return;img.dataset.fallback="1";img.src=IMG.hero;}}
-            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]" />
+            onError={(e)=>{e.currentTarget.style.display="none";const placeholder=e.currentTarget.nextElementSibling as HTMLElement|null;if(placeholder)placeholder.classList.remove("hidden");}}
+            className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]" />
+          <div className="hidden absolute inset-0 grid place-items-center bg-paper-2 px-4 text-center font-mono text-[10px] uppercase tracking-[.14em] text-smoke">Product image unavailable</div>
         </div>
         <span className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
