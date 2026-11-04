@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase";
 type Brand={id:string;name:string;slug:string;logo_path:string|null;description:string|null;active:boolean;sort_order:number};
 const blank={id:"",name:"",slug:"",logo_path:"",description:"",active:true,sort_order:"0"};
 const slugify=(v:string)=>v.toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"");
-const isExternal=(path:string|null)=>!!path&&/^https?:\\/\\//i.test(path);
+const isExternal=(path:string|null)=>!!path&&(path.startsWith("https://")||path.startsWith("http://"));
 const logoUrl=(path:string|null)=>!path?"":isExternal(path)?path:supabase.storage.from("brand-images").getPublicUrl(path).data.publicUrl;
 export default function AdminBrands(){
  const[rows,setRows]=useState<Brand[]>([]),[form,setForm]=useState(blank),[file,setFile]=useState<File|null>(null),[q,setQ]=useState(""),[busy,setBusy]=useState(false),[msg,setMsg]=useState(""),[err,setErr]=useState("");
