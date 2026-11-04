@@ -19,6 +19,8 @@ export const brands: Brand[] = [
   { slug: "multi-fit", name: "Multi-fit", monogram: "MF", divisions: ["Spare Parts"], about: "Multi-fit consumables and replacement parts supplied by Al Safwa Trading." },
 ];
 
+export const getBrandLogoUrl = (path?: string) => !path ? "" : (path.startsWith("https://") || path.startsWith("http://") ? path : supabase.storage.from("brand-images").getPublicUrl(path).data.publicUrl);
+
 function mapLiveBrand(row: any): Brand {
   const fallback = brands.find((b) => b.slug === row.slug);
   return { slug: row.slug, name: row.name, monogram: fallback?.monogram || row.name.slice(0, 2).toUpperCase(), divisions: fallback?.divisions || ["Industrial Equipment"], about: row.description || fallback?.about || `${row.name} products supplied by Al Safwa Trading in Oman.`, logoPath: row.logo_path || undefined };
@@ -42,7 +44,7 @@ async function syncHomepageBrandLogos() {
   const styleId = "live-homepage-brand-logos";
   document.getElementById(styleId)?.remove();
   const rules = data.filter((row) => row.slug && row.logo_path).map((row) => {
-    const publicUrl = /^https?:\\/\\//i.test(row.logo_path!) ? row.logo_path! : supabase.storage.from("brand-images").getPublicUrl(row.logo_path!).data.publicUrl;
+    const publicUrl = getBrandLogoUrl(row.logo_path!);
     if (!publicUrl) return "";
     const slug = CSS.escape(row.slug);
     const url = JSON.stringify(publicUrl);
