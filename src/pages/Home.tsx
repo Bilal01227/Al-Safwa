@@ -246,7 +246,7 @@ export default function Home() {
               <Link to={`/brands/${b.slug}`} className="card-steel group flex h-full flex-col p-5">
                 <div className="flex items-start justify-between">
                   <span className="relative grid h-12 w-12 place-items-center border border-steel-3 font-display text-xl font-semibold text-caution transition-colors group-hover:border-safety group-hover:text-safety">
-                    {b.monogram}
+                    {!b.logoPath && <span className="font-mono text-[8px] uppercase tracking-[0.08em] text-mist">Logo pending</span>}
                     {b.logoPath && <img src={getBrandLogoUrl(b.logoPath)} alt={`${b.name} logo`} loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full bg-white p-1 object-contain" />}
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mist">
