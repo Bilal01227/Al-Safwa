@@ -298,13 +298,7 @@ export function ProductDetailPage() {
             <Reveal className="lg:col-span-6">
               <figure className="relative border border-ink/15 bg-card">
                 <span className="hazard-thin absolute inset-x-0 top-0 z-10 h-1.5" aria-hidden="true" />
-                <img
-                  src={p.imageUrl}
-                  alt={p.productName}
-                  className="aspect-[4/3] w-full object-cover"
-                  width={900}
-                  height={700}
-                />
+                {p.imageUrl ? <img src={p.imageUrl} alt={p.productName} className="aspect-[4/3] w-full object-contain bg-white" width={900} height={700} onError={e=>{e.currentTarget.style.display="none";}}/> : <div className="grid aspect-[4/3] place-items-center bg-paper-2 px-5 text-center font-mono text-xs uppercase tracking-[.14em] text-smoke">Real product photo not assigned yet</div>}
                 {!p.verified && (
                   <span className="absolute bottom-3 left-3">
                     <MonoTag tone="safety">Specs pending verification</MonoTag>
