@@ -3,7 +3,6 @@ import type { Product } from "../lib/types";
 import { waHref, waProductMessage } from "../lib/whatsapp";
 import { AvailabilityBadge } from "./kit";
 import { IcWhatsApp } from "./icons";
-import { IMG } from "../lib/data/images";
 
 export default function ProductCard({ product, index }: { product: Product; index?: number }) {
   const specs = Object.entries(product.specifications).slice(0, 2);
