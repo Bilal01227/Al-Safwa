@@ -42,7 +42,7 @@ async function syncHomepageBrandLogos() {
   const styleId = "live-homepage-brand-logos";
   document.getElementById(styleId)?.remove();
   const rules = data.filter((row) => row.slug && row.logo_path).map((row) => {
-    const publicUrl = supabase.storage.from("brand-images").getPublicUrl(row.logo_path!).data.publicUrl;
+    const publicUrl = /^https?:\\/\\//i.test(row.logo_path!) ? row.logo_path! : supabase.storage.from("brand-images").getPublicUrl(row.logo_path!).data.publicUrl;
     if (!publicUrl) return "";
     const slug = CSS.escape(row.slug);
     const url = JSON.stringify(publicUrl);
