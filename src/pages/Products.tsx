@@ -238,6 +238,7 @@ export function ProductDetailPage() {
       ? `${product.productName} (model ${product.modelNumber}) — supplied by ${business.name} in Oman. Request price and availability.`
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
+    indexable: !!product,
   });
 
   if (product === null) {

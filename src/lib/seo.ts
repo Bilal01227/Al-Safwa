@@ -10,6 +10,7 @@ interface PageMeta {
   type?: "website" | "article" | "product";
   keywords?: string[];
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  indexable?: boolean;
 }
 
 const upsertMeta = (selector: string, attrs: Record<string, string>, content: string) => {
@@ -22,17 +23,18 @@ const upsertMeta = (selector: string, attrs: Record<string, string>, content: st
   node.content = content;
 };
 
-export function usePageMeta({ title, description, path, image, type = "website", keywords, jsonLd }: PageMeta): void {
+export function usePageMeta({ title, description, path, image, type = "website", keywords, jsonLd, indexable = true }: PageMeta): void {
   useEffect(() => {
     const canonicalUrl = window.location.origin + (path === "/" ? "/" : path + "/");
     document.title = title;
 
     upsertMeta('meta[name="description"]', { name: "description" }, description);
-    upsertMeta('meta[name="robots"]', { name: "robots" }, "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1");
+    upsertMeta('meta[name="robots"]', { name: "robots" }, indexable ? "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" : "noindex,nofollow");
     upsertMeta('meta[property="og:title"]', { property: "og:title" }, title);
     upsertMeta('meta[property="og:description"]', { property: "og:description" }, description);
     upsertMeta('meta[property="og:type"]', { property: "og:type" }, type === "product" ? "product" : type);
-    upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
+    if (indexable) upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
+    else document.querySelector('meta[property="og:url"]')?.remove();
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, business.name);
     upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "en_OM");
     if (image) upsertMeta('meta[property="og:image"]', { property: "og:image" }, image);
@@ -43,12 +45,16 @@ export function usePageMeta({ title, description, path, image, type = "website",
     if (keywords?.length) upsertMeta('meta[name="keywords"]', { name: "keywords" }, keywords.join(", "));
 
     let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
+    if (indexable) {
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.rel = "canonical";
+        document.head.appendChild(canonical);
+      }
+      canonical.href = canonicalUrl;
+    } else {
+      canonical?.remove();
     }
-    canonical.href = canonicalUrl;
 
     const oldLd = document.getElementById("route-jsonld");
     oldLd?.remove();
@@ -59,7 +65,7 @@ export function usePageMeta({ title, description, path, image, type = "website",
       script.textContent = JSON.stringify(jsonLd);
       document.head.appendChild(script);
     }
-  }, [title, description, path, image, type, keywords, jsonLd]);
+  }, [title, description, path, image, type, keywords, jsonLd, indexable]);
 }
 
 export const siteTitle = (page?: string): string =>

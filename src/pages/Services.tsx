@@ -99,6 +99,7 @@ export function ServiceDetailPage() {
       ? `${service.name} in Oman — ${service.tagline} Arranged through ${business.name}.`
       : `Services from ${business.name}, Oman.`,
     path: `/services/${slug ?? ""}`,
+    indexable: !!service,
   });
 
   if (!service) {

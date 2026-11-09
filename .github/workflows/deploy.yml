@@ -40,17 +40,19 @@ jobs:
       - name: Generate static route entry points
         run: node scripts/prepare-pages.mjs
 
-      - name: Prepare not-found fallback
-        run: |
-          cp dist/index.html dist/404.html
-          sed -i 's#<title>Al Safwa Trading — Industrial Tools, Equipment & Machinery in Oman</title>#<title>Page Not Found — Al Safwa Trading</title>#' dist/404.html
-          sed -i 's#name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"#name="robots" content="noindex,nofollow"#' dist/404.html
+      - name: Prepare 403 and 404 error documents
+        run: node scripts/prepare-error-pages.mjs
 
       - name: Verify production artifact
         run: |
           set -eu
           test -f dist/index.html
           test -f dist/404.html
+          test -f dist/403.html
+          test -f dist/403/index.html
+          grep -q "noindex,nofollow" dist/404.html
+          grep -q "noindex,nofollow" dist/403.html
+          ! grep -q 'rel="canonical"' dist/404.html
           test -d dist/assets
           test -f dist/products/index.html
           test -f dist/brands/index.html
