@@ -29,7 +29,7 @@ const forbidden = errorShell(
   "Access Restricted — Al Safwa Trading",
   "You do not have permission to access this resource. Contact Al Safwa Trading if you believe this is an error."
 );
-const forbiddenDocument = \`<!doctype html>
+const forbiddenDocument = `<!doctype html>
 <html lang="en-OM">
 <head>
   <meta charset="UTF-8" />
@@ -63,7 +63,7 @@ const forbiddenDocument = \`<!doctype html>
     </nav>
   </main>
 </body>
-</html>\`;
+</html>`;
 await writeFile(path.join(dist, "403.html"), forbiddenDocument, "utf8");
 await mkdir(path.join(dist, "403"), { recursive: true });
 await writeFile(path.join(dist, "403", "index.html"), forbidden, "utf8");
