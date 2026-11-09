@@ -3,6 +3,7 @@ import { business } from "../lib/business";
 import { waHref, waServiceMessage } from "../lib/whatsapp";
 import { usePageMeta, siteTitle } from "../lib/seo";
 import { services, getService } from "../lib/data/services";
+import { useSiteMedia } from "../lib/data/siteMedia";
 import { Reveal, CTAButton, PageHeader, HazardBar } from "../components/kit";
 import { IcArrowRight, IcWhatsApp, IcCheck } from "../components/icons";
 
@@ -13,6 +14,7 @@ const ctaLabel = (cta: "repair" | "maintenance" | "quote", name: string) =>
   cta === "quote" ? "Request spare parts quote" : cta === "maintenance" ? "Request maintenance" : "Request repair";
 
 export function ServicesPage() {
+  const siteMedia = useSiteMedia();
   usePageMeta({
     title: siteTitle("Repair & Maintenance Services"),
     description:
@@ -90,6 +92,7 @@ export function ServicesPage() {
 }
 
 export function ServiceDetailPage() {
+  const siteMedia = useSiteMedia();
   const { slug } = useParams();
   const service = slug ? getService(slug) : undefined;
 
@@ -147,7 +150,7 @@ export function ServiceDetailPage() {
               <span className="absolute -left-3 top-4 bottom-4 z-10 w-2.5 hazard" aria-hidden="true" />
               <div className="overflow-hidden border border-steel-3">
                 <img
-                  src={service.imageUrl}
+                  src={siteMedia[`services.${service.slug}`] || service.imageUrl}
                   alt={service.name}
                   loading="lazy"
                   className="aspect-[4/3] w-full object-cover"
