@@ -10,6 +10,7 @@ import { products, fetchFeaturedProducts } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
 import { IMG } from "../lib/data/images";
+import { useSiteMedia } from "../lib/data/siteMedia";
 import type { Product } from "../lib/types";
 import { Reveal, SectionHead, Marquee, CTAButton } from "../components/kit";
 import {
@@ -40,6 +41,8 @@ export default function Home() {
 
   const [featured, setFeatured] = useState<Product[] | null>(null);
   const [liveBrands, setLiveBrands] = useState(brands);
+  const siteMedia = useSiteMedia();
+
   useEffect(() => {
     let live = true;
     // Let the first screen paint before catalogue requests compete for mobile bandwidth.
@@ -118,7 +121,7 @@ export default function Home() {
                 <span className="absolute -left-3 top-4 bottom-4 w-2.5 hazard z-10" aria-hidden="true" />
                 <div className="overflow-hidden border border-steel-3 bg-steel">
                   <img
-                    src={IMG.hero}
+                    src={siteMedia["home.hero"] || IMG.hero}
                     alt="Industrial power tools arranged on a steel workbench"
                     className="aspect-[4/3] w-full object-cover"
                     width={1600}
@@ -321,7 +324,7 @@ export default function Home() {
             <figure className="relative">
               <div className="overflow-hidden border border-steel-3">
                 <img
-                  src={IMG.closing}
+                  src={siteMedia["home.closing"] || IMG.closing}
                   alt="Excavator working on a construction site in Oman"
                   loading="lazy"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
@@ -390,7 +393,7 @@ export default function Home() {
             <Reveal className="lg:col-span-5">
               <figure className="relative overflow-hidden border border-ink/15 bg-card">
                 <img
-                  src={IMG.closing}
+                  src={siteMedia["home.closing"] || IMG.closing}
                   alt="Excavator at an industrial construction and maintenance site"
                   loading="lazy"
                   className="aspect-[4/3] w-full object-cover"

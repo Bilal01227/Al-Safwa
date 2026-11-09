@@ -5,6 +5,7 @@ import { waHref, waRentalMessage } from "../lib/whatsapp";
 import { usePageMeta, siteTitle } from "../lib/seo";
 import { rentalCategories, fetchRentalItems } from "../lib/data/rental";
 import type { RentalItem } from "../lib/types";
+import { useSiteMedia } from "../lib/data/siteMedia";
 import { Reveal, CTAButton, PageHeader, MonoTag } from "../components/kit";
 import { IcWhatsApp, IcPhone, IcArrowRight } from "../components/icons";
 
@@ -19,6 +20,7 @@ export default function RentalPage() {
   const [params, setParams] = useSearchParams();
   const cat = params.get("cat") ?? "";
   const [items, setItems] = useState<RentalItem[] | null>(null);
+  const siteMedia = useSiteMedia();
 
   useEffect(() => {
     let live = true;
@@ -95,7 +97,7 @@ export default function RentalPage() {
                   <article className="card-hard group flex h-full flex-col">
                     <div className="relative aspect-[16/10] overflow-hidden bg-paper-2">
                       <img
-                        src={r.imageUrl}
+                        src={siteMedia[`rental.${r.id}`] || r.imageUrl}
                         alt={r.name}
                         loading="lazy"
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
