@@ -15,11 +15,11 @@
   --color-paper: #f0f1ed;
   --color-paper-2: #e4e6e0;
   --color-card: #f8f9f6;
-  --color-safety: #e8491a;
-  --color-safety-deep: #c23a12;
+  --color-safety: #b83212;
+  --color-safety-deep: #8f280d;
   --color-caution: #f0a50e;
-  --color-wa: #1da851;
-  --color-wa-deep: #178a42;
+  --color-wa: #137c3a;
+  --color-wa-deep: #0f642f;
 }
 
 html {
@@ -184,11 +184,11 @@ body::after {
 .skel {
   background: linear-gradient(90deg, #e3e5df 25%, #eff0eb 50%, #e3e5df 75%);
   background-size: 200% 100%;
-  animation: skel 1.3s linear infinite;
+  animation: skel 1.3s ease-in-out infinite;
 }
 @keyframes skel {
-  to {
-    background-position: -200% 0;
+  50% {
+    opacity: 0.58;
   }
 }
 
@@ -517,3 +517,12 @@ body::after {
   background-position: center, center, right 12% center;
   background-repeat: repeat, repeat, no-repeat;
 }
+
+/* Accessible contrast for accent text and primary action backgrounds. */
+.bg-coal .text-safety,
+.bg-ink .text-safety,
+.bg-steel .text-safety,
+.bg-steel-2 .text-safety {
+  color: #ff7957;
+}
+
