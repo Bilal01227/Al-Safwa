@@ -10,7 +10,7 @@ import { products, fetchFeaturedProducts } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
 import { IMG } from "../lib/data/images";
-import { supabase } from "../lib/supabase";
+import { useSiteMedia } from "../lib/data/siteMedia";
 import type { Product } from "../lib/types";
 import { Reveal, SectionHead, Marquee, CTAButton } from "../components/kit";
 import {
@@ -41,15 +41,7 @@ export default function Home() {
 
   const [featured, setFeatured] = useState<Product[] | null>(null);
   const [liveBrands, setLiveBrands] = useState(brands);
-  const [siteMedia, setSiteMedia] = useState<Record<string, string>>({});
-  useEffect(() => {
-    let live = true;
-    supabase.from("site_media").select("media_key,bucket_id,storage_path").eq("active", true).then(({ data }) => {
-      if (!live || !data) return;
-      setSiteMedia(Object.fromEntries(data.map((item) => [item.media_key, supabase.storage.from(item.bucket_id).getPublicUrl(item.storage_path).data.publicUrl])));
-    });
-    return () => { live = false; };
-  }, []);
+  const siteMedia = useSiteMedia();
 
   useEffect(() => {
     let live = true;
