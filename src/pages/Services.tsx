@@ -7,7 +7,7 @@ import { Reveal, CTAButton, PageHeader, HazardBar } from "../components/kit";
 import { IcArrowRight, IcWhatsApp, IcCheck } from "../components/icons";
 
 const ctaTarget = (cta: "repair" | "maintenance" | "quote") =>
-  cta === "quote" ? "/request-quote" : cta === "maintenance" ? "/repair?intent=maintenance" : "/repair";
+  cta === "quote" ? "/request-quote" : cta === "maintenance" ? "/repair/?intent=maintenance" : "/repair";
 
 const ctaLabel = (cta: "repair" | "maintenance" | "quote", name: string) =>
   cta === "quote" ? "Request spare parts quote" : cta === "maintenance" ? "Request maintenance" : "Request repair";
@@ -34,7 +34,7 @@ export function ServicesPage() {
             {services.map((s, i) => (
               <Reveal key={s.slug} delay={i * 50}>
                 <Link
-                  to={`/services/${s.slug}`}
+                  to={`/services/${s.slug}/`}
                   className="group -mx-4 grid items-center gap-4 border-t border-ink/15 px-4 py-7 transition-colors last:border-b hover:bg-card sm:mx-0 sm:px-5 md:grid-cols-[90px_1fr_auto]"
                 >
                   <span className="font-mono text-sm uppercase tracking-[0.18em] text-smoke">
@@ -63,7 +63,7 @@ export function ServicesPage() {
                 <p className="mt-2 text-sm leading-relaxed text-mist">
                   Equipment, brand, model and the fault — the workshop responds with a diagnosis quote.
                 </p>
-                <CTAButton to="/repair" variant="safety" className="mt-5">
+                <CTAButton to="/repair/" variant="safety" className="mt-5">
                   Request repair <IcArrowRight width={16} height={16} />
                 </CTAButton>
               </div>
@@ -77,7 +77,7 @@ export function ServicesPage() {
                 <p className="mt-2 text-sm leading-relaxed text-mist">
                   Scheduled inspections and servicing for tools, motors, pumps and plant.
                 </p>
-                <CTAButton to="/repair?intent=maintenance" variant="outlineLight" className="mt-5">
+                <CTAButton to="/repair/?intent=maintenance" variant="outlineLight" className="mt-5">
                   Request maintenance <IcArrowRight width={16} height={16} />
                 </CTAButton>
               </div>
@@ -107,7 +107,7 @@ export function ServiceDetailPage() {
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
         <h1 className="font-display text-5xl font-semibold uppercase">Service not found</h1>
         <p className="mt-4 text-smoke">That service page is not in the current list.</p>
-        <CTAButton to="/services" variant="dark" className="mt-8">
+        <CTAButton to="/services/" variant="dark" className="mt-8">
           All services
         </CTAButton>
       </div>
@@ -123,7 +123,7 @@ export function ServiceDetailPage() {
           <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
             <Link to="/" className="hover:text-safety">Home</Link>
             <span className="mx-2 text-safety">/</span>
-            <Link to="/services" className="hover:text-safety">Services</Link>
+            <Link to="/services/" className="hover:text-safety">Services</Link>
             <span className="mx-2 text-safety">/</span>
             <span className="text-safety">{service.name}</span>
           </p>
@@ -225,7 +225,7 @@ export function ServiceDetailPage() {
             {others.map((s) => (
               <Link
                 key={s.slug}
-                to={`/services/${s.slug}`}
+                to={`/services/${s.slug}/`}
                 className="border border-ink/25 px-4 py-2.5 font-display text-[16px] uppercase tracking-[0.06em] transition-colors hover:border-safety hover:bg-safety hover:text-paper"
               >
                 {s.name}

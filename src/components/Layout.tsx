@@ -21,12 +21,12 @@ export function LogoMark({ size = 34 }: { size?: number }) {
 
 const navItems = [
   { to: "/", label: "Home" },
-  { to: "/products", label: "Products" },
-  { to: "/brands", label: "Brands" },
-  { to: "/rental", label: "Rental" },
-  { to: "/services", label: "Services" },
-  { to: "/repair", label: "Repair" },
-  { to: "/contact", label: "Contact" },
+  { to: "/products/", label: "Products" },
+  { to: "/brands/", label: "Brands" },
+  { to: "/rental/", label: "Rental" },
+  { to: "/services/", label: "Services" },
+  { to: "/repair/", label: "Repair" },
+  { to: "/contact/", label: "Contact" },
 ];
 
 function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleTheme: () => void }) {
@@ -215,7 +215,7 @@ function Footer() {
 
         <FooterCol title="Divisions">
           {categories.map((c) => (
-            <FooterLink key={c.slug} to={c.slug === "rental-equipment" ? "/rental" : `/products?cat=${c.slug}`}>
+            <FooterLink key={c.slug} to={c.slug === "rental-equipment" ? "/rental/" : `/products/?cat=${c.slug}`}>
               {c.name}
             </FooterLink>
           ))}
@@ -223,16 +223,16 @@ function Footer() {
 
         <FooterCol title="Brands">
           {brands.slice(0, 8).map((b) => (
-            <FooterLink key={b.slug} to={`/brands/${b.slug}`}>
+            <FooterLink key={b.slug} to={`/brands/${b.slug}/`}>
               {b.name}
             </FooterLink>
           ))}
-          <FooterLink to="/brands">All brands →</FooterLink>
+          <FooterLink to="/brands/">All brands →</FooterLink>
         </FooterCol>
 
         <FooterCol title="Services">
           {services.map((s) => (
-            <FooterLink key={s.slug} to={`/services/${s.slug}`}>
+            <FooterLink key={s.slug} to={`/services/${s.slug}/`}>
               {s.name}
             </FooterLink>
           ))}

@@ -42,7 +42,7 @@ export function BrandsPage() {
               const count = productCountByBrand(b.slug);
               return (
                 <Reveal key={b.slug} delay={(i % 3) * 80}>
-                  <Link to={`/brands/${b.slug}`} className="card-hard group flex h-full flex-col p-6">
+                  <Link to={`/brands/${b.slug}/`} className="card-hard group flex h-full flex-col p-6">
                     <div className="flex items-start justify-between">
                       <span className="grid h-14 w-14 place-items-center overflow-hidden bg-ink font-display text-2xl font-semibold text-safety transition-colors group-hover:bg-safety group-hover:text-paper">
                         <BrandLogo slug={b.slug} name={b.name} monogram={b.monogram} logoPath={b.logoPath} />
@@ -110,7 +110,7 @@ export function BrandDetailPage() {
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
         <h1 className="font-display text-5xl font-semibold uppercase">Brand not found</h1>
         <p className="mt-4 text-smoke">The brand page you requested is not active in the current catalogue.</p>
-        <CTAButton to="/brands" variant="dark" className="mt-8">All brands</CTAButton>
+        <CTAButton to="/brands/" variant="dark" className="mt-8">All brands</CTAButton>
       </div>
     );
   }
@@ -120,7 +120,7 @@ export function BrandDetailPage() {
       <section className="relative overflow-hidden bg-coal grid-dark">
         <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 md:py-18">
           <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
-            <Link to="/" className="hover:text-safety">Home</Link><span className="mx-2 text-safety">/</span><Link to="/brands" className="hover:text-safety">Brands</Link><span className="mx-2 text-safety">/</span><span className="text-safety">{brand.name}</span>
+            <Link to="/" className="hover:text-safety">Home</Link><span className="mx-2 text-safety">/</span><Link to="/brands/" className="hover:text-safety">Brands</Link><span className="mx-2 text-safety">/</span><span className="text-safety">{brand.name}</span>
           </p>
           <div className="flex flex-wrap items-end justify-between gap-8">
             <div className="flex items-center gap-6">
@@ -134,7 +134,7 @@ export function BrandDetailPage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <CTAButton href={waHref(waBrandMessage(brand.name))} variant="wa"><IcWhatsApp /> WhatsApp</CTAButton>
-              <CTAButton to="/request-quote" variant="safety">Request quote <IcArrowRight width={16} height={16} /></CTAButton>
+              <CTAButton to="/request-quote/" variant="safety">Request quote <IcArrowRight width={16} height={16} /></CTAButton>
               <CTAButton href={telHref} variant="outlineLight"><IcPhone /> Call</CTAButton>
             </div>
           </div>
@@ -152,7 +152,7 @@ export function BrandDetailPage() {
             <div className="border border-dashed border-ink/30 bg-card px-6 py-14 text-center">
               <h2 className="font-display text-3xl font-semibold uppercase">{brand.name} items are available on request</h2>
               <p className="mx-auto mt-3 max-w-lg text-smoke">Catalogue entries for this brand are being verified before publication. Send us the model you need — pricing and availability are confirmed per quote.</p>
-              <div className="mt-6 flex justify-center gap-3"><CTAButton href={waHref(waBrandMessage(brand.name))} variant="wa"><IcWhatsApp /> Ask on WhatsApp</CTAButton><CTAButton to="/request-quote" variant="dark">Request a quote</CTAButton></div>
+              <div className="mt-6 flex justify-center gap-3"><CTAButton href={waHref(waBrandMessage(brand.name))} variant="wa"><IcWhatsApp /> Ask on WhatsApp</CTAButton><CTAButton to="/request-quote/" variant="dark">Request a quote</CTAButton></div>
             </div>
           ) : (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{items.map((pr, i) => <Reveal key={pr.slug} delay={(i % 4) * 70}><ProductCard product={pr} index={i} /></Reveal>)}</div>
