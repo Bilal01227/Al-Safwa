@@ -2,8 +2,8 @@ import type { Brand } from "../types";
 import { supabase } from "../supabase";
 
 export const brands: Brand[] = [
-  { slug: "bosch", name: "Bosch", monogram: "BO", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
-  { slug: "makita", name: "Makita", monogram: "MA", divisions: ["Power Tools"], about: "Japanese manufacturer of professional-grade corded and cordless power tools." },
+  { slug: "bosch", name: "Bosch", monogram: "BO", logoPath: "brands/dc267a2b-7a7b-4319-9eb7-cf4e0a869055.jpg", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
+  { slug: "makita", name: "Makita", monogram: "MA", logoPath: "brands/e9397bd2-0e39-4d72-aca3-41dd2cb41849.png", divisions: ["Power Tools"], about: "Japanese manufacturer of professional-grade corded and cordless power tools." },
   { slug: "dewalt", name: "DeWalt", monogram: "DW", logoPath: "/images/dewalt.jpg", divisions: ["Power Tools"], about: "American brand of professional power tools and accessories for heavy trade use." },
   { slug: "stanley", name: "Stanley", monogram: "ST", logoPath: "/images/Stanley.jpg", divisions: ["Power Tools", "Hand Tools"], about: "American manufacturer of hand tools and professional trade equipment." },
   { slug: "dongcheng", name: "Dongcheng", monogram: "DC", logoPath: "/images/dong%20chong.png", divisions: ["Power Tools"], about: "Chinese manufacturer of professional power tools widely used across Gulf construction sites." },
