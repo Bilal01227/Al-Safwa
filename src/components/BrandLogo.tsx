@@ -45,7 +45,7 @@ export default function BrandLogo({
   }, [slug, logoPath]);
 
   if (url) {
-    return <img src={url} alt={`${name} logo`} className={`h-full w-full object-contain p-2 ${className}`} />;
+    return <img src={url} alt={`${name} logo`} className={`h-full w-full object-contain p-2 ${className}`} onError={() => setUrl(null)} />;
   }
 
   return <span className={className}>{monogram || fallback(name)}</span>;
