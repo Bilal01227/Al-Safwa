@@ -1,16 +1,21 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation, Link } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import { ProductsPage, ProductDetailPage } from "./pages/Products";
-import { BrandsPage, BrandDetailPage } from "./pages/Brands";
-import RentalPage from "./pages/Rental";
-import { ServicesPage, ServiceDetailPage } from "./pages/Services";
-import { RequestQuotePage, RepairPage } from "./pages/Forms";
-import ContactPage from "./pages/Contact";
-import Admin from "./pages/Admin";
 import { business } from "./lib/business";
 import { CTAButton } from "./components/kit";
+
+const Home = lazy(() => import("./pages/Home"));
+const ProductsPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductsPage })));
+const ProductDetailPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductDetailPage })));
+const BrandsPage = lazy(() => import("./pages/Brands").then((m) => ({ default: m.BrandsPage })));
+const BrandDetailPage = lazy(() => import("./pages/Brands").then((m) => ({ default: m.BrandDetailPage })));
+const RentalPage = lazy(() => import("./pages/Rental"));
+const ServicesPage = lazy(() => import("./pages/Services").then((m) => ({ default: m.ServicesPage })));
+const ServiceDetailPage = lazy(() => import("./pages/Services").then((m) => ({ default: m.ServiceDetailPage })));
+const RequestQuotePage = lazy(() => import("./pages/Forms").then((m) => ({ default: m.RequestQuotePage })));
+const RepairPage = lazy(() => import("./pages/Forms").then((m) => ({ default: m.RepairPage })));
+const ContactPage = lazy(() => import("./pages/Contact"));
+const Admin = lazy(() => import("./pages/Admin"));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -60,24 +65,27 @@ function Forbidden() {
     <div className="mt-8 flex justify-center gap-3"><CTAButton to="/" variant="dark">Back to home</CTAButton><CTAButton to="/contact/" variant="safety">Contact us</CTAButton></div>
   </div>;
 }
+
 export default function App() {
   return <BrowserRouter>
     <ScrollToTop />
-    <Routes>
-      <Route path="/admin/*" element={<Admin />} />
-      <Route path="/" element={<Layout><Home /></Layout>} />
-      <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
-      <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
-      <Route path="/brands" element={<Layout><BrandsPage /></Layout>} />
-      <Route path="/brands/:brand" element={<Layout><BrandDetailPage /></Layout>} />
-      <Route path="/rental" element={<Layout><RentalPage /></Layout>} />
-      <Route path="/services" element={<Layout><ServicesPage /></Layout>} />
-      <Route path="/services/:slug" element={<Layout><ServiceDetailPage /></Layout>} />
-      <Route path="/repair" element={<Layout><RepairPage /></Layout>} />
-      <Route path="/request-quote" element={<Layout><RequestQuotePage /></Layout>} />
-      <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
-      <Route path="/403" element={<Forbidden />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <Suspense fallback={null}>
+      <Routes>
+        <Route path="/admin/*" element={<Admin />} />
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
+        <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
+        <Route path="/brands" element={<Layout><BrandsPage /></Layout>} />
+        <Route path="/brands/:brand" element={<Layout><BrandDetailPage /></Layout>} />
+        <Route path="/rental" element={<Layout><RentalPage /></Layout>} />
+        <Route path="/services" element={<Layout><ServicesPage /></Layout>} />
+        <Route path="/services/:slug" element={<Layout><ServiceDetailPage /></Layout>} />
+        <Route path="/repair" element={<Layout><RepairPage /></Layout>} />
+        <Route path="/request-quote" element={<Layout><RequestQuotePage /></Layout>} />
+        <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
+        <Route path="/403" element={<Forbidden />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
   </BrowserRouter>;
 }
