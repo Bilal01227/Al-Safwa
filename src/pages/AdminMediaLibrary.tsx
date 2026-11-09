@@ -17,7 +17,9 @@ type MediaRow = {
 const BUCKETS = ["business-assets", "brand-images", "category-images", "product-images", "rental-images"] as const;
 const slug = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const publicUrl = (row: Pick<MediaRow, "bucket_id" | "storage_path">) =>
-  supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path).data.publicUrl;
+  row.storage_path.startsWith("/") || row.storage_path.startsWith("https://") || row.storage_path.startsWith("http://")
+    ? row.storage_path
+    : supabase.storage.from(row.bucket_id).getPublicUrl(row.storage_path).data.publicUrl;
 
 const empty = {
   id: "", media_key: "", label: "", page: "General", bucket_id: "business-assets",
@@ -90,7 +92,7 @@ export default function AdminMediaLibrary() {
         ? await supabase.from("site_media").update(payload).eq("id", form.id)
         : await supabase.from("site_media").insert(payload);
       if (result.error) throw result.error;
-      if (uploadedPath && form.storage_path && form.bucket_id) {
+      if (uploadedPath && form.storage_path && !form.storage_path.startsWith("/") && !form.storage_path.startsWith("http")) {
         await supabase.storage.from(form.bucket_id).remove([form.storage_path]);
       }
       setMessage(form.id ? "Media record updated." : "Image uploaded and added to the media library.");
@@ -107,9 +109,13 @@ export default function AdminMediaLibrary() {
     const result = await supabase.from("site_media").delete().eq("id", row.id);
     if (result.error) setError(result.error.message);
     else {
-      const removed = await supabase.storage.from(row.bucket_id).remove([row.storage_path]);
-      if (removed.error) setError(`Media record removed, but storage cleanup failed: ${removed.error.message}`);
-      else setMessage("Image removed from the media library.");
+      if (row.storage_path.startsWith("/") || row.storage_path.startsWith("http")) {
+        setMessage("Image reference removed. The original website asset remains in the code repository.");
+      } else {
+        const removed = await supabase.storage.from(row.bucket_id).remove([row.storage_path]);
+        if (removed.error) setError(`Media record removed, but storage cleanup failed: ${removed.error.message}`);
+        else setMessage("Image removed from the media library.");
+      }
       if (form.id === row.id) setForm(empty);
       await load();
     }
