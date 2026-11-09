@@ -390,17 +390,32 @@ export default function Home() {
       {/* ── 6 · SERVICES ─────────────────────────────────────────── */}
       <section className="grid-light bg-paper py-20 md:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <SectionHead
-            index="05"
-            title="Repair & Maintenance Services"
-            lead="Keep equipment earning. Repairs, planned maintenance, field visits and spare parts — arranged through one counter."
-            right={
-              <CTAButton to="/services" variant="outlineDark" className="h-10 px-4 text-[15px]">
-                All services <IcArrowRight width={16} height={16} />
-              </CTAButton>
-            }
-          />
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid items-start gap-8 lg:grid-cols-12">
+            <Reveal className="lg:col-span-5">
+              <figure className="relative overflow-hidden border border-ink/15 bg-card">
+                <img
+                  src={IMG.closing}
+                  alt="Excavator at an industrial construction and maintenance site"
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover"
+                  width={1600}
+                  height={1200}
+                />
+                <span className="hazard-thin absolute inset-x-0 bottom-0 h-2" aria-hidden="true" />
+              </figure>
+            </Reveal>
+            <div className="lg:col-span-7">
+              <SectionHead
+                index="05"
+                title="Repair & Maintenance Services"
+                lead="Keep equipment earning. Repairs, planned maintenance, field visits and spare parts — arranged through one counter."
+                right={
+                  <CTAButton to="/services" variant="outlineDark" className="h-10 px-4 text-[15px]">
+                    All services <IcArrowRight width={16} height={16} />
+                  </CTAButton>
+                }
+              />
+              <div className="grid gap-5 sm:grid-cols-2">
             {featuredServices.map(
               (s, i) =>
                 s && (
@@ -421,6 +436,8 @@ export default function Home() {
                   </Reveal>
                 ),
             )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -593,16 +610,6 @@ export default function Home() {
               </div>
             </Reveal>
           </div>
-          <figure className="mt-10 overflow-hidden border border-ink/15 bg-card">
-            <img
-              src={IMG.closing}
-              alt="Industrial equipment and tools supplied by Al Safwa Trading"
-              loading="lazy"
-              className="max-h-[420px] w-full object-cover"
-              width={1600}
-              height={900}
-            />
-          </figure>
         </div>
       </section>
     </>
