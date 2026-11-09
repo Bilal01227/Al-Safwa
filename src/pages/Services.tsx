@@ -14,7 +14,6 @@ const ctaLabel = (cta: "repair" | "maintenance" | "quote", name: string) =>
   cta === "quote" ? "Request spare parts quote" : cta === "maintenance" ? "Request maintenance" : "Request repair";
 
 export function ServicesPage() {
-  const siteMedia = useSiteMedia();
   usePageMeta({
     title: siteTitle("Repair & Maintenance Services"),
     description:
