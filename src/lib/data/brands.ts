@@ -7,7 +7,7 @@ export const brands: Brand[] = [
   { slug: "dewalt", name: "DeWalt", monogram: "DW", logoPath: "/images/dewalt.jpg", divisions: ["Power Tools"], about: "American brand of professional power tools and accessories for heavy trade use." },
   { slug: "stanley", name: "Stanley", monogram: "ST", logoPath: "/images/Stanley.jpg", divisions: ["Power Tools", "Hand Tools"], about: "American manufacturer of hand tools and professional trade equipment." },
   { slug: "dongcheng", name: "Dongcheng", monogram: "DC", logoPath: "/images/dong%20chong.png", divisions: ["Power Tools"], about: "Chinese manufacturer of professional power tools widely used across Gulf construction sites." },
-  { slug: "ongco", name: "Ongco", monogram: "ON", logoPath: "/images/ingco.png", divisions: ["Power Tools"], about: "Tools and equipment brand supplied across Oman and regional Gulf markets." },
+  { slug: "Ingco", name: "INGCO", monogram: "IN", logoPath: "/images/ingco.png", divisions: ["Power Tools"], about: "Global power tools and hand tools brand supplied across Oman and regional Gulf markets." },
   { slug: "dalilee", name: "Dalilee", monogram: "DA", logoPath: "/images/Dalilee.jpg", divisions: ["Power Tools"], about: "Equipment brand supplying drilling and construction tools to regional distributors." },
   { slug: "ideal", name: "Ideal", monogram: "ID", logoPath: "/images/ideal.jpg", divisions: ["Power Tools", "Hand Tools"], about: "Trade tools brand covering hand tools and power tools for workshops and contractors." },
   { slug: "imperial", name: "Imperial", monogram: "IM", logoPath: "/images/imperial.png", divisions: ["Safety Equipment"], about: "Supplier of personal protective equipment and industrial safety products." },
