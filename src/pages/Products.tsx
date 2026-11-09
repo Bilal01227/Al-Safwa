@@ -13,12 +13,7 @@ import ProductCard from "../components/ProductCard";
 
 /* ── Catalogue page ────────────────────────────────────────────── */
 export function ProductsPage() {
-  usePageMeta({
-    title: siteTitle("Product Catalogue"),
-    description:
-      "Browse industrial power tools, safety equipment, motors, pumps and spare parts supplied by Al Safwa Trading in Oman. Filter by brand, category and availability, then request a quote.",
-    path: "/products",
-  });
+
 
   const [params, setParams] = useSearchParams();
   const q = params.get("q") ?? "";
@@ -77,6 +72,17 @@ export function ProductsPage() {
   }, [all, q, brand, cat, sub, avail, price]);
 
   const hasFilters = Boolean(q || brand || cat || sub || avail || price);
+
+  // Filter combinations are useful to visitors but should not become separate
+  // search landing pages. Keep one canonical, indexable catalogue URL.
+  usePageMeta({
+    title: siteTitle("Product Catalogue"),
+    description:
+      "Browse industrial power tools, safety equipment, motors, pumps and spare parts supplied by Al Safwa Trading in Oman. Filter by brand, category and availability, then request a quote.",
+    path: "/products",
+    indexable: !hasFilters,
+  });
+
   const catName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? slug;
 
   return (
@@ -238,7 +244,7 @@ export function ProductDetailPage() {
       ? `${product.productName} (model ${product.modelNumber}) — supplied by ${business.name} in Oman. Request price and availability.`
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
-    indexable: !!product,
+    indexable: product !== undefined,
   });
 
   if (product === null) {

@@ -98,7 +98,7 @@ export function BrandDetailPage() {
       ? `${brand.name} products supplied by ${business.name} in Oman — request pricing and availability by quote or WhatsApp.`
       : `Brands supplied by ${business.name}, Oman.`,
     path: `/brands/${brandSlug ?? ""}`,
-    indexable: !!brand,
+    indexable: brand !== undefined,
   });
 
   if (brandSlug && brand === undefined && items === null) {
