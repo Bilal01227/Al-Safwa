@@ -214,3 +214,5 @@ export const categoryIcon = (key: IconKey, props?: P) => {
       return <IcBolt {...props} />;
   }
 };
+
+// WhatsApp brand mark uses the official solid glyph above.
