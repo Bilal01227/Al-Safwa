@@ -42,14 +42,14 @@ export default function Home() {
   const [liveBrands, setLiveBrands] = useState(brands);
   useEffect(() => {
     let live = true;
-    fetchBrands().then((items) => live && setLiveBrands(items));
-    return () => { live = false; };
-  }, []);
-  useEffect(() => {
-    let live = true;
-    fetchFeaturedProducts().then((f) => live && setFeatured(f));
+    // Let the first screen paint before catalogue requests compete for mobile bandwidth.
+    const timer = window.setTimeout(() => {
+      fetchBrands().then((items) => live && setLiveBrands(items));
+      fetchFeaturedProducts().then((items) => live && setFeatured(items));
+    }, 1200);
     return () => {
       live = false;
+      window.clearTimeout(timer);
     };
   }, []);
 
@@ -75,11 +75,9 @@ export default function Home() {
                 Muscat · Sultanate of Oman — Supply / Rental / Repair
               </p>
             </Reveal>
-            <Reveal delay={90}>
-              <h1 className="font-display text-[clamp(2.9rem,6.5vw,5.4rem)] font-semibold uppercase leading-[0.95] tracking-[0.005em] text-paper">
+            <h1 className="font-display text-[clamp(2.9rem,6.5vw,5.4rem)] font-semibold uppercase leading-[0.95] tracking-[0.005em] text-paper">
                 Industrial Tools, Equipment &amp; Machinery Solutions in <span className="text-safety">Oman</span>
-              </h1>
-            </Reveal>
+            </h1>
             <Reveal delay={180}>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-mist">
                 Professional equipment supply, rental, repair and maintenance support from {business.name} for
@@ -116,8 +114,7 @@ export default function Home() {
           </div>
 
           <div className="lg:col-span-5">
-            <Reveal delay={200}>
-              <figure className="relative">
+            <figure className="relative">
                 <span className="absolute -left-3 top-4 bottom-4 w-2.5 hazard z-10" aria-hidden="true" />
                 <div className="overflow-hidden border border-steel-3 bg-steel">
                   <img
@@ -140,8 +137,7 @@ export default function Home() {
                 <span className="absolute -top-4 right-6 bg-safety px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-paper">
                   B2B · Oman-wide
                 </span>
-              </figure>
-            </Reveal>
+            </figure>
           </div>
         </div>
         <div className="hazard h-2.5" aria-hidden="true" />
