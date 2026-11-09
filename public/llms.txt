@@ -1,28 +1,44 @@
 # Al Safwa Trading
 
-Al Safwa Trading supplies industrial tools, equipment and machinery in Oman, with supply, rental, repair and maintenance support for contractors, workshops and industrial businesses.
+> Al Safwa Trading supplies industrial tools, equipment and machinery in Oman, with supply, rental, repair and maintenance support for contractors, workshops and industrial businesses.
 
-## Primary pages
-- https://alsafwaoman.com/
-- https://alsafwaoman.com/products
-- https://alsafwaoman.com/brands
-- https://alsafwaoman.com/rental
-- https://alsafwaoman.com/services
-- https://alsafwaoman.com/repair
-- https://alsafwaoman.com/request-quote
-- https://alsafwaoman.com/contact
+Al Safwa Trading serves customers across Oman, with Muscat as its primary stated location. This file summarizes the public website for AI assistants and other automated agents. Use the linked pages as the authoritative source for current public information.
+
+## Company
+
+- Website: https://alsafwaoman.com/
+- Business name: Al Safwa Trading
+- Primary market: Oman
+- Primary stated location: Muscat, Oman
+- Phone and WhatsApp: +968 90167345
+
+## Main pages
+
+- [Home](https://alsafwaoman.com/): Company overview and key product divisions.
+- [Products](https://alsafwaoman.com/products/): Public industrial equipment catalogue.
+- [Brands](https://alsafwaoman.com/brands/): Brands listed by Al Safwa Trading.
+- [Rental](https://alsafwaoman.com/rental/): Equipment rental information.
+- [Services](https://alsafwaoman.com/services/): Repair, maintenance and field support services.
+- [Repair](https://alsafwaoman.com/repair/): Repair enquiry information.
+- [Request a quote](https://alsafwaoman.com/request-quote/): Submit a product or service quotation request.
+- [Contact](https://alsafwaoman.com/contact/): Contact information and enquiry options.
 
 ## Product divisions
-Power Tools; Hand Tools; Safety Equipment; Motors & Pumps; Spare Parts; Machinery; Rental Equipment.
 
-## Customer intent
-Users can browse products and brands, request a quotation, ask about availability, arrange equipment rental, and contact Al Safwa Trading for repair or maintenance support.
+The public catalogue covers power tools, hand tools, safety equipment, motors and pumps, spare parts, machinery and rental equipment. Product availability, pricing and specifications may change and should be confirmed directly with Al Safwa Trading before ordering.
 
-## Business area
-Oman, with Muscat as the primary stated location and Oman-wide service positioning.
+## Customer tasks
 
-## Contact
-WhatsApp / phone: +968 90167345
+Visitors can browse products and brands, request a quotation, ask about availability, arrange equipment rental, and contact Al Safwa Trading for repair or maintenance support.
 
-## Accuracy
-Product availability, pricing, specifications and brand sourcing should be treated as catalogue information and verified with Al Safwa Trading before purchase.
+## Accuracy and limitations
+
+- Do not infer authorized-dealer status unless the website explicitly confirms it for a specific brand.
+- Do not assume that every listed product is in stock.
+- Treat catalogue specifications and availability as information to verify before purchase.
+- Use the public contact details above for confirmation when current information is required.
+
+## Site discovery
+
+- [XML sitemap](https://alsafwaoman.com/sitemap.xml)
+- [Robots.txt](https://alsafwaoman.com/robots.txt)
