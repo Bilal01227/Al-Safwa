@@ -2,8 +2,8 @@ import type { Brand } from "../types";
 import { supabase } from "../supabase";
 
 export const brands: Brand[] = [
-  { slug: "bosch", name: "Bosch", monogram: "BO", logoPath: "/images/1upR7jHmsyR1GNGbdQFYaWUka1XSOK2bw2UzvXm96YEnTPOzVNsN_9Oau0MLzx9KNS_ss5r_pzG4PFONj2dirrH_KZlStiQykNNhivJxk_m5jNE3HKyqNR-oAF8kOAOYdXQv0IWosJ7GXAnjJfNX4hPhxwgN-n8wCkPk4j1fPj70yPSec3ZFrSph8MZ719nY.jpg", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
-  { slug: "makita", name: "Makita", monogram: "MA", logoPath: "/images/43vYWwAHrCXjOui4-bgBTdF3O_cPkZv58TOd5kI10buVj8Ei3RtEvSVOKpiP7VObpzBj4ezsFg8XO2JzmCnOgxY2NEquwQAv4BBm1O2_vFUb1jMU2SqRbGuNjc1fki2rViz43qfNeTIfG3lXokzdBpOp0nbfXMiGtaI6Hilv3VsdSmPXT6L6hCZBbSRkk8L3.jpg", divisions: ["Power Tools"], about: "Japanese manufacturer of professional-grade corded and cordless power tools." },
+  { slug: "bosch", name: "Bosch", monogram: "BO", divisions: ["Power Tools"], about: "German manufacturer of professional power tools, accessories and measuring equipment." },
+  { slug: "makita", name: "Makita", monogram: "MA", divisions: ["Power Tools"], about: "Japanese manufacturer of professional-grade corded and cordless power tools." },
   { slug: "dewalt", name: "DeWalt", monogram: "DW", logoPath: "/images/dewalt.jpg", divisions: ["Power Tools"], about: "American brand of professional power tools and accessories for heavy trade use." },
   { slug: "stanley", name: "Stanley", monogram: "ST", logoPath: "/images/Stanley.jpg", divisions: ["Power Tools", "Hand Tools"], about: "American manufacturer of hand tools and professional trade equipment." },
   { slug: "dongcheng", name: "Dongcheng", monogram: "DC", logoPath: "/images/dong%20chong.png", divisions: ["Power Tools"], about: "Chinese manufacturer of professional power tools widely used across Gulf construction sites." },

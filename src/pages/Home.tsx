@@ -593,6 +593,16 @@ export default function Home() {
               </div>
             </Reveal>
           </div>
+          <figure className="mt-10 overflow-hidden border border-ink/15 bg-card">
+            <img
+              src={IMG.closing}
+              alt="Industrial equipment and tools supplied by Al Safwa Trading"
+              loading="lazy"
+              className="max-h-[420px] w-full object-cover"
+              width={1600}
+              height={900}
+            />
+          </figure>
         </div>
       </section>
     </>
