@@ -25,5 +25,5 @@ jobs:
       - name: Build production app
         env:
           VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_1e9TK7R2CSPP7190qxO2jg_9emlfwgy
         run: npm run build -- --base=/
