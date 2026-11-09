@@ -321,6 +321,22 @@ export default function Home() {
           RENTAL
         </span>
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-2">
+          <Reveal delay={150}>
+            <figure className="relative">
+              <div className="overflow-hidden border border-steel-3">
+                <img
+                  src={IMG.closing}
+                  alt="Excavator working on a construction site in Oman"
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
+                />
+              </div>
+              <span className="hazard-thin absolute inset-x-0 bottom-0 h-2" aria-hidden="true" />
+              <figcaption className="absolute left-4 top-4 bg-ink/90 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-caution">
+                Rates quoted per project
+              </figcaption>
+            </figure>
+          </Reveal>
           <Reveal>
             <div>
               <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-safety">
@@ -367,22 +383,6 @@ export default function Home() {
                 </CTAButton>
               </div>
             </div>
-          </Reveal>
-          <Reveal delay={150}>
-            <figure className="relative">
-              <div className="overflow-hidden border border-steel-3">
-                <img
-                  src={IMG.machinery}
-                  alt="Excavator working on a construction site in Oman"
-                  loading="lazy"
-                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
-                />
-              </div>
-              <span className="hazard-thin absolute inset-x-0 bottom-0 h-2" aria-hidden="true" />
-              <figcaption className="absolute left-4 top-4 bg-ink/90 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-caution">
-                Rates quoted per project
-              </figcaption>
-            </figure>
           </Reveal>
         </div>
       </section>
