@@ -134,9 +134,14 @@ export function RequestQuotePage() {
     if (Object.keys(errs).length) return;
     setSending(true);
     const type: SubmissionType = isRental ? "rental" : "quote";
-    const rec = await saveSubmission(type, { ...form, intent: type });
-    setSending(false);
-    setDone({ id: rec.id });
+    try {
+      const rec = await saveSubmission(type, { ...form, intent: type });
+      setDone({ id: rec.id });
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Your request could not be saved. Please try again or contact us on WhatsApp.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -277,9 +282,14 @@ export function RepairPage() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setSending(true);
-    const rec = await saveSubmission("repair", { ...form, intent: isMaintenance ? "maintenance" : "repair" });
-    setSending(false);
-    setDone({ id: rec.id });
+    try {
+      const rec = await saveSubmission("repair", { ...form, intent: isMaintenance ? "maintenance" : "repair" });
+      setDone({ id: rec.id });
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "Your request could not be saved. Please try again or contact us on WhatsApp.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
