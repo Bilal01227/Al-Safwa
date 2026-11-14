@@ -526,3 +526,9 @@ body::after {
   color: #ff7957;
 }
 
+
+
+/* Arabic storefront: RTL layout and Arabic-capable typography. */
+.arabic-page { direction: rtl; font-family: Tahoma, Arial, sans-serif; }
+.arabic-page .font-mono, .arabic-page .font-display { font-family: Tahoma, Arial, sans-serif; letter-spacing: 0; }
+.arabic-page .arabic-number { direction: ltr; unicode-bidi: isolate; }

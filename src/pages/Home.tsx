@@ -46,15 +46,13 @@ export default function Home() {
 
   useEffect(() => {
     let live = true;
-    // Let the first screen paint before catalogue requests compete for mobile bandwidth.
-    const timer = window.setTimeout(() => {
-      fetchBrands().then((items) => live && setLiveBrands(items));
-      fetchProducts().then((items) => live && setLiveProducts(items));
-      fetchFeaturedProducts().then((items) => live && setFeatured(items));
-    }, 1200);
+    // Load the authoritative catalogue immediately; do not leave the
+    // homepage on its small emergency fallback dataset for the first paint.
+    fetchBrands().then((items) => live && setLiveBrands(items));
+    fetchProducts().then((items) => live && setLiveProducts(items));
+    fetchFeaturedProducts().then((items) => live && setFeatured(items));
     return () => {
       live = false;
-      window.clearTimeout(timer);
     };
   }, []);
 
