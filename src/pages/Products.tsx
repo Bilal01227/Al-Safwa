@@ -310,6 +310,7 @@ export function ProductDetailPage() {
   }
 
   const p = product;
+  const specificationEntries = Object.entries(p.specifications || {});
   const showPrice = p.verified && p.price !== null;
 
   return (
@@ -399,10 +400,10 @@ export function ProductDetailPage() {
           <SectionHead eyebrow="Product details" title="Specifications" />
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
             <div className="border border-ink/10 bg-card p-6 lg:col-span-2">
-              <p className="leading-relaxed text-smoke">{p.description}</p>
-              {p.specifications?.length ? (
+              <p className="leading-relaxed text-smoke">{p.description || p.shortDescription}</p>
+              {specificationEntries.length ? (
                 <dl className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
-                  {p.specifications.map(([label, value]) => (
+                  {specificationEntries.map(([label, value]) => (
                     <div key={label} className="grid gap-2 py-4 sm:grid-cols-3">
                       <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-smoke">{label}</dt>
                       <dd className="sm:col-span-2">{value}</dd>
