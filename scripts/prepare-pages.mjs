@@ -11,6 +11,7 @@ const pages = new Map([
   ["/repair", ["Equipment Repair Request — Al Safwa Trading Oman", "Request equipment inspection, repair and maintenance support from Al Safwa Trading in Oman."]],
   ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing and availability for industrial tools, machinery, rental and spare parts in Oman."]],
   ["/contact", ["Contact Al Safwa Trading — Oman", "Contact Al Safwa Trading for industrial equipment supply, rental, repair and maintenance enquiries."]],
+  ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
 
 async function collectTs(dir) {
@@ -124,7 +125,8 @@ for (const [route, details] of pages) {
   const output = path.join(dist, route.slice(1), "index.html");
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
-  let html = rootHtml.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(title) + "</title>");
+  let html = route === "/ar" ? rootHtml : rootHtml.replaceAll('<link rel="alternate" hreflang="en-OM" href="https://alsafwaoman.com/" />', "").replaceAll('<link rel="alternate" hreflang="ar-OM" href="https://alsafwaoman.com/ar/" />', "").replaceAll('<link rel="alternate" hreflang="x-default" href="https://alsafwaoman.com/" />', "");
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(title) + "</title>");
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?\s*>/i, '<link rel="canonical" href="' + canonical + '" />');
   html = replaceMeta(html, "description", description);
   html = replaceMeta(html, "og:title", title, "property");
