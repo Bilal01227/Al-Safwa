@@ -43,17 +43,27 @@ type DbProduct = {
 type Ref = { id: string; name: string; slug: string; image_path?: string | null };
 type ImageRef = { product_id: string; storage_path: string; is_primary: boolean; sort_order: number };
 
+async function fetchAllRows<T>(query: any): Promise<T[]> {
+  const rows: T[] = [];
+  const pageSize = 1000;
+  for (let offset = 0; ; offset += pageSize) {
+    const { data, error } = await query.range(offset, offset + pageSize - 1);
+    if (error) throw error;
+    const page = (data || []) as T[];
+    rows.push(...page);
+    if (page.length < pageSize) break;
+  }
+  return rows;
+}
+
 async function fromSupabase(): Promise<Product[]> {
   const [p, b, c, i] = await Promise.all([
-    supabase
-      .from("products")
-      .select(
-        "id,name,slug,brand_id,category_id,model_number,short_description,specifications,price,currency,price_type,availability_status,featured,verified,source_url,source_company,last_verified_at,active",
-      )
-      .eq("active", true),
-    supabase.from("brands").select("id,name,slug"),
-    supabase.from("categories").select("id,name,slug,image_path"),
-    supabase.from("product_images").select("product_id,storage_path,is_primary,sort_order").order("sort_order"),
+    fetchAllRows<DbProduct>(supabase.from("products").select(
+      "id,name,slug,brand_id,category_id,model_number,short_description,specifications,price,currency,price_type,availability_status,featured,verified,source_url,source_company,last_verified_at,active",
+    )),
+    fetchAllRows<Ref>(supabase.from("brands").select("id,name,slug")),
+    fetchAllRows<Ref>(supabase.from("categories").select("id,name,slug,image_path")),
+    fetchAllRows<ImageRef>(supabase.from("product_images").select("product_id,storage_path,is_primary,sort_order").order("sort_order")),
   ]);
 
   if (p.error) throw p.error;
@@ -61,11 +71,11 @@ async function fromSupabase(): Promise<Product[]> {
   if (c.error) throw c.error;
   if (i.error) throw i.error;
 
-  const brandRefs = (b.data || []) as Ref[];
-  const categoryRefs = (c.data || []) as Ref[];
-  const images = (i.data || []) as ImageRef[];
+  const brandRefs = b;
+  const categoryRefs = c;
+  const images = i;
 
-  return ((p.data || []) as DbProduct[]).map((x) => {
+  return (p || []).map((x) => {
     const brand = brandRefs.find((v) => v.id === x.brand_id);
     const category = categoryRefs.find((v) => v.id === x.category_id);
     const image = images
@@ -107,8 +117,8 @@ async function fromSupabase(): Promise<Product[]> {
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    // Supabase is authoritative. This is what makes Admin CRUD control the
-    // public catalogue instead of silently resurrecting deleted React items.
+    // Supabase is authoritative. Every database product is retained in the public catalogue;
+    // pagination prevents the default PostgREST row cap from truncating larger imports.
     return await fromSupabase();
   } catch {
     // Only use the old catalogue if the database itself is unavailable.
