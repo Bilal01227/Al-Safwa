@@ -324,8 +324,8 @@ export default function Home() {
             <figure className="relative">
               <div className="overflow-hidden border border-steel-3">
                 <img
-                  src={siteMedia["home.closing"] || IMG.closing}
-                  alt="Excavator working on a construction site in Oman"
+                  src={siteMedia["home.rental"] || IMG.closing}
+                  alt="Excavator operating at a construction site"
                   loading="lazy"
                   className="aspect-[4/3] w-full object-cover transition-transform duration-700 hover:scale-[1.04]"
                 />
