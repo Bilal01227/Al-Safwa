@@ -62,7 +62,7 @@ export async function saveSubmission(
       customer_id: customerRow.id,
       product_name_snapshot: payload.product.trim(),
       model_snapshot: payload.model?.trim() || null,
-      quantity: payload.quantity && /^\\d+$/.test(payload.quantity.trim()) ? Number(payload.quantity.trim()) : null,
+      quantity: payload.quantity && /^[0-9]+$/.test(payload.quantity.trim()) && Number(payload.quantity.trim()) > 0 ? Number(payload.quantity.trim()) : null,
       requirement: payload.requirement.trim(),
       location: payload.location?.trim() || null,
       customer_notes: JSON.stringify({
