@@ -102,6 +102,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/ar/" lang="ar" aria-label="عرض الموقع باللغة العربية" className="inline-flex h-10 items-center border border-white/20 px-2.5 font-mono text-[11px] font-semibold text-paper transition-colors hover:border-safety hover:text-safety sm:px-3">العربية</Link>
             <button
               type="button"
               onClick={onToggleTheme}
@@ -172,6 +173,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
           ))}
         </nav>
         <div className="flex gap-3 border-t border-white/10 p-4 sm:px-6">
+          <Link to="/ar/" lang="ar" className="inline-flex items-center justify-center border border-white/20 px-4 py-2 font-mono text-xs text-paper hover:border-safety hover:text-safety">العربية</Link>
           <CTAButton href={waHref(waGeneralMessage())} variant="wa" className="flex-1">
             <IcWhatsApp /> WhatsApp
           </CTAButton>
