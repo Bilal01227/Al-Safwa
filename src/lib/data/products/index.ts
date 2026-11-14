@@ -25,6 +25,7 @@ type DbProduct = {
   slug: string;
   brand_id: string | null;
   category_id: string | null;
+  subcategory_id: string | null;
   model_number: string | null;
   short_description: string | null;
   specifications: Record<string, string> | null;
@@ -59,10 +60,10 @@ async function fetchAllRows<T>(query: any): Promise<T[]> {
 async function fromSupabase(): Promise<Product[]> {
   const [p, b, c, i] = await Promise.all([
     fetchAllRows<DbProduct>(supabase.from("products").select(
-      "id,name,slug,brand_id,category_id,model_number,short_description,specifications,price,currency,price_type,availability_status,featured,verified,source_url,source_company,last_verified_at,active",
+      "id,name,slug,brand_id,category_id,subcategory_id,model_number,short_description,specifications,price,currency,price_type,availability_status,featured,verified,source_url,source_company,last_verified_at,active",
     )),
     fetchAllRows<Ref>(supabase.from("brands").select("id,name,slug")),
-    fetchAllRows<Ref>(supabase.from("categories").select("id,name,slug,image_path")),
+    fetchAllRows<Ref>(supabase.from("categories").select("id,name,slug,image_path,parent_id")),
     fetchAllRows<ImageRef>(supabase.from("product_images").select("product_id,storage_path,is_primary,sort_order").order("sort_order")),
   ]);
 
@@ -73,6 +74,9 @@ async function fromSupabase(): Promise<Product[]> {
   return (p || []).map((x) => {
     const brand = brandRefs.find((v) => v.id === x.brand_id);
     const category = categoryRefs.find((v) => v.id === x.category_id);
+    const subcategory = x.subcategory_id ? categoryRefs.find((v) => v.id === x.subcategory_id) : undefined;
+    const parentCategory = category?.parent_id ? categoryRefs.find((v) => v.id === category.parent_id) : undefined;
+    const primaryCategory = parentCategory || category;
     const image = images
       .filter((v) => v.product_id === x.id)
       .sort((a, z) => Number(z.is_primary) - Number(a.is_primary) || a.sort_order - z.sort_order)[0];
@@ -92,8 +96,8 @@ async function fromSupabase(): Promise<Product[]> {
       brand: brand?.name || "Al Safwa",
       brandSlug: brand?.slug || "al-safwa",
       modelNumber: x.model_number || "—",
-      category: category?.slug || "industrial-equipment",
-      subcategory: category?.name || "Industrial Equipment",
+      category: primaryCategory?.slug || "industrial-equipment",
+      subcategory: subcategory?.name || (parentCategory ? category?.name : category?.name) || "Industrial Equipment",
       shortDescription: x.short_description || "",
       specifications: x.specifications || {},
       imageUrl,
