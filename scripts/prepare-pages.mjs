@@ -34,15 +34,15 @@ async function collectOneFile(file) {
   const source = await readFile(file, "utf8");
   return new Set(Array.from(source.matchAll(/\bslug\s*:\s*["']([a-z0-9-]+)["']/g), (match) => match[1]));
 }
-async function fetchSlugs(table) {
+async function fetchSlugs(table, includeInactive = false) {
   const base = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-  if (!base || !key) return [];
+  if (!base || !key) throw new Error('Supabase URL and publishable key are required for complete sitemap generation.');
   const result = [];
   for (let offset = 0; offset < 10000; offset += 1000) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/" + table);
     url.searchParams.set("select", "slug");
-    url.searchParams.set("active", "eq.true");
+    if (!includeInactive) url.searchParams.set("active", "eq.true");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
     const response = await fetch(url, {
@@ -63,10 +63,10 @@ const services = await collectOneFile("src/lib/data/services.ts");
 const products = await collectSlugs("src/lib/data/products");
 for (const [table, target] of [["brands", brands], ["products", products]]) {
   try {
-    for (const slug of await fetchSlugs(table)) target.add(slug);
+    for (const slug of await fetchSlugs(table, table === "products")) target.add(slug);
     console.log("Loaded active " + table + " slugs.");
   } catch (error) {
-    console.warn("Could not fetch " + table + " slugs; using local fallback: " + error.message);
+    throw new Error("Could not fetch complete " + table + " slugs; refusing to publish an incomplete sitemap: " + error.message);
   }
 }
 for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Request pricing and availability."]);
