@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { brands as fallbackBrands, fetchBrand, fetchBrands, TRADEMARK_NOTE } from "../lib/data/brands";
-import { productCountByBrand, fetchProductsByBrand } from "../lib/data/products";
+import { fetchProducts, fetchProductsByBrand } from "../lib/data/products";
 import { waHref, waBrandMessage } from "../lib/whatsapp";
 import { business, telHref } from "../lib/business";
 import { usePageMeta, siteTitle } from "../lib/seo";
@@ -14,10 +14,17 @@ import { Link } from "react-router-dom";
 
 export function BrandsPage() {
   const [brands, setBrands] = useState<Brand[]>(fallbackBrands);
+  const [counts, setCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
     let live = true;
     fetchBrands().then((rows) => live && setBrands(rows));
+    fetchProducts().then((rows) => {
+      if (!live) return;
+      const next: Record<string, number> = {};
+      rows.forEach((product) => { next[product.brandSlug] = (next[product.brandSlug] || 0) + 1; });
+      setCounts(next);
+    });
     return () => { live = false; };
   }, []);
 
@@ -39,7 +46,7 @@ export function BrandsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {brands.map((b, i) => {
-              const count = productCountByBrand(b.slug);
+              const count = counts[b.slug] ?? 0;
               return (
                 <Reveal key={b.slug} delay={(i % 3) * 80}>
                   <Link to={`/brands/${b.slug}/`} className="card-hard group flex h-full flex-col p-6">
