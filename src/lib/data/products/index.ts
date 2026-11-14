@@ -66,11 +66,6 @@ async function fromSupabase(): Promise<Product[]> {
     fetchAllRows<ImageRef>(supabase.from("product_images").select("product_id,storage_path,is_primary,sort_order").order("sort_order")),
   ]);
 
-  if (p.error) throw p.error;
-  if (b.error) throw b.error;
-  if (c.error) throw c.error;
-  if (i.error) throw i.error;
-
   const brandRefs = b;
   const categoryRefs = c;
   const images = i;
