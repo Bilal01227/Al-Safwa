@@ -5,6 +5,7 @@ import { business } from "./lib/business";
 import { CTAButton } from "./components/kit";
 
 const Home = lazy(() => import("./pages/Home"));
+const ArabicHome = lazy(() => import("./pages/ArabicHome"));
 const ProductsPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductsPage })));
 const ProductDetailPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductDetailPage })));
 const BrandsPage = lazy(() => import("./pages/Brands").then((m) => ({ default: m.BrandsPage })));
@@ -73,6 +74,7 @@ export default function App() {
       <Routes>
         <Route path="/admin/*" element={<Admin />} />
         <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/ar" element={<ArabicHome />} />
         <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
         <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
         <Route path="/brands" element={<Layout><BrandsPage /></Layout>} />
