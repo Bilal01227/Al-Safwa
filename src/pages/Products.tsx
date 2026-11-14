@@ -244,6 +244,31 @@ export function ProductDetailPage() {
       ? `${product.productName} (model ${product.modelNumber}) — supplied by ${business.name} in Oman. Request price and availability.`
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
+    image: product?.imageUrl || undefined,
+    type: "product",
+    jsonLd: product
+      ? [
+          {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: product.productName,
+            description: product.description || product.shortDescription,
+            model: product.modelNumber !== "—" ? product.modelNumber : undefined,
+            image: product.imageUrl || undefined,
+            brand: { "@type": "Brand", name: product.brand },
+            category: product.subcategory,
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: "https://alsafwaoman.com/" },
+              { "@type": "ListItem", position: 2, name: "Products", item: "https://alsafwaoman.com/products/" },
+              { "@type": "ListItem", position: 3, name: product.productName, item: `https://alsafwaoman.com/products/${slug}/` },
+            ],
+          },
+        ]
+      : undefined,
     indexable: product !== undefined,
   });
 
