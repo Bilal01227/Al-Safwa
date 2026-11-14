@@ -26,7 +26,7 @@ export async function saveSubmission(
     email: payload.email?.trim() || null,
     city: payload.location?.trim() || null,
     country: "Oman",
-    customer_type: payload.company?.trim() ? "business" : "individual",
+    customer_type: payload.company?.trim() ? "company" : "individual",
   };
 
   const { data: customerRow, error: customerError } = await supabase
@@ -48,7 +48,7 @@ export async function saveSubmission(
         model_number: payload.model?.trim() || null,
         problem_description: payload.problem.trim(),
         location: payload.location?.trim() || null,
-        urgency: (payload.urgency || "Standard").toLowerCase().replaceAll(" ", "_"),
+        urgency: payload.urgency === "Critical breakdown" ? "emergency" : payload.urgency === "Urgent" ? "high" : "normal",
       })
       .select("service_number")
       .single();
