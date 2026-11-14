@@ -38,6 +38,9 @@ jobs:
         run: npm run build -- --base=/
 
       - name: Generate static route entry points
+        env:
+          VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY || 'sb_publishable_1e9TK7R2CSPP7190qxO2jg_9emlfwgy' }}
         run: node scripts/prepare-pages.mjs
 
       - name: Prepare 403 and 404 error documents
