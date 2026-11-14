@@ -57,6 +57,27 @@ async function fetchSlugs(table, includeInactive = false) {
   return result;
 }
 
+async function fetchProductRecords() {
+  const base = process.env.VITE_SUPABASE_URL;
+  const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!base || !key) throw new Error("Supabase credentials are required for product metadata generation.");
+  const records = [];
+  for (let offset = 0; ; offset += 1000) {
+    const url = new URL(base.replace(/\\/$/, "") + "/rest/v1/products");
+    url.searchParams.set("select", "slug,name,model_number,short_description,full_description");
+    url.searchParams.set("limit", "1000");
+    url.searchParams.set("offset", String(offset));
+    const response = await fetch(url, {
+      headers: { apikey: key, Authorization: "Bearer " + key, Accept: "application/json" },
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!response.ok) throw new Error("Product metadata HTTP " + response.status);
+    const rows = await response.json();
+    records.push(...rows.filter((row) => typeof row.slug === "string" && /^[a-z0-9-]+$/.test(row.slug)));
+    if (rows.length < 1000) break;
+  }
+  return records;
+}
 const humanize = (slug) => slug.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 const brands = await collectOneFile("src/lib/data/brands.ts");
 const services = await collectOneFile("src/lib/data/services.ts");
@@ -71,7 +92,24 @@ for (const [table, target] of [["brands", brands], ["products", products]]) {
 }
 for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Request pricing and availability."]);
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
-for (const slug of products) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Request product pricing and availability."]);
+const productRecords = await fetchProductRecords();
+for (const record of productRecords) {
+  products.add(record.slug);
+  const name = String(record.name || humanize(record.slug));
+  const description = String(record.full_description || record.short_description || name + " supplied by Al Safwa Trading in Oman. Request product pricing and availability.").replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ").trim().slice(0, 300);
+  const route = "/products/" + record.slug;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    model: record.model_number || undefined,
+  };
+  pages.set(route, [name + " — Al Safwa Trading Oman", description, structuredData]);
+}
+for (const slug of products) {
+  if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Request product pricing and availability."]);
+}
 
 const rootHtml = await readFile(path.join(dist, "index.html"), "utf8");
 const escapeHtml = (value) => String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
@@ -82,6 +120,7 @@ function replaceMeta(html, key, value, attribute = "name") {
 for (const [route, details] of pages) {
   const title = details[0];
   const description = details[1];
+  const structuredData = details[2];
   const output = path.join(dist, route.slice(1), "index.html");
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
@@ -93,6 +132,10 @@ for (const [route, details] of pages) {
   html = replaceMeta(html, "og:url", canonical, "property");
   html = replaceMeta(html, "twitter:title", title);
   html = replaceMeta(html, "twitter:description", description);
+  if (structuredData) {
+    const safeJson = JSON.stringify(structuredData).replaceAll("</", "<\\/");
+    html = html.replace("</head>", '<script id="route-jsonld" type="application/ld+json">' + safeJson + "</script></head>");
+  }
   await writeFile(output, html, "utf8");
 }
 const urls = [site + "/", ...Array.from(pages.keys(), (route) => site + route + "/")];
