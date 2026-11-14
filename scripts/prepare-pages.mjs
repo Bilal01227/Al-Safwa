@@ -63,7 +63,7 @@ async function fetchProductRecords() {
   if (!base || !key) throw new Error("Supabase credentials are required for product metadata generation.");
   const records = [];
   for (let offset = 0; ; offset += 1000) {
-    const url = new URL(base.replace(/\\/$/, "") + "/rest/v1/products");
+    const url = new URL(base.replace(/\/$/, "") + "/rest/v1/products");
     url.searchParams.set("select", "slug,name,model_number,short_description,full_description");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
@@ -96,7 +96,7 @@ const productRecords = await fetchProductRecords();
 for (const record of productRecords) {
   products.add(record.slug);
   const name = String(record.name || humanize(record.slug));
-  const description = String(record.full_description || record.short_description || name + " supplied by Al Safwa Trading in Oman. Request product pricing and availability.").replace(/<[^>]*>/g, " ").replace(/\\s+/g, " ").trim().slice(0, 300);
+  const description = String(record.full_description || record.short_description || name + " supplied by Al Safwa Trading in Oman. Request product pricing and availability.").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
   const structuredData = {
     "@context": "https://schema.org",
