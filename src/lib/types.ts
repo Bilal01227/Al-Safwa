@@ -15,6 +15,7 @@ export interface Product {
   category: string;
   subcategory: string;
   shortDescription: string;
+  description?: string;
   specifications: Record<string, string>;
   imageUrl: string;
   sourceUrl: string;
