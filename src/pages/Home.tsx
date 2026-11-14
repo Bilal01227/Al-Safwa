@@ -6,7 +6,7 @@ import { usePageMeta } from "../lib/seo";
 import { siteTitle } from "../lib/seo";
 import { categories } from "../lib/data/categories";
 import { brands, fetchBrands, getBrandLogoUrl } from "../lib/data/brands";
-import { products, fetchFeaturedProducts } from "../lib/data/products";
+import { products, fetchProducts, fetchFeaturedProducts } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
 import { IMG } from "../lib/data/images";
@@ -40,6 +40,7 @@ export default function Home() {
   });
 
   const [featured, setFeatured] = useState<Product[] | null>(null);
+  const [liveProducts, setLiveProducts] = useState<Product[]>(products);
   const [liveBrands, setLiveBrands] = useState(brands);
   const siteMedia = useSiteMedia();
 
@@ -48,6 +49,7 @@ export default function Home() {
     // Let the first screen paint before catalogue requests compete for mobile bandwidth.
     const timer = window.setTimeout(() => {
       fetchBrands().then((items) => live && setLiveBrands(items));
+      fetchProducts().then((items) => live && setLiveProducts(items));
       fetchFeaturedProducts().then((items) => live && setFeatured(items));
     }, 1200);
     return () => {
@@ -104,7 +106,7 @@ export default function Home() {
               <dl className="mt-12 flex flex-wrap gap-x-10 gap-y-4 border-t border-white/10 pt-6">
                 {[
                   [String(liveBrands.length), "Brands supplied"],
-                  [String(products.length), "Catalogue items"],
+                  [String(liveProducts.length), "Catalogue items"],
                   [String(rentalItems.length), "Rental fleet classes"],
                 ].map(([n, label]) => (
                   <div key={label}>
@@ -162,7 +164,7 @@ export default function Home() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((c, i) => {
               const isRental = c.slug === "rental-equipment";
-              const count = isRental ? rentalItems.length : products.filter((pr) => pr.category === c.slug).length;
+              const count = isRental ? rentalItems.length : liveProducts.filter((pr) => pr.category === c.slug).length;
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
@@ -249,7 +251,7 @@ export default function Home() {
                     {b.logoPath && <img src={getBrandLogoUrl(b.logoPath)} alt={`${b.name} logo`} loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full bg-white p-1 object-contain" />}
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mist">
-                    {products.filter((pr) => pr.brandSlug === b.slug).length || "—"} items
+                    {liveProducts.filter((pr) => pr.brandSlug === b.slug).length || "—"} items
                   </span>
                 </div>
                 <h3 className="mt-4 font-display text-2xl font-semibold uppercase text-paper transition-colors group-hover:text-safety">
