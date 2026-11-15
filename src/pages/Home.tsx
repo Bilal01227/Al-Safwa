@@ -598,13 +598,13 @@ export default function Home() {
               <div className="h-full border border-ink/15 bg-card p-2">
                 <iframe
                   src={business.googleMapsEmbedUrl}
-                  title="Map — Muscat, Oman"
+                  title="Map — Karsha, Nizwa, Oman"
                   loading="lazy"
                   className="h-[320px] w-full border-0 grayscale-[35%] md:h-[420px]"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
                 <p className="px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                  Map shows Muscat, Oman — the exact location is embedded once the registered address is verified.
+                  Map shows the Karsha, Nizwa area. Contact Al Safwa to confirm the exact shop location.
                 </p>
               </div>
             </Reveal>
