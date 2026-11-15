@@ -35,8 +35,8 @@ export const business = {
   // TODO(verify): commercial registration — publish only if verified
   registration: "",
 
-  /** True while placeholder contact details are still in place. */
-  placeholdersPending: true,
+  /** Public contact details are verified; email is intentionally unpublished. */
+  placeholdersPending: false,
 } as const;
 
 export const telHref = `tel:${business.phone.replace(/[^+\d]/g, "")}`;
