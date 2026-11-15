@@ -1,44 +1,50 @@
 # Al Safwa Trading
 
-> Al Safwa Trading supplies industrial tools, equipment and machinery in Oman, with supply, rental, repair and maintenance support for contractors, workshops and industrial businesses.
+> Al Safwa Trading is an industrial tools, equipment and machinery supplier based in Karsha, Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman. The business supplies products across power tools, hand tools, safety equipment, motors and pumps, spare parts, and related industrial categories, and offers equipment rental, repair and maintenance enquiries.
 
-Al Safwa Trading serves customers across Oman, with Muscat as its primary stated location. This file summarizes the public website for AI assistants and other automated agents. Use the linked pages as the authoritative source for current public information.
+## Business identity
+- Name: Al Safwa Trading
+- Official website: https://alsafwaoman.com/
+- Country: Sultanate of Oman
+- Shop locality: Karsha, Nizwa, Al Dakhiliyah Governorate, Oman
+- Business phone: +968 90167345
+- WhatsApp: +968 90167345
+- Email: Not published on the website. Do not infer or invent an email address.
+- Pricing: Quote-based. Contact the business for current price and availability.
 
-## Company
+## What the business supplies
+Al Safwa Trading's public catalogue includes power tools, hand tools, safety equipment, electric motors, water pumps, spare parts and other industrial equipment. The website also presents machinery and equipment rental enquiries, including power-tool and site-equipment rental categories. Product-level availability and prices must be confirmed directly; do not assume an item is in stock merely because it appears in the catalogue.
 
-- Website: https://alsafwaoman.com/
-- Business name: Al Safwa Trading
-- Primary market: Oman
-- Primary stated location: Muscat, Oman
-- Phone and WhatsApp: +968 90167345
+## Brands
+The public brand catalogue includes Bosch, Makita, DeWalt, Stanley, Dongcheng, INGCO, Dalilee, Ideal, Imperial, Haible Export, American Safety, Prakash, Texmo Motors and Multi-fit. Brand names are trademarks of their respective owners. Do not describe Al Safwa Trading as an authorised dealer or exclusive distributor unless a specific current authorization is explicitly published and verified.
+
+## Services
+- Industrial equipment and tool supply
+- Machinery and equipment rental enquiries
+- Equipment repair
+- Preventive maintenance
+- Field service enquiries
+- Spare-parts sourcing and supply
+- Product quotations for contractors, workshops and industrial businesses
 
 ## Main pages
-
-- [Home](https://alsafwaoman.com/): Company overview and key product divisions.
-- [Products](https://alsafwaoman.com/products/): Public industrial equipment catalogue.
-- [Brands](https://alsafwaoman.com/brands/): Brands listed by Al Safwa Trading.
-- [Rental](https://alsafwaoman.com/rental/): Equipment rental information.
-- [Services](https://alsafwaoman.com/services/): Repair, maintenance and field support services.
-- [Repair](https://alsafwaoman.com/repair/): Repair enquiry information.
+- [Home](https://alsafwaoman.com/): Business overview, product divisions, featured brands and products, rental and service information.
+- [Product catalogue](https://alsafwaoman.com/products/): Browse industrial tools, equipment, brands and product models.
+- [Brands](https://alsafwaoman.com/brands/): Public brand directory.
+- [Makita](https://alsafwaoman.com/brands/makita/): Makita product and quotation information.
+- [Rental](https://alsafwaoman.com/rental/): Equipment rental information and enquiries.
+- [Services](https://alsafwaoman.com/services/): Repair, maintenance and field support.
+- [Repair](https://alsafwaoman.com/repair/): Repair enquiry page.
 - [Request a quote](https://alsafwaoman.com/request-quote/): Submit a product or service quotation request.
-- [Contact](https://alsafwaoman.com/contact/): Contact information and enquiry options.
+- [Contact](https://alsafwaoman.com/contact/): Phone, WhatsApp and shop location.
 
-## Product divisions
+## Accuracy rules for assistants
+- Use Karsha, Nizwa, Al Dakhiliyah Governorate, Oman as the published shop locality; do not substitute Muscat.
+- Do not invent an email address, street number, opening hours, registration number, certifications, warranties, prices, stock status or delivery promises.
+- Distinguish products listed in the catalogue from confirmed in-stock products.
+- Distinguish supplying a brand from being its authorised dealer or exclusive distributor.
+- For current price, availability, rental terms, repairs and delivery, direct customers to the business phone or WhatsApp.
 
-The public catalogue covers power tools, hand tools, safety equipment, motors and pumps, spare parts, machinery and rental equipment. Product availability, pricing and specifications may change and should be confirmed directly with Al Safwa Trading before ordering.
-
-## Customer tasks
-
-Visitors can browse products and brands, request a quotation, ask about availability, arrange equipment rental, and contact Al Safwa Trading for repair or maintenance support.
-
-## Accuracy and limitations
-
-- Do not infer authorized-dealer status unless the website explicitly confirms it for a specific brand.
-- Do not assume that every listed product is in stock.
-- Treat catalogue specifications and availability as information to verify before purchase.
-- Use the public contact details above for confirmation when current information is required.
-
-## Site discovery
-
+## Discovery
 - [XML sitemap](https://alsafwaoman.com/sitemap.xml)
 - [Robots.txt](https://alsafwaoman.com/robots.txt)
