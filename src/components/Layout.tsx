@@ -11,11 +11,15 @@ import { Moon, Sun } from "lucide-react";
 
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 32 32" aria-hidden="true">
-      <path d="M16 2 28 9v14L16 30 4 23V9Z" fill="#e8491a" />
-      <circle cx="16" cy="16" r="6.5" fill="#10141a" />
-      <circle cx="16" cy="16" r="2.5" fill="#f0a50e" />
-    </svg>
+    <img
+      src="/images/al-safwa-logo.jpg"
+      alt="Al Safwa Trading"
+      width={size * 10}
+      height={size * 3}
+      className="h-auto rounded-sm bg-white object-contain"
+      style={{ width: size * 5, maxWidth: "min(42vw, 210px)" }}
+      fetchPriority="high"
+    />
   );
 }
 
@@ -75,13 +79,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link to="/" className="group flex items-center gap-3" aria-label={`${business.name} — home`}>
-            <LogoMark />
-            <span className="flex flex-col leading-none">
-              <span className="font-display text-[22px] font-semibold tracking-[0.06em] text-paper transition-colors group-hover:text-safety">
-                AL SAFWA
-              </span>
-              <span className="mt-1 font-mono text-[9px] tracking-[0.32em] text-mist">TRADING — OMAN</span>
-            </span>
+            <LogoMark size={38} />
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
@@ -143,7 +141,6 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
         <div className="flex h-16 items-center justify-between border-b border-white/10 px-4 sm:px-6">
           <span className="flex items-center gap-3">
             <LogoMark size={30} />
-            <span className="font-display text-xl font-semibold tracking-[0.06em] text-paper">AL SAFWA TRADING</span>
           </span>
           <button
             onClick={() => setOpen(false)}
