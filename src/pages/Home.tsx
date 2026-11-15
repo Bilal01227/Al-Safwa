@@ -75,7 +75,7 @@ export default function Home() {
             <Reveal>
               <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
                 <span className="mr-3 inline-block h-2 w-2 bg-safety align-middle" />
-                Muscat · Sultanate of Oman — Supply / Rental / Repair
+                Karsha · Nizwa · Al Dakhiliyah · Oman — Supply / Rental / Repair
               </p>
             </Reveal>
             <h1 className="font-display text-[clamp(2.9rem,6.5vw,5.4rem)] font-semibold uppercase leading-[0.95] tracking-[0.005em] text-paper">
