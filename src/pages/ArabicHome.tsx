@@ -81,11 +81,7 @@ export default function ArabicHome() {
       <header className="sticky top-0 z-40 border-b border-white/10 bg-coal text-paper shadow-lg">
         <div className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
           <Link to="/ar/" className="flex items-center gap-3" aria-label="الصفوة للتجارة - الرئيسية">
-            <LogoMark />
-            <span className="flex flex-col leading-tight">
-              <strong className="font-display text-xl tracking-wide">AL SAFWA</strong>
-              <span className="text-[10px] tracking-widest text-mist">TRADING — OMAN</span>
-            </span>
+            <LogoMark size={38} />
           </Link>
           <nav className="hidden items-center gap-5 text-sm text-mist lg:flex" aria-label="التنقل الرئيسي">
             <a href="#divisions" className="hover:text-white">الأقسام</a>
