@@ -16,8 +16,8 @@ export function LogoMark({ size = 34 }: { size?: number }) {
       alt="Al Safwa Trading"
       width={size * 10}
       height={size * 3}
-      className="h-auto rounded-sm bg-white object-contain"
-      style={{ width: size * 5, maxWidth: "min(42vw, 210px)" }}
+      className="h-12 w-[180px] rounded-sm bg-white object-contain p-1"
+      style={{ width: "min(180px, 38vw)", maxWidth: "180px" }}
       fetchPriority="high"
     />
   );
@@ -38,7 +38,8 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const prefix = locale === "ar" ? "/ar" : "";
-  const localizedNavItems = navItems.map((item) => ({ ...item, to: prefix + item.to }));
+  const arabicNav: Record<string, string> = { Home: "الرئيسية", Products: "المنتجات", Brands: "العلامات التجارية", Rental: "التأجير", Services: "الخدمات", Repair: "الإصلاح", Contact: "اتصل بنا" };
+  const localizedNavItems = navItems.map((item) => ({ ...item, to: prefix + item.to, label: locale === "ar" ? arabicNav[item.label] : item.label }));
   const languageTarget = locale === "ar" ? (location.pathname.replace(/^\/ar(?=\/|$)/, "") || "/") : ("/ar" + (location.pathname === "/" ? "/" : location.pathname));
 
   useEffect(() => setOpen(false), [location.pathname]);
@@ -186,7 +187,9 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
   );
 }
 
-function Footer() {
+function Footer({ locale = "en" }: { locale?: "en" | "ar" }) {
+  const prefix = locale === "ar" ? "/ar" : "";
+  const arabic = locale === "ar";
   return (
     <footer className="bg-coal text-mist">
       <HazardBar className="h-2.5" />
@@ -215,26 +218,26 @@ function Footer() {
           )}
         </div>
 
-        <FooterCol title="Divisions">
+        <FooterCol title={arabic ? "الأقسام" : "Divisions"}>
           {categories.map((c) => (
-            <FooterLink key={c.slug} to={c.slug === "rental-equipment" ? "/rental/" : `/products/?cat=${c.slug}`}>
+            <FooterLink key={c.slug} to={prefix + (c.slug === "rental-equipment" ? "/rental/" : `/products/?cat=${c.slug}`)}>
               {c.name}
             </FooterLink>
           ))}
         </FooterCol>
 
-        <FooterCol title="Brands">
+        <FooterCol title={arabic ? "العلامات التجارية" : "Brands"}>
           {brands.slice(0, 8).map((b) => (
-            <FooterLink key={b.slug} to={`/brands/${b.slug}/`}>
+            <FooterLink key={b.slug} to={`${prefix}/brands/${b.slug}/`}>
               {b.name}
             </FooterLink>
           ))}
-          <FooterLink to="/brands/">All brands →</FooterLink>
+          <FooterLink to={`${prefix}/brands/`}>{arabic ? "جميع العلامات التجارية ←" : "All brands →"}</FooterLink>
         </FooterCol>
 
-        <FooterCol title="Services">
+        <FooterCol title={arabic ? "الخدمات" : "Services"}>
           {services.map((s) => (
-            <FooterLink key={s.slug} to={`/services/${s.slug}/`}>
+            <FooterLink key={s.slug} to={`${prefix}/services/${s.slug}/`}>
               {s.name}
             </FooterLink>
           ))}
@@ -316,7 +319,7 @@ export default function Layout({ children, locale = "en" }: { children: ReactNod
     <div className={`public-site flex min-h-screen flex-col ${locale === "ar" ? "arabic-page" : ""} ${theme === "dark" ? "theme-dark" : ""}`} dir={locale === "ar" ? "rtl" : "ltr"}>
       <Header theme={theme} onToggleTheme={toggleTheme} locale={locale} />
       <main className="flex-1">{children}</main>
-      <Footer />
+      <Footer locale={locale} />
       <FloatingWhatsApp />
     </div>
   );
