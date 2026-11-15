@@ -12,7 +12,7 @@ import { Moon, Sun } from "lucide-react";
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
     <img
-      src="/images/al-safwa-logo.jpg"
+      src="/images/al-safwa-logo.svg"
       alt="Al Safwa Trading"
       width={size * 10}
       height={size * 3}
