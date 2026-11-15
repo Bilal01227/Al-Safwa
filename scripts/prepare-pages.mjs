@@ -81,9 +81,9 @@ async function fetchProductRecords() {
   return records;
 }
 const humanize = (slug) => slug.split("-").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
-const brands = await collectOneFile("src/lib/data/brands.ts");
+const brands = new Set();
 const services = await collectOneFile("src/lib/data/services.ts");
-const products = await collectSlugs("src/lib/data/products");
+const products = new Set();
 for (const [table, target] of [["brands", brands], ["products", products]]) {
   try {
     for (const slug of await fetchSlugs(table)) target.add(slug);
