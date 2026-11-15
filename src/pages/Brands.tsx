@@ -146,6 +146,20 @@ export function BrandDetailPage() {
             </div>
           </div>
           <p className="mt-8 max-w-2xl leading-relaxed text-mist">{brand.about}</p>
+          {brand.slug === "makita" && (
+            <div className="mt-8 max-w-3xl border-l-2 border-safety bg-white/5 px-5 py-4">
+              <h2 className="font-display text-2xl font-semibold uppercase text-paper">Makita Power Tools in Oman</h2>
+              <p className="mt-2 leading-relaxed text-mist">
+                Al Safwa Trading supplies Makita power tools alongside a wider range of industrial equipment,
+                construction tools, safety products, motors, pumps and spare parts. Browse the Makita models
+                currently listed below, or send the model number, required quantity and delivery location for a
+                quotation. If the exact model is not shown, ask the team to check sourcing availability.
+              </p>
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mist">
+                Product pricing and availability are confirmed per quotation.
+              </p>
+            </div>
+          )}
         </div>
         <div className="hazard h-2" aria-hidden="true" />
       </section>
