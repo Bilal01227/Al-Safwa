@@ -33,10 +33,13 @@ const navItems = [
   { to: "/contact/", label: "Contact" },
 ];
 
-function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleTheme: () => void }) {
+function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dark"; onToggleTheme: () => void; locale?: "en" | "ar" }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const prefix = locale === "ar" ? "/ar" : "";
+  const localizedNavItems = navItems.map((item) => ({ ...item, to: prefix + item.to }));
+  const languageTarget = locale === "ar" ? (location.pathname.replace(/^\/ar(?=\/|$)/, "") || "/") : ("/ar" + (location.pathname === "/" ? "/" : location.pathname));
 
   useEffect(() => setOpen(false), [location.pathname]);
 
@@ -83,7 +86,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
           </Link>
 
           <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
-            {navItems.map((item) => (
+            {localizedNavItems.map((item) => (
               <NavLink
                 key={item.to}
                 to={item.to}
@@ -100,7 +103,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <Link to="/ar/" lang="ar" aria-label="عرض الموقع باللغة العربية" className="inline-flex h-10 items-center border border-white/20 px-2.5 font-mono text-[11px] font-semibold text-paper transition-colors hover:border-safety hover:text-safety sm:px-3">العربية</Link>
+            <Link to={languageTarget} lang={locale === "ar" ? "en" : "ar"} aria-label={locale === "ar" ? "View English website" : "عرض الموقع باللغة العربية"} className="inline-flex h-10 items-center border border-white/20 px-2.5 font-mono text-[11px] font-semibold text-paper transition-colors hover:border-safety hover:text-safety sm:px-3">{locale === "ar" ? "English" : "العربية"}</Link>
             <button
               type="button"
               onClick={onToggleTheme}
@@ -170,7 +173,7 @@ function Header({ theme, onToggleTheme }: { theme: "light" | "dark"; onToggleThe
           ))}
         </nav>
         <div className="flex gap-3 border-t border-white/10 p-4 sm:px-6">
-          <Link to="/ar/" lang="ar" className="inline-flex items-center justify-center border border-white/20 px-4 py-2 font-mono text-xs text-paper hover:border-safety hover:text-safety">العربية</Link>
+          <Link to={languageTarget} lang={locale === "ar" ? "en" : "ar"} className="inline-flex items-center justify-center border border-white/20 px-4 py-2 font-mono text-xs text-paper hover:border-safety hover:text-safety">{locale === "ar" ? "English" : "العربية"}</Link>
           <CTAButton href={waHref(waGeneralMessage())} variant="wa" className="flex-1">
             <IcWhatsApp /> WhatsApp
           </CTAButton>
@@ -294,7 +297,15 @@ function FloatingWhatsApp() {
   );
 }
 
-export default function Layout({ children }: { children: ReactNode }) {
+export default function Layout({ children, locale = "en" }: { children: ReactNode; locale?: "en" | "ar" }) {
+  useEffect(() => {
+    const root = document.documentElement;
+    const oldLang = root.lang;
+    const oldDir = root.dir;
+    root.lang = locale === "ar" ? "ar-OM" : "en-OM";
+    root.dir = locale === "ar" ? "rtl" : "ltr";
+    return () => { root.lang = oldLang || "en-OM"; root.dir = oldDir || "ltr"; };
+  }, [locale]);
   // Always start each fresh page load in light mode. Visitors can still
   // switch to dark mode for the current visit using the header toggle.
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -302,8 +313,8 @@ export default function Layout({ children }: { children: ReactNode }) {
   const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
 
   return (
-    <div className={`public-site flex min-h-screen flex-col ${theme === "dark" ? "theme-dark" : ""}`}>
-      <Header theme={theme} onToggleTheme={toggleTheme} />
+    <div className={`public-site flex min-h-screen flex-col ${locale === "ar" ? "arabic-page" : ""} ${theme === "dark" ? "theme-dark" : ""}`} dir={locale === "ar" ? "rtl" : "ltr"}>
+      <Header theme={theme} onToggleTheme={toggleTheme} locale={locale} />
       <main className="flex-1">{children}</main>
       <Footer />
       <FloatingWhatsApp />
