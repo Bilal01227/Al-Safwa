@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { business, telHref, mailHref } from "../lib/business";
 import { waHref, waGeneralMessage } from "../lib/whatsapp";
 import { categories } from "../lib/data/categories";
@@ -37,6 +37,7 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const prefix = locale === "ar" ? "/ar" : "";
   const arabicNav: Record<string, string> = { Home: "الرئيسية", Products: "المنتجات", Brands: "العلامات التجارية", Rental: "التأجير", Services: "الخدمات", Repair: "الإصلاح", Contact: "اتصل بنا" };
   const localizedNavItems = navItems.map((item) => ({ ...item, to: prefix + item.to, label: locale === "ar" ? arabicNav[item.label] : item.label }));
@@ -314,9 +315,19 @@ export default function Layout({ children, locale = "en" }: { children: ReactNod
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const toggleTheme = () => setTheme((current) => (current === "dark" ? "light" : "dark"));
+  const handleLocalizedNavigation = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (locale !== "ar" || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const anchor = (event.target as HTMLElement).closest("a[href]") as HTMLAnchorElement | null;
+    if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
+    const url = new URL(anchor.href, window.location.origin);
+    if (url.origin !== window.location.origin || url.pathname.startsWith("/ar/") || url.pathname === "/ar") return;
+    if (!url.pathname.startsWith("/")) return;
+    event.preventDefault();
+    navigate(`/ar${url.pathname}${url.search}${url.hash}`);
+  };
 
   return (
-    <div className={`public-site flex min-h-screen flex-col ${locale === "ar" ? "arabic-page" : ""} ${theme === "dark" ? "theme-dark" : ""}`} dir={locale === "ar" ? "rtl" : "ltr"}>
+    <div onClick={handleLocalizedNavigation} className={`public-site flex min-h-screen flex-col ${locale === "ar" ? "arabic-page" : ""} ${theme === "dark" ? "theme-dark" : ""}`} dir={locale === "ar" ? "rtl" : "ltr"}>
       <Header theme={theme} onToggleTheme={toggleTheme} locale={locale} />
       <main className="flex-1">{children}</main>
       <Footer locale={locale} />
