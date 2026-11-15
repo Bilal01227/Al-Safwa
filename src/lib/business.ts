@@ -21,16 +21,16 @@ export const business = {
   email: "sales@alsafwa-trading.example",
 
   // TODO(verify): registered physical address
-  addressLine1: "[Registered address pending verification]",
-  addressLine2: "Muscat, Sultanate of Oman",
+  addressLine1: "Karsha",
+  addressLine2: "Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman",
 
   // TODO(verify): official opening hours
   hours: "Sat–Thu 08:00–18:00 · Fri closed (placeholder)",
 
   // Generic Muscat embed until the exact verified location is published.
-  googleMapsEmbedUrl: "https://www.google.com/maps?q=Muscat,Oman&output=embed",
-  // TODO(verify): exact location URL
-  googleMapsUrl: "",
+  googleMapsEmbedUrl: "https://www.google.com/maps?q=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman&output=embed",
+  // Exact street-level pin not supplied; link resolves the verified locality.
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman",
 
   // TODO(verify): commercial registration — publish only if verified
   registration: "",
