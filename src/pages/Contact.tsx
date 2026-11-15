@@ -17,7 +17,7 @@ export default function ContactPage() {
   const cards: { icon: ReactNode; label: string; value: string; sub?: string; href?: string; external?: boolean }[] = [
     { icon: <IcPhone width={20} height={20} />, label: "Business phone", value: business.phone, sub: "Official Oman line", href: telHref },
     { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: waDisplay, sub: "Fastest for quotes", href: waHref(waGeneralMessage()), external: true },
-    { icon: <IcMail width={20} height={20} />, label: "Email", value: business.email, sub: "Written quotations", href: mailHref },
+    ...(business.email ? [{ icon: <IcMail width={20} height={20} />, label: "Email", value: business.email, sub: "Written quotations", href: mailHref }] : []),
     { icon: <IcPin width={20} height={20} />, label: "Address", value: business.addressLine1, sub: business.addressLine2 },
     { icon: <IcClock width={20} height={20} />, label: "Opening hours", value: business.hours },
     {
@@ -71,14 +71,13 @@ export default function ContactPage() {
             <div className="mt-12 border border-ink/15 bg-card p-2">
               <iframe
                 src={business.googleMapsEmbedUrl}
-                title="Map — Muscat, Oman"
+                title="Map — Karsha, Nizwa, Oman"
                 loading="lazy"
                 className="h-[340px] w-full border-0 grayscale-[35%] md:h-[440px]"
                 referrerPolicy="no-referrer-when-downgrade"
               />
               <p className="px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                Map shows Muscat, Oman — the exact {business.name} location is embedded once the registered address is
-                verified.
+                Map shows the Karsha, Nizwa area — contact {business.name} to confirm the exact shop location.
               </p>
             </div>
           </Reveal>
