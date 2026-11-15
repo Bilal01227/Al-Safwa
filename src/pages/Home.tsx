@@ -560,27 +560,22 @@ export default function Home() {
           <SectionHead
             index="07"
             title="Find Us in Oman"
-            lead="Counter, workshop and dispatch — details are published here as soon as each one is verified."
+            lead="Visit Al Safwa Trading in Karsha, Nizwa, Al Dakhiliyah Governorate, Oman, or contact our team by phone and WhatsApp."
           />
           <div className="grid gap-8 lg:grid-cols-5">
             <Reveal className="lg:col-span-2">
               <div className="card-hard flex h-full flex-col gap-5 p-6">
                 {[
-                  { icon: <IcPin width={20} height={20} />, label: "Address", value: `${business.addressLine1}, ${business.addressLine2}`, pending: true },
-                  { icon: <IcClock width={20} height={20} />, label: "Opening hours", value: business.hours, pending: true },
-                  { icon: <IcMail width={20} height={20} />, label: "Email", value: business.email, pending: true },
-                  { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: business.phone, pending: true },
+                  { icon: <IcPin width={20} height={20} />, label: "Address", value: `${business.addressLine1}, ${business.addressLine2}` },
+                  { icon: <IcClock width={20} height={20} />, label: "Opening hours", value: business.hours },
+                  
+                  { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: business.phone },
                 ].map((row) => (
                   <div key={row.label} className="flex items-start gap-4 border-b border-ink/10 pb-4 last:border-0 last:pb-0">
                     <span className="grid h-10 w-10 shrink-0 place-items-center bg-ink text-safety">{row.icon}</span>
                     <div>
                       <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-smoke">{row.label}</p>
                       <p className="mt-1 text-[15px] font-medium text-ink">{row.value}</p>
-                      {row.pending && (
-                        <span className="mt-1.5 inline-block border border-dashed border-caution/60 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-caution">
-                          Pending verification
-                        </span>
-                      )}
                     </div>
                   </div>
                 ))}
@@ -604,7 +599,7 @@ export default function Home() {
                   referrerPolicy="no-referrer-when-downgrade"
                 />
                 <p className="px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                  Map shows the Karsha, Nizwa area. Contact Al Safwa to confirm the exact shop location.
+                  Al Safwa Trading, Karsha, Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman.
                 </p>
               </div>
             </Reveal>
