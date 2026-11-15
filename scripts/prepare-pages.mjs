@@ -27,15 +27,15 @@ async function collectSlugs(dir) {
   const slugs = new Set();
   for (const file of await collectTs(dir)) {
     const source = await readFile(file, "utf8");
-    for (const match of source.matchAll(/\bslug\s*:\s*["']([a-z0-9-]+)["']/g)) slugs.add(match[1]);
+    for (const match of source.matchAll(/\bslug\s*:\s*["']([A-Za-z0-9-]+)["']/g)) slugs.add(match[1]);
   }
   return slugs;
 }
 async function collectOneFile(file) {
   const source = await readFile(file, "utf8");
-  return new Set(Array.from(source.matchAll(/\bslug\s*:\s*["']([a-z0-9-]+)["']/g), (match) => match[1]));
+  return new Set(Array.from(source.matchAll(/\bslug\s*:\s*["']([A-Za-z0-9-]+)["']/g), (match) => match[1]));
 }
-async function fetchSlugs(table, includeInactive = false) {
+async function fetchSlugs(table) {
   const base = process.env.VITE_SUPABASE_URL;
   const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!base || !key) throw new Error('Supabase URL and publishable key are required for complete sitemap generation.');
@@ -43,7 +43,7 @@ async function fetchSlugs(table, includeInactive = false) {
   for (let offset = 0; offset < 10000; offset += 1000) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/" + table);
     url.searchParams.set("select", "slug");
-    if (!includeInactive) url.searchParams.set("active", "eq.true");
+    url.searchParams.set("active", "eq.true");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
     const response = await fetch(url, {
@@ -52,7 +52,7 @@ async function fetchSlugs(table, includeInactive = false) {
     });
     if (!response.ok) throw new Error(table + " HTTP " + response.status);
     const rows = await response.json();
-    result.push(...rows.map((row) => row.slug).filter((slug) => typeof slug === "string" && /^[a-z0-9-]+$/.test(slug)));
+    result.push(...rows.map((row) => row.slug).filter((slug) => typeof slug === "string" && /^[A-Za-z0-9-]+$/.test(slug)));
     if (rows.length < 1000) break;
   }
   return result;
@@ -66,6 +66,7 @@ async function fetchProductRecords() {
   for (let offset = 0; ; offset += 1000) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/products");
     url.searchParams.set("select", "slug,name,model_number,short_description,full_description");
+    url.searchParams.set("active", "eq.true");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
     const response = await fetch(url, {
@@ -74,7 +75,7 @@ async function fetchProductRecords() {
     });
     if (!response.ok) throw new Error("Product metadata HTTP " + response.status);
     const rows = await response.json();
-    records.push(...rows.filter((row) => typeof row.slug === "string" && /^[a-z0-9-]+$/.test(row.slug)));
+    records.push(...rows.filter((row) => typeof row.slug === "string" && /^[A-Za-z0-9-]+$/.test(row.slug)));
     if (rows.length < 1000) break;
   }
   return records;
@@ -85,7 +86,7 @@ const services = await collectOneFile("src/lib/data/services.ts");
 const products = await collectSlugs("src/lib/data/products");
 for (const [table, target] of [["brands", brands], ["products", products]]) {
   try {
-    for (const slug of await fetchSlugs(table, table === "products")) target.add(slug);
+    for (const slug of await fetchSlugs(table)) target.add(slug);
     console.log("Loaded active " + table + " slugs.");
   } catch (error) {
     throw new Error("Could not fetch complete " + table + " slugs; refusing to publish an incomplete sitemap: " + error.message);
@@ -126,6 +127,10 @@ for (const [route, details] of pages) {
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
   let html = route === "/ar" ? rootHtml : rootHtml.replaceAll('<link rel="alternate" hreflang="en-OM" href="https://alsafwaoman.com/" />', "").replaceAll('<link rel="alternate" hreflang="ar-OM" href="https://alsafwaoman.com/ar/" />', "").replaceAll('<link rel="alternate" hreflang="x-default" href="https://alsafwaoman.com/" />', "");
+  if (route === "/ar") {
+    html = html.replace('<html lang="en-OM">', '<html lang="ar-OM" dir="rtl">');
+    html = replaceMeta(html, "og:locale", "ar_OM", "property");
+  }
   html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(title) + "</title>");
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?\s*>/i, '<link rel="canonical" href="' + canonical + '" />');
   html = replaceMeta(html, "description", description);
