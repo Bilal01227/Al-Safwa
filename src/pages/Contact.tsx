@@ -47,7 +47,6 @@ export default function ContactPage() {
                 <div className="card-hard flex h-full flex-col p-6">
                   <div className="flex items-center justify-between">
                     <span className="grid h-11 w-11 place-items-center bg-ink text-safety">{c.icon}</span>
-                    <PendingTag />
                   </div>
                   <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.18em] text-smoke">{c.label}</p>
                   {c.href ? (
@@ -109,11 +108,3 @@ export default function ContactPage() {
   );
 }
 
-function PendingTag() {
-  if (!business.placeholdersPending) return null;
-  return (
-    <span className="border border-dashed border-caution/60 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-caution">
-      Pending verification
-    </span>
-  );
-}
