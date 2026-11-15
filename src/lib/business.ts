@@ -18,16 +18,16 @@ export const business = {
   whatsappNumber: "96890167345",
 
   // TODO(verify): official business email
-  email: "sales@alsafwa-trading.example",
+  email: "",
 
   // TODO(verify): registered physical address
   addressLine1: "Karsha",
   addressLine2: "Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman",
 
   // TODO(verify): official opening hours
-  hours: "Sat–Thu 08:00–18:00 · Fri closed (placeholder)",
+  hours: "Contact us for current opening hours",
 
-  // Generic Muscat embed until the exact verified location is published.
+  // Locality-level map only; exact shop pin has not been supplied.
   googleMapsEmbedUrl: "https://www.google.com/maps?q=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman&output=embed",
   // Exact street-level pin not supplied; link resolves the verified locality.
   googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman",
