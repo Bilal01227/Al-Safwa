@@ -81,7 +81,7 @@ function SuccessPanel({
         <CTAButton href={waHref(waMessage)} variant="wa">
           <IcWhatsApp /> Continue on WhatsApp
         </CTAButton>
-        <CTAButton to="/products" variant="outlineDark">
+        <CTAButton to="/products/" variant="outlineDark">
           Back to catalogue
         </CTAButton>
       </div>
