@@ -279,18 +279,20 @@ export default function AdminExcelImport() {
     const imageErrors: string[] = [];
     try {
       const products = rowsToImport.map((r) => r.product);
+      // Return IDs with each 100-row upsert. A single .in("slug", 736 slugs)
+      // creates an oversized PostgREST URL and can fail after all products were saved.
+      const idBySlug = new Map<string, string>();
       for (let offset = 0; offset < products.length; offset += 100) {
         const batch = products.slice(offset, offset + 100);
-        const { error: upsertError } = await supabase.from("products").upsert(batch, { onConflict: "slug" });
+        const { data: savedBatch, error: upsertError } = await supabase
+          .from("products")
+          .upsert(batch, { onConflict: "slug" })
+          .select("id,slug");
         if (upsertError) throw upsertError;
+        (savedBatch || []).forEach((p: { id: string; slug: string }) => idBySlug.set(p.slug, p.id));
         productCount += batch.length;
         setProgress(`Saved ${productCount} of ${products.length} products…`);
       }
-
-      const slugs = rowsToImport.map((r) => r.slug);
-      const { data: saved, error: lookupError } = await supabase.from("products").select("id,slug").in("slug", slugs);
-      if (lookupError) throw lookupError;
-      const idBySlug = new Map<string, string>((saved || []).map((p: { id: string; slug: string }) => [p.slug, p.id] as [string, string]));
 
       const imageRows = rowsToImport.filter((r) => r.source.image);
       for (let index = 0; index < imageRows.length; index++) {
