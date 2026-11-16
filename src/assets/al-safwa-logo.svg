@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title">
+<title id="title">Al Safwa Trading</title>
+<rect width="1200" height="360" fill="#fff"/>
+<g transform="translate(22 20)">
+  <path fill="#263f46" d="M170 12h83L94 300H12L170 12Zm-9 48L70 250h36l91-190h-36Z"/>
+  <path fill="#263f46" d="m170 12 78 0-25 48-83 0z"/>
+  <path fill="#263f46" d="m104 211 270-74v48L104 270z"/>
+  <path fill="#263f46" d="m115 300 50-82h76l-49 82z"/>
+  <path fill="#e99543" d="m248 48 48 123-68 20-40-91z"/>
+  <path fill="#e99543" d="m293 210 66 90h-81l-49-109z"/>
+  <g fill="#fff">
+    <path d="m169 58 27 0-18 34z"/><path d="m140 110 31 0-20 35z"/><path d="m111 163 31 0-20 35z"/><path d="m82 216 31 0-20 35z"/>
+    <path d="m193 172 28-8-17 24z"/><path d="m234 160 27-8-17 24z"/><path d="m277 148 26-8-17 24z"/><path d="m319 136 25-7-16 22z"/>
+  </g>
+</g>
+<g fill="#29373b" font-family="Arial,Helvetica,sans-serif" font-weight="700">
+  <text x="410" y="185" font-size="112" letter-spacing="3">AL SAFWA</text>
+  <text x="416" y="270" font-size="78" letter-spacing="24">TRADING</text>
+</g>
+</svg>
