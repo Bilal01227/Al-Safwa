@@ -191,7 +191,13 @@ export default function AdminExcelImport() {
         // Existing SKU means update that product, even if the workbook's title/slug has changed.
         const existingSkuSlug = rawSku ? existingSku.get(rawSku.toLowerCase()) : undefined;
         const explicitSlug = readValue(v, "slug").trim();
-        let slug = existingSkuSlug || (explicitSlug ? slugify(explicitSlug) : slugify([brandName, name, modelNumber || rawSku].filter(Boolean).join("-")));
+        const legacyNameSlug = slugify(name);
+        const legacyMatch = existingBySlug.get(legacyNameSlug);
+        const legacyMatchBelongsToBrand = !!legacyMatch && legacyMatch.brand_id === brand.id;
+        // Preserve old product URLs and update existing records when the name-based slug already
+        // belongs to the same brand; only new/colliding catalogue items receive a brand/model slug.
+        let slug = existingSkuSlug || (explicitSlug ? slugify(explicitSlug) :
+          (legacyMatchBelongsToBrand ? legacyNameSlug : slugify([brandName, name, modelNumber || rawSku].filter(Boolean).join("-"))));
         if (!slug) slug = slugify(`${brandName}-${name}-${source.excelRow}`);
         const duplicateSku = !!rawSku && seenSkus.has(rawSku.toLowerCase());
         if (seenSlugs.has(slug)) slug = `${slug}-${source.excelRow}`;
