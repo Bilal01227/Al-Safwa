@@ -98,12 +98,16 @@ export default function RentalPage() {
                     <div className="relative aspect-[16/10] overflow-hidden bg-paper-2">
                       <img
                         src={siteMedia[`rental.${r.id}`] || r.imageUrl}
-                        alt={r.name}
+                        alt={`${r.name} product reference image — illustrative, not a confirmed Al Safwa fleet unit`}
                         loading="lazy"
+                        onError={(event) => { event.currentTarget.style.display = "none"; }}
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                       />
                       <span className="absolute left-3 top-3">
                         <MonoTag>{r.category}</MonoTag>
+                      </span>
+                      <span className="absolute bottom-3 left-3">
+                        <MonoTag>REFERENCE IMAGE</MonoTag>
                       </span>
                     </div>
                     <div className="flex flex-1 flex-col p-5">
@@ -157,8 +161,7 @@ export default function RentalPage() {
 
           <Reveal>
             <p className="mt-10 border border-dashed border-ink/25 bg-card px-4 py-3 font-mono text-[10.5px] uppercase leading-relaxed tracking-[0.1em] text-smoke">
-              Rental rates are never listed without verification — duration, location, transport and operator
-              requirements all affect pricing, so every rental is quoted individually.
+              Product images are reference photographs from equipment manufacturers and suppliers, selected to match each equipment type. They do not represent confirmed Al Safwa-owned units. Fleet availability, exact make/model, condition, operators, transport and rental rates are confirmed individually before quotation.
             </p>
           </Reveal>
 
