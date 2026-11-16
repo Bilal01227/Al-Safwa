@@ -18,6 +18,9 @@ export interface Product {
   description?: string;
   specifications: Record<string, string>;
   imageUrl: string;
+  /** Local category art used when no verified individual product photo exists. */
+  fallbackImageUrl?: string;
+  imageIsCategoryFallback?: boolean;
   sourceUrl: string;
   sourceCompany: string;
   availability: string;
