@@ -69,9 +69,11 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
             <a href={telHref} className="flex items-center gap-1.5 transition-colors hover:text-safety">
               <IcPhone width={12} height={12} /> {business.phone}
             </a>
-            <a href={mailHref} className="flex items-center gap-1.5 transition-colors hover:text-safety">
-              <IcMail width={12} height={12} /> {business.email}
-            </a>
+            {business.email && (
+              <a href={mailHref} className="flex items-center gap-1.5 transition-colors hover:text-safety">
+                <IcMail width={12} height={12} /> {business.email}
+              </a>
+            )}
           </span>
         </div>
       </div>
