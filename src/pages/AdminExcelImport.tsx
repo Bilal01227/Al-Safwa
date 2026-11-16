@@ -178,28 +178,28 @@ export default function AdminExcelImport() {
         const categoryName = readValue(v, "category");
         const rawSku = readValue(v, "sku").trim();
         const modelNumber = readValue(v, "model_number").trim();
-        const line = `${source.sheet} row `${source.excelRow}`;
+        const line = `${source.sheet} row ${source.excelRow}`;
         if (!name || !brandName || !categoryName) {
           problems.push(`${line}: required fields missing (product name, brand or category).`);
           return;
         }
         const brand = brandMap.get(brandName.toLowerCase()) || brandMap.get(slugify(brandName));
         const category = categoryMap.get(categoryName.toLowerCase()) || categoryMap.get(slugify(categoryName));
-        if (!brand) problems.push(`${line}: brand not found in Admin > Brands: `${brandName}.`);
-        if (!category) problems.push(`${line}: category not found in Admin > Categories: `${categoryName}.`);
+        if (!brand) problems.push(`${line}: brand not found in Admin > Brands: ${brandName}.`);
+        if (!category) problems.push(`${line}: category not found in Admin > Categories: ${categoryName}.`);
 
         // Existing SKU means update that product, even if the workbook's title/slug has changed.
         const existingSkuSlug = rawSku ? existingSku.get(rawSku.toLowerCase()) : undefined;
         const explicitSlug = readValue(v, "slug").trim();
         let slug = existingSkuSlug || (explicitSlug ? slugify(explicitSlug) : slugify([brandName, name, modelNumber || rawSku].filter(Boolean).join("-")));
-        if (!slug) slug = slugify(`${brandName}-`${name}-`${source.excelRow}`);
+        if (!slug) slug = slugify(`${brandName}-${name}-${source.excelRow}`);
         const duplicateSku = !!rawSku && seenSkus.has(rawSku.toLowerCase());
-        if (seenSlugs.has(slug)) slug = `${slug}-`${source.excelRow}`;
+        if (seenSlugs.has(slug)) slug = `${slug}-${source.excelRow}`;
         const sku = duplicateSku ? "" : rawSku;
 
         const priceText = readValue(v, "price");
         const price = numericValue(priceText);
-        if (priceText && (price === null || !Number.isFinite(price))) problems.push(`${line}: invalid price `${priceText}.`);
+        if (priceText && (price === null || !Number.isFinite(price))) problems.push(`${line}: invalid price ${priceText}.`);
         const stockText = readValue(v, "stock_quantity");
         const stockValue = numericValue(stockText);
         const stock = stockText ? stockValue : 0;
