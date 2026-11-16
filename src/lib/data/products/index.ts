@@ -45,6 +45,25 @@ type DbProduct = {
 type Ref = { id: string; name: string; slug: string; image_path?: string | null };
 type ImageRef = { product_id: string; storage_path: string; is_primary: boolean; sort_order: number };
 
+const categoryFallbackImages: Record<string, string> = {
+  "agricultural-equipment": "/images/15-agricultural-equipment.png",
+  "air-compressors": "/images/05-air-compressors.png",
+  "cleaning-equipment": "/images/13-cleaning-equipment.png",
+  "electrical-equipment": "/images/14-electrical-equipment.png",
+  "generators": "/images/04-generators.png",
+  "hand-tools": "/images/07-hand-tools.png",
+  "heavy-machinery": "/images/02-heavy-machinery.png",
+  "lifting-equipment": "/images/12-lifting-and-material-handling.png",
+  "motors-pumps": "/images/08-motors-and-pumps.png",
+  "power-tools": "/images/01-power-tools.png",
+  "safety-equipment": "/images/06-safety-equipment.png",
+  "spare-parts": "/images/11-spare-parts.png",
+  "welding-equipment": "/images/03-welding-equipment.png",
+  "cutting-tools": "/images/09-cutting-and-grinding.png",
+  "measuring-tools": "/images/10-measuring-and-testing.png",
+  "rental-equipment": "/images/16-rental-equipment.png",
+};
+
 async function fetchAllRows<T>(query: any): Promise<T[]> {
   const rows: T[] = [];
   const pageSize = 1000;
@@ -87,9 +106,13 @@ async function fromSupabase(): Promise<Product[]> {
     const categoryImage = category?.image_path
       ? supabase.storage.from("category-images").getPublicUrl(category.image_path).data.publicUrl
       : null;
+    const fallbackImageUrl =
+      categoryFallbackImages[primaryCategory?.slug || ""] ||
+      categoryFallbackImages[category?.slug || ""] ||
+      "/images/16-rental-equipment.png";
     const imageUrl = image
       ? ((image.storage_path.startsWith("https://") || image.storage_path.startsWith("http://")) ? image.storage_path : supabase.storage.from("product-images").getPublicUrl(image.storage_path).data.publicUrl)
-      : categoryImage || "";
+      : categoryImage || fallbackImageUrl;
 
     return {
       slug: x.slug,
@@ -103,6 +126,8 @@ async function fromSupabase(): Promise<Product[]> {
       description: x.full_description || x.short_description || "",
       specifications: x.specifications || {},
       imageUrl,
+      fallbackImageUrl,
+      imageIsCategoryFallback: !image && !categoryImage,
       sourceUrl: x.source_url || "",
       sourceCompany: x.source_company || "",
       availability: x.availability_status,
