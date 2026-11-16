@@ -92,7 +92,15 @@ export async function parseExcelCatalogue(file: File): Promise<ExcelCatalogueRow
       for (const cell of cells) values[colIndex(attr(cell, "r"))] = cellValue(cell, strings);
       return { number: Number(attr(row, "r")) || 0, values };
     });
-    const headerRow = parsedRows.find((r) => r.values.filter((v) => String(v || "").trim()).length >= 2);
+    const headerScore = (values: string[]) => {
+      const h = values.map((v) => String(v || "").toLowerCase().replace(/[^a-z0-9]+/g, "_"));
+      const hasName = h.some((v) => ["name", "product_name", "item_name", "equipment_name"].includes(v));
+      const hasBrand = h.some((v) => ["brand", "brand_name", "manufacturer", "make"].includes(v));
+      const hasCategory = h.some((v) => ["category", "category_name", "product_category"].includes(v));
+      return Number(hasName) + Number(hasBrand) + Number(hasCategory);
+    };
+    const headerRow = parsedRows.find((r) => headerScore(r.values) === 3)
+      || parsedRows.find((r) => r.values.filter((v) => String(v || "").trim()).length >= 3);
     if (!headerRow) continue;
     const headers = headerRow.values.map((v) => String(v || "").trim());
     const imageByRow = new Map<number, File[]>();
