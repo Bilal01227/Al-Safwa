@@ -383,6 +383,27 @@ export default function Home() {
               </div>
             </div>
           </Reveal>
+          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
+            {rentalItems.slice(0, 4).map((item, i) => (
+              <Reveal key={item.id} delay={i * 60}>
+                <Link to={`/rental?cat=${encodeURIComponent(item.category)}`} className="group block h-full overflow-hidden border border-white/15 bg-ink/40 transition-colors hover:border-safety">
+                  <div className="aspect-[16/10] overflow-hidden bg-steel">
+                    <img
+                      src={siteMedia[`rental.${item.id}`] || item.imageUrl}
+                      alt={`Representative image for ${item.name}`}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-caution">{item.category}</p>
+                    <h3 className="mt-2 font-display text-xl font-semibold uppercase leading-tight text-paper group-hover:text-safety">{item.name}</h3>
+                    <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mist">Rates on request · Confirm availability</p>
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
