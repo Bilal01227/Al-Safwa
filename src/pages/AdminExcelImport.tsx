@@ -88,6 +88,28 @@ export default function AdminExcelImport() {
 
       const brandMap = new Map<string, Ref>();
       (brands || []).forEach((b: Ref) => { brandMap.set(b.name.toLowerCase(), b); brandMap.set(b.slug.toLowerCase(), b); });
+
+      // Treat the uploaded catalogue as the source of truth for missing brand labels too.
+      // Create plain brand records (without fabricated logos or claims) so valid products are not blocked.
+      const missingBrandNames = [...new Set(withPreviews.map((row) => readValue(row.values, "brand").trim()).filter(Boolean))]
+        .filter((name) => !brandMap.has(name.toLowerCase()) && !brandMap.has(slugify(name)));
+      if (missingBrandNames.length) {
+        const existingBrandSlugs = new Set((brands || []).map((brand: Ref) => brand.slug.toLowerCase()));
+        const additions = missingBrandNames.map((name, index) => {
+          let slug = slugify(name) || `catalogue-brand-${index + 1}`;
+          if (existingBrandSlugs.has(slug)) slug = `${slug}-catalogue`;
+          existingBrandSlugs.add(slug);
+          return { name, slug, description: `Brand listed in the Al Safwa product catalogue: ${name}.`, logo_path: null, active: true, sort_order: 500 + index };
+        });
+        const { data: createdBrands, error: createBrandError } = await supabase
+          .from("brands").insert(additions).select("id,name,slug");
+        if (createBrandError) throw new Error(`Could not create missing catalogue brands: ${createBrandError.message}`);
+        (createdBrands || []).forEach((brand: Ref) => {
+          brandMap.set(brand.name.toLowerCase(), brand);
+          brandMap.set(brand.slug.toLowerCase(), brand);
+        });
+      }
+
       const categoryMap = new Map<string, Ref>();
       (categories || []).forEach((c: Ref) => { categoryMap.set(c.name.toLowerCase(), c); categoryMap.set(c.slug.toLowerCase(), c); });
 
