@@ -54,7 +54,7 @@ export default function RentalPage() {
       <PageHeader
         crumb="Rental"
         title="Machinery & Equipment Rental"
-        lead="Rent by the day, week or month. Fleet details and rates are confirmed per project — every rental gets a real quotation from Al Safwa Trading."
+        lead="Browse a broad equipment rental enquiry catalogue for construction, industrial and infrastructure projects. Specifications, fleet availability, transport, operators and rates are confirmed per project."
         ghost="RENT"
       />
 
@@ -75,7 +75,7 @@ export default function RentalPage() {
       <section className="grid-light bg-paper pb-20 pt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-smoke">
-            {filtered === null ? "Loading fleet…" : `${filtered.length} fleet class${filtered.length === 1 ? "" : "es"}${cat ? ` · ${cat}` : ""}`}
+            {filtered === null ? "Loading fleet…" : `${filtered.length} equipment type${filtered.length === 1 ? "" : "s"}${cat ? ` · ${cat}` : ""}`}
           </p>
 
           {filtered === null ? (
