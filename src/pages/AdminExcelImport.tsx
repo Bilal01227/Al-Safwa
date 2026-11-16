@@ -169,8 +169,13 @@ export default function AdminExcelImport() {
         if (sku) seenSkus.add(sku.toLowerCase());
       });
       const extraImages = withPreviews.filter((r) => r.imageCount > 1).map((r) => `${r.sheet} row ${r.excelRow}: ${r.imageCount} embedded images; first image will be assigned and extras need manual review.`);
-      setPrepared(next); setIssues([...problems, ...extraImages]);
-      if (extraImages.length) setError("Multiple images are anchored to some product rows. Review these before importing; the first image is mapped automatically.");
+      const allIssues = [...problems, ...extraImages];
+      setPrepared(next); setIssues(allIssues);
+      if (allIssues.length) {
+        setError("The workbook was read, but publishing is paused because some rows need correction. Fix the listed issues and upload the corrected workbook.");
+      } else {
+        await publishCatalogue(next);
+      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not inspect this Excel workbook.");
     } finally { setBusy(false); }
@@ -181,13 +186,13 @@ export default function AdminExcelImport() {
     if (file) void inspect(file);
   }
 
-  async function importCatalogue() {
-    if (!prepared.length || issues.length || busy) return;
-    setBusy(true); setError(""); setMessage(""); setProgress("");
+  async function publishCatalogue(rowsToImport: PreparedRow[]) {
+    if (!rowsToImport.length) return;
+    setBusy(true); setError(""); setMessage(""); setProgress("Validation passed. Publishing products to the live catalogue…");
     let productCount = 0, imageCount = 0;
     const imageErrors: string[] = [];
     try {
-      const products = prepared.map((r) => r.product);
+      const products = rowsToImport.map((r) => r.product);
       for (let offset = 0; offset < products.length; offset += 100) {
         const batch = products.slice(offset, offset + 100);
         const { error: upsertError } = await supabase.from("products").upsert(batch, { onConflict: "slug" });
@@ -196,12 +201,12 @@ export default function AdminExcelImport() {
         setProgress(`Saved ${productCount} of ${products.length} products…`);
       }
 
-      const slugs = prepared.map((r) => r.slug);
+      const slugs = rowsToImport.map((r) => r.slug);
       const { data: saved, error: lookupError } = await supabase.from("products").select("id,slug").in("slug", slugs);
       if (lookupError) throw lookupError;
       const idBySlug = new Map<string, string>((saved || []).map((p: { id: string; slug: string }) => [p.slug, p.id] as [string, string]));
 
-      const imageRows = prepared.filter((r) => r.source.image);
+      const imageRows = rowsToImport.filter((r) => r.source.image);
       for (let index = 0; index < imageRows.length; index++) {
         const item = imageRows[index];
         const productId = idBySlug.get(item.slug);
@@ -232,14 +237,14 @@ export default function AdminExcelImport() {
         else imageCount++;
         setProgress(`Saved products. Uploaded ${index + 1} of ${imageRows.length} embedded images…`);
       }
-      setMessage(`Completed: ${productCount} product records processed and ${imageCount} embedded images linked. Existing matching product slugs were updated. ${imageErrors.length ? `${imageErrors.length} image issue(s) need attention.` : ""}`);
+      setMessage(`Published to the website: ${productCount} product records processed and ${imageCount} embedded images linked. Existing matching product slugs were updated. ${imageErrors.length ? `${imageErrors.length} image issue(s) need attention; see the issue list.` : "The catalogue is now saved in the database."}`);
       if (imageErrors.length) setIssues(imageErrors);
+      setProgress("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Catalogue import failed.");
     } finally { setBusy(false); }
   }
 
-  const valid = rows.length > 0 && prepared.length > 0 && issues.length === 0;
   const withImages = rows.filter((r) => !!r.image).length;
 
   return <section className="mx-auto mt-8 max-w-7xl border border-black/10 bg-white p-6">
@@ -256,7 +261,7 @@ export default function AdminExcelImport() {
       <label className="block text-sm font-medium">Select original Excel workbook (.xlsx)<input type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={onFile} className="mt-2 block w-full text-sm"/></label>
       <p className="mt-2 text-xs text-smoke">{fileName || "Keep original rows, column headings and embedded images unchanged."}</p>
       <p className="mt-2 text-sm">{rows.length} product rows detected · {withImages} rows with embedded images · {prepared.length} rows mapped to existing brands/categories</p>
-      <button type="button" disabled={!valid || busy} onClick={() => void importCatalogue()} className="mt-4 bg-black px-5 py-3 text-sm font-medium text-white disabled:opacity-50">{busy ? "Importing…" : `Confirm & Import ${prepared.length} products + ${withImages} images`}</button>
+      <p className="mt-4 border border-black/10 bg-paper-2 p-3 text-sm">{busy ? "Publishing…" : message ? "Publishing completed. Products and linked images have been saved to the live catalogue." : issues.length ? "Publishing is paused until the listed validation issues are corrected." : rows.length ? "Workbook validated. Products and embedded images will publish automatically when validation passes." : "Choose the workbook to validate and publish its products to the website."}</p>
     </div>
     {issues.length > 0 && <div className="mt-4 max-h-56 overflow-auto border border-red-100 bg-red-50 p-4 text-xs text-red-700">{issues.slice(0, 200).map((issue, i) => <p key={i}>{issue}</p>)}{issues.length > 200 && <p>Showing first 200 issues.</p>}</div>}
     <div className="mt-5 max-h-[520px] overflow-auto border border-black/10">
