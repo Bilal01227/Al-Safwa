@@ -95,7 +95,7 @@ export default function Home() {
                 <CTAButton to="/request-quote" variant="safety">
                   Request a Quote <IcArrowRight width={18} height={18} />
                 </CTAButton>
-                <CTAButton to="/products" variant="outlineLight">
+                <CTAButton to="/products/" variant="outlineLight">
                   Explore Products
                 </CTAButton>
               </div>
@@ -154,7 +154,7 @@ export default function Home() {
             title="Product & Equipment Divisions"
             lead="Seven supply divisions cover the tools, equipment and machinery an industrial operation runs on."
             right={
-              <CTAButton to="/products" variant="outlineDark" className="h-10 px-4 text-[15px]">
+              <CTAButton to="/products/" variant="outlineDark" className="h-10 px-4 text-[15px]">
                 Full catalogue <IcArrowRight width={16} height={16} />
               </CTAButton>
             }
@@ -166,7 +166,7 @@ export default function Home() {
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
-                    to={isRental ? "/rental" : `/products?cat=${c.slug}`}
+                    to={isRental ? "/rental" : `/products/?cat=${c.slug}`}
                     className="card-hard group block h-full overflow-hidden"
                   >
                     <div className="relative h-40 overflow-hidden bg-paper-2">
@@ -232,7 +232,7 @@ export default function Home() {
             title="Featured Brands"
             lead="Power tools, safety equipment and motors & pumps from the brands contractors ask for by name."
             right={
-              <CTAButton to="/brands" variant="outlineLight" className="h-10 px-4 text-[15px]">
+              <CTAButton to="/brands/" variant="outlineLight" className="h-10 px-4 text-[15px]">
                 All brands <IcArrowRight width={16} height={16} />
               </CTAButton>
             }
@@ -275,7 +275,7 @@ export default function Home() {
             title="Featured Products"
             lead="A working selection from the catalogue. Every item is quoted with real pricing and availability."
             right={
-              <CTAButton to="/products" variant="outlineDark" className="h-10 px-4 text-[15px]">
+              <CTAButton to="/products/" variant="outlineDark" className="h-10 px-4 text-[15px]">
                 View catalogue <IcArrowRight width={16} height={16} />
               </CTAButton>
             }
