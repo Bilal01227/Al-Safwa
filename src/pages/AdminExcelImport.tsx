@@ -41,6 +41,18 @@ function parseSpecs(value: string) {
   } catch { /* Plain text specifications are retained as a single field. */ }
   return { Details: value };
 }
+const knownHeaders = new Set(
+  ["name", "brand", "category", "subcategory", "slug", "sku", "model_number", "short_description", "full_description", "price", "currency", "price_type", "stock_quantity", "minimum_stock_level", "availability_status", "featured", "active", "verified", "source_url", "source_company", "specifications"]
+    .flatMap((key) => [key, ...(aliases[key] || [])])
+    .map(normalize)
+);
+function extractSpecifications(values: Record<string, string>) {
+  const specs = parseSpecs(readValue(values, "specifications"));
+  for (const [header, value] of Object.entries(values)) {
+    if (value.trim() && !knownHeaders.has(normalize(header))) specs[header.trim()] = value.trim();
+  }
+  return specs;
+}
 
 export default function AdminExcelImport() {
   const [rows, setRows] = useState<PreviewRow[]>([]);
@@ -187,7 +199,7 @@ export default function AdminExcelImport() {
       const slugs = prepared.map((r) => r.slug);
       const { data: saved, error: lookupError } = await supabase.from("products").select("id,slug").in("slug", slugs);
       if (lookupError) throw lookupError;
-      const idBySlug = new Map((saved || []).map((p: { id: string; slug: string }) => [p.slug, p.id]));
+      const idBySlug = new Map<string, string>((saved || []).map((p: { id: string; slug: string }) => [p.slug, p.id] as [string, string]));
 
       const imageRows = prepared.filter((r) => r.source.image);
       for (let index = 0; index < imageRows.length; index++) {
