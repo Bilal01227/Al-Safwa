@@ -10,10 +10,11 @@ export default function ProductCard({ product, index }: { product: Product; inde
     <article className="card-hard group flex flex-col">
       <Link to={`/products/${product.slug}/`} className="relative block overflow-hidden bg-paper-2" tabIndex={-1} aria-hidden="true">
         <div className="aspect-[4/3] overflow-hidden">
-          {product.imageUrl ? <img src={product.imageUrl} alt={product.productName} loading="lazy" width={900} height={700}
-            onError={(e)=>{e.currentTarget.style.display="none";const placeholder=e.currentTarget.nextElementSibling as HTMLElement|null;if(placeholder)placeholder.classList.remove("hidden");}}
+          {product.imageUrl ? <img src={product.imageUrl} alt={product.imageIsCategoryFallback ? `Representative category image for ${product.productName}; individual product photo not yet assigned` : product.productName} loading="lazy" width={900} height={700}
+            onError={(e)=>{const img=e.currentTarget;if(!img.dataset.fallbackApplied&&product.fallbackImageUrl&&img.src!==new URL(product.fallbackImageUrl,window.location.href).href){img.dataset.fallbackApplied="true";img.src=product.fallbackImageUrl;return;}img.style.display="none";const placeholder=img.nextElementSibling as HTMLElement|null;if(placeholder)placeholder.classList.remove("hidden");}}
             className="h-full w-full object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]" /> : null}
-          <div className={product.imageUrl ? "hidden absolute inset-0 grid place-items-center bg-paper-2 px-4 text-center font-mono text-[10px] uppercase tracking-[.14em] text-smoke" : "absolute inset-0 grid place-items-center bg-paper-2 px-4 text-center font-mono text-[10px] uppercase tracking-[.14em] text-smoke"}>Real product photo not assigned yet</div>
+          <div className="hidden absolute inset-0 grid place-items-center bg-paper-2 px-4 text-center font-mono text-[10px] uppercase tracking-[.14em] text-smoke">Image unavailable</div>
+          {product.imageIsCategoryFallback && <span className="absolute bottom-2 right-2 bg-white/95 px-2 py-1 font-mono text-[9px] uppercase tracking-[.12em] text-ink">Category image</span>}
         </div>
         <span className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
