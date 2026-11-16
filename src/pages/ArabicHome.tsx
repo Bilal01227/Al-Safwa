@@ -97,7 +97,7 @@ export default function ArabicHome() {
         <section className="relative overflow-hidden bg-coal text-paper">
           <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-2">
             <div>
-              <p className="mb-5 text-xs tracking-wide text-mist">مسقط · سلطنة عُمان — التوريد والتأجير والإصلاح</p>
+              <p className="mb-5 text-xs tracking-wide text-mist">كرشة، نزوى · سلطنة عُمان — التوريد والتأجير والإصلاح</p>
               <h1 className="font-display text-4xl font-bold leading-[1.35] md:text-6xl">
                 حلول الأدوات والمعدات والآلات الصناعية في <span className="text-safety">عُمان</span>
               </h1>
