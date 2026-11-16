@@ -34,13 +34,13 @@ function relsPath(sourceFile: string) {
   const name = parts.pop() || "";
   return [...parts, "_rels", name + ".rels"].join("/");
 }
-function relationships(entries: Record<string, Uint8Array>, path: string) {
-  const bytes = entries[path];
+function relationships(entries: Record<string, Uint8Array>, sourceFile: string) {
+  const bytes = entries[relsPath(sourceFile)];
   if (!bytes) return new Map<string, string>();
   const doc = xml(strFromU8(bytes));
   return new Map(all(doc, "Relationship").map((r) => [
     attr(r, "Id"),
-    resolveTarget(path, attr(r, "Target")),
+    resolveTarget(sourceFile, attr(r, "Target")),
   ]));
 }
 function colIndex(reference: string) {
@@ -99,11 +99,11 @@ export async function parseExcelCatalogue(file: File): Promise<ExcelCatalogueRow
 
     const drawingNode = first(sheetDoc, "drawing");
     const drawingRid = drawingNode?.getAttributeNS(relNs, "id") || attr(drawingNode, "r:id");
-    const sheetRels = relationships(entries, relsPath(sheetPath));
+    const sheetRels = relationships(entries, sheetPath);
     const drawingPath = sheetRels.get(drawingRid);
     if (drawingPath && entries[drawingPath]) {
       const drawingDoc = xml(strFromU8(entries[drawingPath]));
-      const drawingRels = relationships(entries, relsPath(drawingPath));
+      const drawingRels = relationships(entries, drawingPath);
       for (const anchor of all(drawingDoc, "oneCellAnchor").concat(all(drawingDoc, "twoCellAnchor"))) {
         const from = first(anchor, "from");
         const rowNumber = Number(textContent(first(from || anchor, "row"))) + 1;
