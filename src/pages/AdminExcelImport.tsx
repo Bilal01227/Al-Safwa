@@ -90,6 +90,32 @@ export default function AdminExcelImport() {
       (brands || []).forEach((b: Ref) => { brandMap.set(b.name.toLowerCase(), b); brandMap.set(b.slug.toLowerCase(), b); });
       const categoryMap = new Map<string, Ref>();
       (categories || []).forEach((c: Ref) => { categoryMap.set(c.name.toLowerCase(), c); categoryMap.set(c.slug.toLowerCase(), c); });
+
+      // The workbook is the source of truth for its catalogue taxonomy.
+      // Create any missing worksheet categories automatically instead of blocking all 736 products.
+      const missingCategoryNames = [...new Set(withPreviews.map((row) => readValue(row.values, "category").trim()).filter(Boolean))]
+        .filter((name) => !categoryMap.has(name.toLowerCase()) && !categoryMap.has(slugify(name)));
+      if (missingCategoryNames.length) {
+        const existingSlugs = new Set((categories || []).map((category: Ref) => category.slug.toLowerCase()));
+        const additions = missingCategoryNames.map((name, index) => {
+          let slug = slugify(name) || `catalogue-category-${index + 1}`;
+          if (existingSlugs.has(slug)) slug = `${slug}-catalogue`;
+          existingSlugs.add(slug);
+          return {
+            name, slug, description: `Products classified as ${name} in the Al Safwa product catalogue.`,
+            blurb: null, icon: "gear", parent_id: null, image_path: null,
+            active: true, homepage_visible: false, sort_order: 500 + index,
+            seo_title: null, seo_description: null,
+          };
+        });
+        const { data: createdCategories, error: createCategoryError } = await supabase
+          .from("categories").insert(additions).select("id,name,slug,parent_id");
+        if (createCategoryError) throw new Error(`Could not create missing catalogue categories: ${createCategoryError.message}`);
+        (createdCategories || []).forEach((category: Ref) => {
+          categoryMap.set(category.name.toLowerCase(), category);
+          categoryMap.set(category.slug.toLowerCase(), category);
+        });
+      }
       const existingSku = new Map<string, string>();
       const existingBySlug = new Map<string, Record<string, any>>();
       (existing || []).forEach((p: Record<string, any>) => {
