@@ -38,10 +38,10 @@ function relationships(entries: Record<string, Uint8Array>, sourceFile: string) 
   const bytes = entries[relsPath(sourceFile)];
   if (!bytes) return new Map<string, string>();
   const doc = xml(strFromU8(bytes));
-  return new Map(all(doc, "Relationship").map((r) => [
+  return new Map<string, string>(all(doc, "Relationship").map((r) => [
     attr(r, "Id"),
     resolveTarget(sourceFile, attr(r, "Target")),
-  ]));
+  ] as [string, string]));
 }
 function colIndex(reference: string) {
   const letters = reference.match(/^[A-Z]+/i)?.[0]?.toUpperCase() || "A";
