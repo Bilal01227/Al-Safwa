@@ -9,6 +9,28 @@ type PreviewRow = ExcelCatalogueRow & { previewUrl?: string };
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 const truthy = (value: string, fallback: boolean) => value === "" ? fallback : ["true", "1", "yes", "y"].includes(value.trim().toLowerCase());
 const normalize = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+const numericValue = (value: string) => {
+  if (!value.trim()) return null;
+  const cleaned = value.replace(/,/g, "").replace(/[^0-9.\\-]/g, "");
+  if (!cleaned || cleaned === "." || cleaned === "-") return null;
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : Number.NaN;
+};
+const normalizePriceType = (value: string, hasPrice: boolean): "fixed" | "starting_from" | "request_quote" => {
+  const v = normalize(value);
+  if (["fixed", "retail", "retail_price", "set_price"].includes(v)) return "fixed";
+  if (["starting_from", "from", "starts_at", "starting_at"].includes(v)) return "starting_from";
+  if (["request_quote", "quote", "on_request", "price_on_request", "contact", "contact_for_price", "ask"].includes(v)) return "request_quote";
+  return hasPrice ? "fixed" : "request_quote";
+};
+const normalizeAvailability = (value: string): "in_stock" | "low_stock" | "out_of_stock" | "contact_for_availability" | "discontinued" => {
+  const v = normalize(value);
+  if (["in_stock", "available", "yes", "ready_stock", "instock"].includes(v)) return "in_stock";
+  if (["low_stock", "limited_stock", "few_left"].includes(v)) return "low_stock";
+  if (["out_of_stock", "unavailable", "no_stock", "sold_out"].includes(v)) return "out_of_stock";
+  if (["discontinued", "obsolete", "end_of_life"].includes(v)) return "discontinued";
+  return "contact_for_availability";
+};
 const aliases: Record<string, string[]> = {
   name: ["product_name", "item_name", "equipment_name", "name_of_product"],
   brand: ["brand_name", "manufacturer", "make"],
@@ -154,57 +176,67 @@ export default function AdminExcelImport() {
         const name = readValue(v, "name");
         const brandName = readValue(v, "brand");
         const categoryName = readValue(v, "category");
-        const sku = readValue(v, "sku");
-        const line = `${source.sheet} row ${source.excelRow}`;
+        const rawSku = readValue(v, "sku").trim();
+        const modelNumber = readValue(v, "model_number").trim();
+        const line = `${source.sheet} row `${source.excelRow}`;
         if (!name || !brandName || !categoryName) {
           problems.push(`${line}: required fields missing (product name, brand or category).`);
           return;
         }
         const brand = brandMap.get(brandName.toLowerCase()) || brandMap.get(slugify(brandName));
         const category = categoryMap.get(categoryName.toLowerCase()) || categoryMap.get(slugify(categoryName));
-        if (!brand) problems.push(`${line}: brand not found in Admin > Brands: ${brandName}.`);
-        if (!category) problems.push(`${line}: category not found in Admin > Categories: ${categoryName}.`);
-        const slugValue = readValue(v, "slug") || slugify(name);
-        const slug = slugValue || (sku ? slugify(`${name}-${sku}`) : "");
-        if (seenSlugs.has(slug)) problems.push(`${line}: duplicate product slug in workbook: ${slug}.`);
-        if (sku && seenSkus.has(sku.toLowerCase())) problems.push(`${line}: duplicate SKU in workbook: ${sku}.`);
-        const conflictingSlug = sku ? existingSku.get(sku.toLowerCase()) : undefined;
-        if (conflictingSlug && conflictingSlug !== slug) problems.push(`${line}: SKU ${sku} already belongs to product slug ${conflictingSlug}.`);
+        if (!brand) problems.push(`${line}: brand not found in Admin > Brands: `${brandName}.`);
+        if (!category) problems.push(`${line}: category not found in Admin > Categories: `${categoryName}.`);
+
+        // Existing SKU means update that product, even if the workbook's title/slug has changed.
+        const existingSkuSlug = rawSku ? existingSku.get(rawSku.toLowerCase()) : undefined;
+        const explicitSlug = readValue(v, "slug").trim();
+        let slug = existingSkuSlug || (explicitSlug ? slugify(explicitSlug) : slugify([brandName, name, modelNumber || rawSku].filter(Boolean).join("-")));
+        if (!slug) slug = slugify(`${brandName}-`${name}-`${source.excelRow}`);
+        const duplicateSku = !!rawSku && seenSkus.has(rawSku.toLowerCase());
+        if (seenSlugs.has(slug)) slug = `${slug}-`${source.excelRow}`;
+        const sku = duplicateSku ? "" : rawSku;
+
         const priceText = readValue(v, "price");
-        const price = priceText ? Number(priceText.replace(/,/g, "")) : null;
-        if (priceText && !Number.isFinite(price)) problems.push(`${line}: invalid price ${priceText}.`);
+        const price = numericValue(priceText);
+        if (priceText && (price === null || !Number.isFinite(price))) problems.push(`${line}: invalid price `${priceText}.`);
         const stockText = readValue(v, "stock_quantity");
-        const stock = stockText ? Number(stockText.replace(/,/g, "")) : 0;
-        if (stockText && (!Number.isInteger(stock) || stock < 0)) problems.push(`${line}: stock quantity must be a non-negative integer.`);
+        const stockValue = numericValue(stockText);
+        const stock = stockText ? stockValue : 0;
+        if (stockText && (stock === null || !Number.isInteger(stock) || stock < 0)) problems.push(`${line}: stock quantity must be a non-negative integer.`);
         const minText = readValue(v, "minimum_stock_level");
-        const minStock = minText ? Number(minText) : 0;
-        if (minText && (!Number.isInteger(minStock) || minStock < 0)) problems.push(`${line}: minimum stock must be a non-negative integer.`);
+        const minValue = numericValue(minText);
+        const minStock = minText ? minValue : 0;
+        if (minText && (minStock === null || !Number.isInteger(minStock) || minStock < 0)) problems.push(`${line}: minimum stock must be a non-negative integer.`);
         let specs: Record<string, unknown> = {};
         try { specs = parseSpecs(readValue(v, "specifications")); } catch { problems.push(`${line}: invalid specifications.`); }
-        const existingProduct = existingBySlug.get(slug);
+        if (duplicateSku && rawSku) specs["Original catalogue SKU"] = rawSku;
         if (source.image && (source.image.size > 5 * 1024 * 1024 || !["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"].includes(source.image.type))) {
           problems.push(`${line}: embedded image exceeds the 5 MB limit or uses an unsupported format (JPG, PNG, WEBP or GIF only).`);
         }
-        if (brand && category && !seenSlugs.has(slug)) {
+        const existingProduct = existingBySlug.get(slug);
+        if (brand && category) {
           const subcategoryName = readValue(v, "subcategory");
           const subcategory = subcategoryName ? categoryMap.get(subcategoryName.toLowerCase()) || categoryMap.get(slugify(subcategoryName)) : undefined;
+          const normalizedPrice = normalizePriceType(readValue(v, "price_type"), price !== null && Number.isFinite(price));
+          const normalizedAvailability = normalizeAvailability(readValue(v, "availability_status"));
           next.push({
             source,
             slug,
             product: {
               name: name.trim(), slug, brand_id: brand.id, category_id: category.id,
               subcategory_id: subcategory ? (subcategory.parent_id === category.id ? subcategory.id : existingProduct?.subcategory_id ?? null) : existingProduct?.subcategory_id ?? null,
-              sku: sku.trim() || existingProduct?.sku || null,
-              model_number: readValue(v, "model_number") || existingProduct?.model_number || null,
+              sku: sku || (existingProduct?.sku && !duplicateSku ? existingProduct.sku : null),
+              model_number: modelNumber || existingProduct?.model_number || null,
               short_description: readValue(v, "short_description") || existingProduct?.short_description || null,
               full_description: readValue(v, "full_description") || existingProduct?.full_description || null,
               specifications: Object.keys(specs).length ? specs : existingProduct?.specifications || {},
               price: priceText ? price : existingProduct?.price ?? null,
               currency: readValue(v, "currency") || existingProduct?.currency || "OMR",
-              price_type: readValue(v, "price_type") || existingProduct?.price_type || "request_quote",
+              price_type: readValue(v, "price_type") ? normalizedPrice : (existingProduct?.price_type || normalizedPrice),
               stock_quantity: stockText ? stock : existingProduct?.stock_quantity ?? 0,
               minimum_stock_level: minText ? minStock : existingProduct?.minimum_stock_level ?? 0,
-              availability_status: readValue(v, "availability_status") || existingProduct?.availability_status || "contact_for_availability",
+              availability_status: readValue(v, "availability_status") ? normalizedAvailability : (existingProduct?.availability_status || normalizedAvailability),
               featured: readValue(v, "featured") ? truthy(readValue(v, "featured"), false) : existingProduct?.featured ?? false,
               active: readValue(v, "active") ? truthy(readValue(v, "active"), true) : existingProduct?.active ?? true,
               verified: readValue(v, "verified") ? truthy(readValue(v, "verified"), false) : existingProduct?.verified ?? false,
@@ -214,7 +246,7 @@ export default function AdminExcelImport() {
           });
         }
         seenSlugs.add(slug);
-        if (sku) seenSkus.add(sku.toLowerCase());
+        if (rawSku) seenSkus.add(rawSku.toLowerCase());
       });
       const extraImages = withPreviews.filter((r) => r.imageCount > 1).map((r) => `${r.sheet} row ${r.excelRow}: ${r.imageCount} embedded images; first image will be assigned and extras need manual review.`);
       const allIssues = [...problems, ...extraImages];
@@ -262,11 +294,11 @@ export default function AdminExcelImport() {
           imageErrors.push(`${item.source.sheet} row ${item.source.excelRow}: saved product ID or image is missing.`);
           continue;
         }
-        const ext = item.source.image.name.split(".").pop()?.toLowerCase() || "jpg";
-        const safeName = item.source.image.name.replace(/[^a-zA-Z0-9._-]+/g, "-").slice(-80);
-        const path = `products/${productId}/excel-row-${item.source.excelRow}-${safeName}`;
+        const ext = item.source.image.type === "image/png" ? "png" : item.source.image.type === "image/webp" ? "webp" : item.source.image.type === "image/gif" ? "gif" : "jpg";
+        const path = `products/${productId}/catalogue-row-${item.source.excelRow}-${crypto.randomUUID()}.${ext}`;
+        // Immutable paths avoid the extra SELECT + UPDATE policies required by Storage upsert.
         const upload = await supabase.storage.from("product-images").upload(path, item.source.image, {
-          upsert: true, cacheControl: "31536000", contentType: item.source.image.type || "image/jpeg",
+          upsert: false, cacheControl: "31536000", contentType: item.source.image.type || "image/jpeg",
         });
         if (upload.error) {
           imageErrors.push(`${item.source.sheet} row ${item.source.excelRow}: ${upload.error.message}`);
