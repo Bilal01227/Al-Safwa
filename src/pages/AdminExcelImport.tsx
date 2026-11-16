@@ -68,7 +68,7 @@ export default function AdminExcelImport() {
       const [{ data: brands, error: brandError }, { data: categories, error: categoryError }, { data: existing, error: existingError }] = await Promise.all([
         supabase.from("brands").select("id,name,slug"),
         supabase.from("categories").select("id,name,slug,parent_id"),
-        supabase.from("products").select("id,slug,sku"),
+        supabase.from("products").select("id,slug,sku,name,brand_id,category_id,subcategory_id,model_number,short_description,full_description,specifications,price,currency,price_type,stock_quantity,minimum_stock_level,availability_status,featured,active,verified,source_url,source_company"),
       ]);
       if (brandError) throw brandError;
       if (categoryError) throw categoryError;
@@ -79,7 +79,11 @@ export default function AdminExcelImport() {
       const categoryMap = new Map<string, Ref>();
       (categories || []).forEach((c: Ref) => { categoryMap.set(c.name.toLowerCase(), c); categoryMap.set(c.slug.toLowerCase(), c); });
       const existingSku = new Map<string, string>();
-      (existing || []).forEach((p: { id: string; slug: string; sku: string | null }) => { if (p.sku) existingSku.set(p.sku.toLowerCase(), p.slug); });
+      const existingBySlug = new Map<string, Record<string, any>>();
+      (existing || []).forEach((p: Record<string, any>) => {
+        existingBySlug.set(p.slug, p);
+        if (p.sku) existingSku.set(String(p.sku).toLowerCase(), p.slug);
+      });
 
       const next: PreparedRow[] = [];
       const problems: string[] = [];
@@ -117,6 +121,10 @@ export default function AdminExcelImport() {
         if (minText && (!Number.isInteger(minStock) || minStock < 0)) problems.push(`${line}: minimum stock must be a non-negative integer.`);
         let specs: Record<string, unknown> = {};
         try { specs = parseSpecs(readValue(v, "specifications")); } catch { problems.push(`${line}: invalid specifications.`); }
+        const existingProduct = existingBySlug.get(slug);
+        if (source.image && (source.image.size > 5 * 1024 * 1024 || !["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"].includes(source.image.type))) {
+          problems.push(`${line}: embedded image exceeds the 5 MB limit or uses an unsupported format (JPG, PNG, WEBP or GIF only).`);
+        }
         if (brand && category && !seenSlugs.has(slug)) {
           const subcategoryName = readValue(v, "subcategory");
           const subcategory = subcategoryName ? categoryMap.get(subcategoryName.toLowerCase()) || categoryMap.get(slugify(subcategoryName)) : undefined;
@@ -125,17 +133,23 @@ export default function AdminExcelImport() {
             slug,
             product: {
               name: name.trim(), slug, brand_id: brand.id, category_id: category.id,
-              subcategory_id: subcategory?.parent_id === category.id ? subcategory.id : null,
-              sku: sku.trim() || null, model_number: readValue(v, "model_number") || null,
-              short_description: readValue(v, "short_description") || null,
-              full_description: readValue(v, "full_description") || null,
-              specifications: specs, price, currency: readValue(v, "currency") || "OMR",
-              price_type: readValue(v, "price_type") || "request_quote",
-              stock_quantity: stock, minimum_stock_level: minStock,
-              availability_status: readValue(v, "availability_status") || "contact_for_availability",
-              featured: truthy(readValue(v, "featured"), false), active: truthy(readValue(v, "active"), true),
-              verified: truthy(readValue(v, "verified"), false),
-              source_url: readValue(v, "source_url") || null, source_company: readValue(v, "source_company") || null,
+              subcategory_id: subcategory ? (subcategory.parent_id === category.id ? subcategory.id : existingProduct?.subcategory_id ?? null) : existingProduct?.subcategory_id ?? null,
+              sku: sku.trim() || existingProduct?.sku || null,
+              model_number: readValue(v, "model_number") || existingProduct?.model_number || null,
+              short_description: readValue(v, "short_description") || existingProduct?.short_description || null,
+              full_description: readValue(v, "full_description") || existingProduct?.full_description || null,
+              specifications: Object.keys(specs).length ? specs : existingProduct?.specifications || {},
+              price: priceText ? price : existingProduct?.price ?? null,
+              currency: readValue(v, "currency") || existingProduct?.currency || "OMR",
+              price_type: readValue(v, "price_type") || existingProduct?.price_type || "request_quote",
+              stock_quantity: stockText ? stock : existingProduct?.stock_quantity ?? 0,
+              minimum_stock_level: minText ? minStock : existingProduct?.minimum_stock_level ?? 0,
+              availability_status: readValue(v, "availability_status") || existingProduct?.availability_status || "contact_for_availability",
+              featured: readValue(v, "featured") ? truthy(readValue(v, "featured"), false) : existingProduct?.featured ?? false,
+              active: readValue(v, "active") ? truthy(readValue(v, "active"), true) : existingProduct?.active ?? true,
+              verified: readValue(v, "verified") ? truthy(readValue(v, "verified"), false) : existingProduct?.verified ?? false,
+              source_url: readValue(v, "source_url") || existingProduct?.source_url || null,
+              source_company: readValue(v, "source_company") || existingProduct?.source_company || null,
             },
           });
         }
