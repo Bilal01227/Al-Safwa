@@ -147,7 +147,7 @@ export function ProductsPage() {
       <section className="grid-light bg-paper pb-20 pt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-smoke">
-            {filtered === null ? "Loading catalogue…" : `${filtered.length} item${filtered.length === 1 ? "" : "s"} · data pending verification`}
+            {filtered === null ? "Loading catalogue…" : `${filtered.length} item${filtered.length === 1 ? "" : "s"} · availability confirmed on enquiry`}
           </p>
 
           {filtered === null ? (
