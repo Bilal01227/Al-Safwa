@@ -8,17 +8,24 @@ import { services } from "../lib/data/services";
 import { CTAButton, HazardBar } from "./kit";
 import { IcWhatsApp, IcPhone, IcMenu, IcX, IcArrowUpRight, IcMail } from "./icons";
 import { Moon, Sun } from "lucide-react";
+import alSafwaLogo from "../assets/al-safwa-logo.svg";
 
 export function LogoMark({ size = 34 }: { size?: number }) {
   return (
     <img
-      src="/images/al-safwa-logo.svg"
+      src={alSafwaLogo}
       alt="Al Safwa Trading"
       width={size * 10}
       height={size * 3}
-      className="h-12 w-[180px] rounded-sm bg-white object-contain p-1"
+      className="block h-12 w-[180px] rounded-sm bg-white object-contain p-1"
       style={{ width: "min(180px, 38vw)", maxWidth: "180px" }}
+      loading="eager"
+      decoding="async"
       fetchPriority="high"
+      onError={(event) => {
+        event.currentTarget.onerror = null;
+        event.currentTarget.src = "/images/al-safwa-logo.jpg";
+      }}
     />
   );
 }
