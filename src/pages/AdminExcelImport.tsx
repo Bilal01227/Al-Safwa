@@ -11,7 +11,7 @@ const truthy = (value: string, fallback: boolean) => value === "" ? fallback : [
 const normalize = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 const numericValue = (value: string) => {
   if (!value.trim()) return null;
-  const cleaned = value.replace(/,/g, "").replace(/[^0-9.\\-]/g, "");
+  const cleaned = value.replace(/,/g, "").replace(/[^0-9.-]/g, "");
   if (!cleaned || cleaned === "." || cleaned === "-") return null;
   const parsed = Number(cleaned);
   return Number.isFinite(parsed) ? parsed : Number.NaN;
