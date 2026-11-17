@@ -189,7 +189,7 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
             <IcWhatsApp /> WhatsApp
           </CTAButton>
           <CTAButton href={telHref} variant="outlineLight" className="flex-1">
-            <IcPhone /> {arabic ? "اتصل بنا" : "Call"} Us
+            <IcPhone /> {locale === "ar" ? "اتصل بنا" : "Call Us"}
           </CTAButton>
         </div>
       </div>
