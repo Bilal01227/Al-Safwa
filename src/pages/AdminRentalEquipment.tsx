@@ -41,7 +41,7 @@ export default function AdminRentalEquipment() {
 
   useEffect(() => { void load(); }, []);
 
-  const set = (key: string, value: string | boolean) => setForm((current) => ({ ...current, [key]: value }));
+  const set = (key: string, value: string | boolean) => setForm((current) => ({ ...current, [key]: value } as typeof current));
 
   function edit(row: RentalRecord) {
     setNotice("");
