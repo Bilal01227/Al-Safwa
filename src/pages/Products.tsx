@@ -67,7 +67,7 @@ export function ProductsPage() {
       }
       return true;
     });
-  }, [all, q, brand, cat, sub, avail, price]);
+  }, [all, q, brand, cat, sub, price]);
 
   const hasFilters = Boolean(q || brand || cat || sub || price);
 
