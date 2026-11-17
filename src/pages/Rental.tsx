@@ -98,11 +98,14 @@ export default function RentalPage() {
                     <div className="relative aspect-[16/10] overflow-hidden bg-paper-2">
                       <img
                         src={siteMedia[`rental.${r.id}`] || r.imageUrl}
-                        alt={`${r.name} product reference image — illustrative, not a confirmed Al Safwa fleet unit`}
+                        alt={`${r.name} — illustrative image, not a confirmed Al Safwa fleet unit`}
                         loading="lazy"
-                        onError={(event) => { event.currentTarget.style.display = "none"; }}
+                        onError={(event) => { event.currentTarget.style.display = "none"; const placeholder = event.currentTarget.nextElementSibling as HTMLElement | null; if (placeholder) placeholder.classList.remove("hidden"); }}
                         className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                       />
+                      <div className="hidden absolute inset-0 grid place-items-center px-4 text-center font-mono text-[10px] uppercase tracking-[0.14em] text-smoke">
+                        Image unavailable
+                      </div>
                       <span className="absolute left-3 top-3">
                         <MonoTag>{r.category}</MonoTag>
                       </span>
