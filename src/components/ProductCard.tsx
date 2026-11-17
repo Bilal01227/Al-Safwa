@@ -18,7 +18,7 @@ export default function ProductCard({ product, index }: { product: Product; inde
         </div>
         <span className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <span className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-safety opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        <span className="absolute left-3 top-3 bg-ink/90 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper">{index !== undefined ? `P-${String(index + 1).padStart(2, "0")}` : product.category.replace(/-/g, " ")}</span>
+        <span className="absolute left-3 top-3 bg-ink/90 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper">{product.category.replace(/-/g, " ")}</span>
       </Link>
       <div className="flex flex-1 flex-col gap-2.5 p-4">
         <div className="flex items-center justify-between gap-2"><Link to={`/brands/${product.brandSlug}/`} className="font-mono text-[11px] uppercase tracking-[0.16em] text-safety transition-colors hover:text-safety-deep">{product.brand}</Link><span className="font-mono text-[10px] uppercase tracking-[0.12em] text-smoke">{product.subcategory}</span></div>
