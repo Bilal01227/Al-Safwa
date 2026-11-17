@@ -317,6 +317,7 @@ export function RepairPage() {
           />
         ) : (
           <form onSubmit={submit} noValidate>
+            <input type="text" name="website" value={form.website || ""} onChange={set("website")} autoComplete="off" tabIndex={-1} aria-hidden="true" className="pointer-events-none absolute h-0 w-0 opacity-0" />
             <h2 className="font-display text-3xl font-semibold uppercase">
               {isMaintenance ? "Maintenance details" : "Repair details"}
             </h2>
