@@ -42,6 +42,7 @@ export default function Home() {
   const [featured, setFeatured] = useState<Product[] | null>(null);
   const [liveProducts, setLiveProducts] = useState<Product[]>(products);
   const [liveBrands, setLiveBrands] = useState(brands);
+  const [liveDataLoaded, setLiveDataLoaded] = useState(false);
   const siteMedia = useSiteMedia();
 
   useEffect(() => {
