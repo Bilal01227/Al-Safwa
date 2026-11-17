@@ -158,7 +158,7 @@ export function RequestQuotePage() {
             id={done.id}
             heading={isRental ? "Rental request logged" : "Quote request logged"}
             message={`Thank you — ${business.name} will review the request and respond with ${
-              isRental ? "rental terms and availability" : "pricing and rental details"
+              isRental ? "rental period and terms" : "pricing and rental details"
             }. For the fastest answer, continue on WhatsApp with your reference number.`}
             waMessage={waQuoteMessage(form.product || undefined, form.model || undefined)}
           />
