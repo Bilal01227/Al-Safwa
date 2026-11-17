@@ -20,7 +20,7 @@ export function ProductsPage() {
   const brand = params.get("brand") ?? "";
   const cat = params.get("cat") ?? "";
   const sub = params.get("sub") ?? "";
-  const avail = params.get("avail") ?? "";
+  
   const price = params.get("price") ?? "";
 
   const [all, setAll] = useState<Product[] | null>(null);
@@ -42,14 +42,13 @@ export function ProductsPage() {
   };
 
   const options = useMemo(() => {
-    if (!all) return { brands: [], cats: [], subs: [], avails: [], prices: [] };
+    if (!all) return { brands: [], cats: [], subs: [], prices: [] };
     const uniq = (arr: string[]) => Array.from(new Set(arr.filter(Boolean))).sort();
     const scoped = cat ? all.filter((p) => p.category === cat) : all;
     return {
       brands: uniq(all.map((p) => p.brand)),
       cats: uniq(all.map((p) => p.category)),
       subs: uniq(scoped.map((p) => p.subcategory)),
-      avails: uniq(all.map((p) => p.availability)),
       prices: uniq(all.map((p) => p.priceType)),
     };
   }, [all, cat]);
@@ -61,7 +60,6 @@ export function ProductsPage() {
       if (brand && p.brand !== brand) return false;
       if (cat && p.category !== cat) return false;
       if (sub && p.subcategory !== sub) return false;
-      if (avail && p.availability !== avail) return false;
       if (price && p.priceType !== price) return false;
       if (needle) {
         const hay = `${p.productName} ${p.brand} ${p.modelNumber} ${p.subcategory} ${p.shortDescription}`.toLowerCase();
@@ -71,14 +69,14 @@ export function ProductsPage() {
     });
   }, [all, q, brand, cat, sub, avail, price]);
 
-  const hasFilters = Boolean(q || brand || cat || sub || avail || price);
+  const hasFilters = Boolean(q || brand || cat || sub || price);
 
   // Filter combinations are useful to visitors but should not become separate
   // search landing pages. Keep one canonical, indexable catalogue URL.
   usePageMeta({
     title: siteTitle("Product Catalogue"),
     description:
-      "Browse industrial power tools, safety equipment, motors, pumps and spare parts supplied by Al Safwa Trading in Oman. Filter by brand, category and availability, then request a quote.",
+      "Browse industrial power tools, safety equipment, motors, pumps and spare parts supplied by Al Safwa Trading in Oman. Filter by brand and category, then contact us for price.",
     path: "/products",
     indexable: !hasFilters,
   });
@@ -90,7 +88,7 @@ export function ProductsPage() {
       <PageHeader
         crumb="Products"
         title="Product Catalogue"
-        lead="Industrial tools, safety equipment, motors, pumps and spare parts. Pricing and availability are quoted per order — filter, shortlist, then request a quote."
+        lead="Industrial tools, safety equipment, motors, pumps and spare parts. Contact us for price — filter, shortlist, then request a quotation."
         ghost="CAT"
       />
 
@@ -114,13 +112,13 @@ export function ProductsPage() {
               ["brand", "Brand", options.brands],
               ["cat", "Category", options.cats],
               ["sub", "Subcategory", options.subs],
-              ["avail", "Availability", options.avails],
+              
               ["price", "Price type", options.prices],
             ] as const
           ).map(([key, label, opts]) => (
             <select
               key={key}
-              value={key === "brand" ? brand : key === "cat" ? cat : key === "sub" ? sub : key === "avail" ? avail : price}
+              value={key === "brand" ? brand : key === "cat" ? cat : key === "sub" ? sub : price}
               onChange={(e) => update(key, e.target.value)}
               className="field w-auto min-w-[130px] py-2 text-sm"
               aria-label={`Filter by ${label}`}
@@ -147,7 +145,7 @@ export function ProductsPage() {
       <section className="grid-light bg-paper pb-20 pt-8">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <p className="mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-smoke">
-            {filtered === null ? "Loading catalogue…" : `${filtered.length} item${filtered.length === 1 ? "" : "s"} · availability confirmed on enquiry`}
+            {filtered === null ? "Loading catalogue…" : `${filtered.length} item${filtered.length === 1 ? "" : "s"} · price confirmed on enquiry`}
           </p>
 
           {filtered === null ? (
@@ -241,7 +239,7 @@ export function ProductDetailPage() {
   usePageMeta({
     title: siteTitle(product ? product.productName : "Product"),
     description: product
-      ? `${product.productName}${product.modelNumber && product.modelNumber !== "—" ? ` (model ${product.modelNumber})` : ""} — supplied by ${business.name} in Oman. Request price and availability.`
+      ? `${product.productName}${product.modelNumber && product.modelNumber !== "—" ? ` (model ${product.modelNumber})` : ""} — supplied by ${business.name} in Oman. Contact us for price.`
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
     image: product?.imageUrl || undefined,
@@ -377,7 +375,7 @@ export function ProductDetailPage() {
                     </div>
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Availability</p>
-                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability === "contact_for_availability" ? "Contact for availability" : p.availability.replace(/[_-]+/g, " ")}</p>
+                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability === "contact_for_availability" || p.availability === "contact_for_price" ? "Contact for price" : p.availability.replace(/[_-]+/g, " ")}</p>
                     </div>
                   </div>
                 </div>
