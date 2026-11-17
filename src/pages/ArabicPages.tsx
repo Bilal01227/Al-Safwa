@@ -4,7 +4,7 @@ import { business, telHref } from "../lib/business";
 import { waHref, waProductMessage, waRentalMessage } from "../lib/whatsapp";
 import { usePageMeta, siteTitle } from "../lib/seo";
 import { fetchProducts, fetchProductBySlug } from "../lib/data/products";
-import { fetchBrands, fetchBrand } from "../lib/data/brands";
+import { fetchBrands, fetchBrand, getBrandLogoUrl } from "../lib/data/brands";
 import { fetchRentalItems } from "../lib/data/rental";
 import { categories } from "../lib/data/categories";
 import { services } from "../lib/data/services";
@@ -78,6 +78,7 @@ export default function ArabicPages() {
   const [rentals,setRentals] = useState<RentalItem[]>([]);
   const [loading,setLoading] = useState(false);
   const [search,setSearch] = useState("");
+  const brandFilter = params.get("brand") || "";
   const [category,setCategory] = useState("");
   const [notice,setNotice] = useState("");
   const [error,setError] = useState("");
@@ -109,7 +110,7 @@ export default function ArabicPages() {
   },[section,isProductDetail,product,isBrandDetail,brand,isServiceDetail,slug,service,isRepair,isQuote,isRental,location.pathname]);
   usePageMeta({title:siteTitle(pageMeta.title),description:pageMeta.description,path:pageMeta.path});
 
-  const visibleProducts = products.filter((p)=> (!search || `${p.productName} ${p.brand} ${p.modelNumber}`.toLowerCase().includes(search.toLowerCase())) && (!category || p.category===category));
+  const visibleProducts = products.filter((p)=> (!search || `${p.productName} ${p.brand} ${p.modelNumber}`.toLowerCase().includes(search.toLowerCase())) && (!category || p.category===category) && (!brandFilter || p.brand===brandFilter));
   const setField=(key:string,value:string)=>setForm((current)=>({...current,[key]:value}));
 
   async function submit(event:FormEvent) {
@@ -135,7 +136,7 @@ export default function ArabicPages() {
     {!product ? <p>{loading?"جارٍ تحميل المنتج...":"لم يتم العثور على هذا المنتج."}</p> : <div className="grid gap-8 md:grid-cols-2"><div className="bg-paper-2"><img src={product.imageUrl} alt={product.productName} className="w-full object-contain"/></div><div><p className="text-safety">{product.brand}</p><h2 className="mt-3 font-display text-3xl font-bold">{product.productName}</h2>{product.modelNumber && product.modelNumber!=="—" && <p className="mt-3 text-sm text-smoke">رقم الطراز: {product.modelNumber}</p>}<p className="mt-5 leading-8 text-smoke">يرجى التواصل معنا لتأكيد تفاصيل المنتج والمواصفات الفنية والسعر وفقاً للعلامة التجارية ورقم الطراز المطلوب.</p><div className="mt-5"><PriceLabel/></div><Link to={`/ar/request-quote/?product=${encodeURIComponent(product.productName)}`} className="mt-6 inline-block bg-safety px-5 py-3 font-semibold text-white">اطلب عرض سعر</Link></div></div>}
   </Page>;
 
-  if(section==="brands" && !isBrandDetail) return <Page title="العلامات التجارية" lead="العلامات التجارية المدرجة في كتالوج الصفوة للتجارة."><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{brands.map(b=><Link key={b.slug} to={`/ar/brands/${b.slug}/`} className="card-hard flex min-h-28 items-center gap-4 p-5"><img src={b.logoPath?.startsWith("http")?b.logoPath:b.logoPath?.startsWith("/")?b.logoPath:""} alt={b.name} className="h-14 w-20 object-contain"/><span className="font-display text-xl font-semibold">{b.name}</span></Link>)}</div></Page>;
+  if(section==="brands" && !isBrandDetail) return <Page title="العلامات التجارية" lead="العلامات التجارية المدرجة في كتالوج الصفوة للتجارة."><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{brands.map(b=><Link key={b.slug} to={`/ar/brands/${b.slug}/`} className="card-hard flex min-h-28 items-center gap-4 p-5"><img src={getBrandLogoUrl(b.logoPath)} alt={b.name} className="h-14 w-20 object-contain"/><span className="font-display text-xl font-semibold">{b.name}</span></Link>)}</div></Page>;
   if(isBrandDetail) return <Page title={brand?.name || "العلامة التجارية"} lead={brandAbout}>{!brand?<p>لم يتم العثور على العلامة التجارية.</p>:<div className="space-y-5"><p className="leading-8 text-smoke">{brandAbout}</p><Link to={`/ar/products/?brand=${encodeURIComponent(brand.name)}`} className="inline-block bg-safety px-5 py-3 font-semibold text-white">عرض المنتجات</Link></div>}</Page>;
 
   if(section==="rental") return <Page title="تأجير المعدات والآليات" lead="خيارات تأجير المعدات للمشاريع والمواقع والورش. يتم تأكيد تفاصيل المعدة ومدة التأجير والسعر قبل الاتفاق.">
