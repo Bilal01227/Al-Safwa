@@ -278,7 +278,7 @@ export default function Home() {
           <SectionHead
             index="03"
             title="Featured Products"
-            lead="A working selection from the catalogue. Pricing and availability are confirmed for each enquiry."
+            lead="A working selection from the catalogue. Pricing is confirmed for each enquiry."
             right={
               <CTAButton to="/products/" variant="outlineDark" className="h-10 px-4 text-[15px]">
                 View catalogue <IcArrowRight width={16} height={16} />
@@ -403,7 +403,7 @@ export default function Home() {
                   <div className="p-4">
                     <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-caution">{item.category}</p>
                     <h3 className="mt-2 font-display text-xl font-semibold uppercase leading-tight text-paper group-hover:text-safety">{item.name}</h3>
-                    <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mist">Rates on request · Confirm availability</p>
+                    <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mist">Contact for price</p>
                   </div>
                 </Link>
               </Reveal>
@@ -481,7 +481,7 @@ export default function Home() {
               {
                 icon: <IcTag width={24} height={24} />,
                 title: "Quote-based pricing",
-                body: "Every price is confirmed per order in OMR — real pricing, real availability, no invented figures on this site.",
+                body: "Prices are quoted per order in OMR. Contact us for a current quotation.",
               },
               {
                 icon: <IcBolt width={24} height={24} />,
@@ -538,7 +538,7 @@ export default function Home() {
                 Talk to us on WhatsApp
               </h2>
               <p className="mt-2 max-w-xl text-white/85">
-                Fast answers on pricing, availability and rental from {business.name} — send the product name and model,
+                Fast answers on pricing and rental enquiries from {business.name} — send the product name and model,
                 we take it from there.
               </p>
             </div>
