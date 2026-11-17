@@ -92,7 +92,7 @@ for (const [table, target] of [["brands", brands], ["products", products]]) {
     throw new Error("Could not fetch complete " + table + " slugs; refusing to publish an incomplete sitemap: " + error.message);
   }
 }
-for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Request pricing and availability."]);
+for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Contact us for price."]);
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
 const productRecords = await fetchProductRecords();
 for (const record of productRecords) {
@@ -110,7 +110,7 @@ for (const record of productRecords) {
   pages.set(route, [name + " — Al Safwa Trading Oman", description, structuredData]);
 }
 for (const slug of products) {
-  if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Request product pricing and availability."]);
+  if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Contact us for product pricing."]);
 }
 
 const arabicStaticPages = new Map([
