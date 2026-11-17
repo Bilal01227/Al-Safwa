@@ -7,6 +7,7 @@
  * operator and transport are confirmed before a quotation is issued.
  */
 import type { RentalItem } from "../types";
+import { supabase } from "../supabase";
 
 export const rentalCategories: string[] = [
   "Heavy Machinery",
@@ -23,7 +24,7 @@ export const rentalCategories: string[] = [
   "Site Equipment",
 ];
 
-const CONTACT = "Subject to fleet confirmation";
+const CONTACT = "Contact for price";
 const condition = "Inspection and condition confirmed before dispatch";
 
 function item(
@@ -32,7 +33,7 @@ function item(
   category: string,
   description: string,
   imageUrl: string,
-  model = "Size / capacity confirmed per project",
+  model = "",
 ): RentalItem {
   return {
     id, name, brand: "Confirmed per unit", model, category, description,
@@ -124,5 +125,30 @@ export const rentalItems: RentalItem[] = [
 ];
 
 export async function fetchRentalItems(): Promise<RentalItem[]> {
-  return [...rentalItems];
+  const { data, error } = await supabase
+    .from("rental_equipment")
+    .select("slug,name,category,model_number,description,image_url,daily_rate,weekly_rate,monthly_rate")
+    .eq("active", true)
+    .order("sort_order", { ascending: true })
+    .order("name", { ascending: true });
+
+  if (error || !data?.length) return [...rentalItems];
+
+  return data.map((row) => {
+    const fallback = rentalItems.find((item) => item.id === `rt-${row.slug}`);
+    return {
+      id: `rt-${row.slug}`,
+      name: row.name,
+      brand: "",
+      model: row.model_number || "",
+      category: row.category || "Other Equipment",
+      description: row.description || "Contact us for equipment details and rental pricing.",
+      condition: "Confirmed before hire",
+      availability: "Contact for price",
+      dailyRate: row.daily_rate == null ? null : String(row.daily_rate),
+      weeklyRate: row.weekly_rate == null ? null : String(row.weekly_rate),
+      monthlyRate: row.monthly_rate == null ? null : String(row.monthly_rate),
+      imageUrl: row.image_url || fallback?.imageUrl || "",
+    };
+  });
 }
