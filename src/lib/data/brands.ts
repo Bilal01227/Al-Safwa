@@ -38,4 +38,4 @@ export async function fetchBrand(slug: string): Promise<Brand | undefined> {
 
 export const getBrand = (slug: string): Brand | undefined => brands.find((b) => slug !== undefined && b.slug === slug);
 
-export const TRADEMARK_NOTE = "All brand names and trademarks shown on this website are the property of their respective owners. Al Safwa Trading supplies genuine products through verified sourcing; authorized-dealer status is stated only where formally confirmed.";
+export const TRADEMARK_NOTE = "All brand names and trademarks shown on this website are the property of their respective owners. Product listings are provided for enquiry. Brand names and trademarks remain the property of their respective owners.";
