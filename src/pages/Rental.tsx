@@ -107,16 +107,10 @@ export default function RentalPage() {
                       <h2 className="font-display text-2xl font-semibold uppercase leading-tight">{r.name}</h2>
                       <p className="mt-3 text-sm leading-relaxed text-smoke">{r.description}</p>
 
-                      <dl className="mt-4 space-y-1.5 border-t border-ink/10 pt-3 font-mono text-[10.5px] uppercase tracking-[0.1em]">
-                        <div className="flex justify-between gap-3">
-                          <dt className="text-smoke">Condition</dt>
-                          <dd className="text-right text-ink">{r.condition}</dd>
-                        </div>
-                        <div className="flex justify-between gap-3">
-                          <dt className="text-smoke">Pricing</dt>
-                          <dd className="text-right text-caution">Contact for price</dd>
-                        </div>
-                      </dl>
+                      <div className="mt-4 border-t border-ink/10 pt-3">
+                        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Rental pricing</p>
+                        <p className="mt-1 font-display text-lg font-semibold uppercase text-caution">Contact for price</p>
+                      </div>
 
                       
 
