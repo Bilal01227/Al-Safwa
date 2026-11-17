@@ -151,7 +151,8 @@ export const AvailabilityBadge = ({ text = "Contact for availability" }: { text?
     in_stock: "In stock",
     low_stock: "Limited stock",
     out_of_stock: "Out of stock",
-    contact_for_availability: "Contact for availability",
+    contact_for_availability: "Contact for price",
+    contact_for_price: "Contact for price",
     discontinued: "Discontinued",
   };
   const label = labels[text] || text.replace(/[_-]+/g, " ");
