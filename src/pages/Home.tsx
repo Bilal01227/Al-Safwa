@@ -6,7 +6,7 @@ import { usePageMeta } from "../lib/seo";
 import { siteTitle } from "../lib/seo";
 import { categories } from "../lib/data/categories";
 import { brands, fetchBrands, getBrandLogoUrl } from "../lib/data/brands";
-import { products, fetchProducts, fetchFeaturedProducts } from "../lib/data/products";
+import { products, fetchProducts, fetchFeaturedProducts, productMatchesDivision } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
 import { IMG } from "../lib/data/images";
@@ -162,7 +162,7 @@ export default function Home() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((c, i) => {
               const isRental = c.slug === "rental-equipment";
-              const count = isRental ? rentalItems.length : liveProducts.filter((pr) => pr.category === c.slug).length;
+              const count = isRental ? rentalItems.length : liveProducts.filter((pr) => productMatchesDivision(pr, c.slug)).length;
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
