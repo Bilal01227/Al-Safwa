@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
 import { business, telHref } from "../lib/business";
 import { waHref, waProductMessage, waRentalMessage } from "../lib/whatsapp";
@@ -40,7 +40,7 @@ const serviceAbout: Record<string,string> = {
   "spare-parts":"توفير قطع الغيار والمواد الاستهلاكية بعد مطابقة النوع ورقم الطراز."
 };
 
-function Page({title,lead,children}:{title:string;lead:string;children:React.ReactNode}) {
+function Page({title,lead,children}:{title:string;lead:string;children:ReactNode}) {
   return <div dir="rtl" className="grid-light bg-paper text-ink">
     <header className="bg-coal px-4 py-12 text-paper sm:px-6 md:py-16">
       <div className="mx-auto max-w-7xl"><p className="font-mono text-xs text-safety">الصفوة للتجارة · سلطنة عُمان</p><h1 className="mt-3 font-display text-4xl font-bold leading-tight md:text-6xl">{title}</h1><p className="mt-4 max-w-3xl text-base leading-8 text-mist">{lead}</p></div>
