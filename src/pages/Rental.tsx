@@ -42,13 +42,6 @@ export default function RentalPage() {
     setParams(next, { replace: true });
   };
 
-  const RateCell = ({ label }: { label: string }) => (
-    <div className="px-2 py-2.5 text-center">
-      <p className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-smoke">{label}</p>
-      <p className="mt-0.5 font-display text-[15px] font-semibold uppercase text-caution">On quote</p>
-    </div>
-  );
-
   return (
     <>
       <PageHeader
@@ -125,11 +118,7 @@ export default function RentalPage() {
                         </div>
                       </dl>
 
-                      <div className="mt-4 grid grid-cols-3 divide-x divide-ink/10 border border-ink/15 bg-paper-2/60">
-                        <RateCell label="Daily" />
-                        <RateCell label="Weekly" />
-                        <RateCell label="Monthly" />
-                      </div>
+                      
 
                       <div className="mt-4 grid grid-cols-[1fr_44px] gap-2">
                         <CTAButton
