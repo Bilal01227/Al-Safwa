@@ -115,6 +115,7 @@ export function RequestQuotePage() {
     quantity: "",
     location: "",
     requirement: "",
+    website: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
@@ -164,6 +165,7 @@ export function RequestQuotePage() {
           />
         ) : (
           <form onSubmit={submit} noValidate>
+            <input type="text" name="website" value={form.website || ""} onChange={set("website")} autoComplete="off" tabIndex={-1} aria-hidden="true" className="pointer-events-none absolute h-0 w-0 opacity-0" />
             <h2 className="font-display text-3xl font-semibold uppercase">
               {isRental ? "Rental quote details" : "Quote details"}
             </h2>
@@ -264,6 +266,7 @@ export function RepairPage() {
     problem: "",
     location: "",
     urgency: "Standard",
+    website: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sending, setSending] = useState(false);
