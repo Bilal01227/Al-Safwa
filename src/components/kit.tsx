@@ -146,7 +146,7 @@ export function CTAButton({
 }
 
 /* ── Badges & tags ─────────────────────────────────────────────── */
-export const AvailabilityBadge = ({ text = "Contact for availability" }: { text?: string }) => {
+export const AvailabilityBadge = ({ text = "Contact for price" }: { text?: string }) => {
   const labels: Record<string, string> = {
     in_stock: "In stock",
     low_stock: "Limited stock",
