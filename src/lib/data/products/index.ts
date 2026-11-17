@@ -193,6 +193,12 @@ async function fromSupabase(): Promise<Product[]> {
   });
 }
 
+/** Count product subcategories under the curated homepage division using their shared category-art mapping. */
+export function productMatchesDivision(product: Product, divisionSlug: string): boolean {
+  const divisionFallback = categoryFallbackImages[divisionSlug];
+  return product.category === divisionSlug || (!!divisionFallback && product.fallbackImageUrl === divisionFallback);
+}
+
 export async function fetchProducts(): Promise<Product[]> {
   try {
     // Supabase is authoritative. Every database product is retained in the public catalogue;
