@@ -102,7 +102,7 @@ export function BrandDetailPage() {
   usePageMeta({
     title: siteTitle(brand ? `${brand.name} in Oman` : "Brand"),
     description: brand
-      ? `${brand.name} products supplied by ${business.name} in Oman — request pricing and availability by quote or WhatsApp.`
+      ? `${brand.name} products supplied by ${business.name} in Oman — contact us for price by quotation or WhatsApp.`
       : `Brands supplied by ${business.name}, Oman.`,
     path: `/brands/${brandSlug ?? ""}`,
     indexable: brand !== undefined,
@@ -153,10 +153,10 @@ export function BrandDetailPage() {
                 Al Safwa Trading supplies Makita power tools alongside a wider range of industrial equipment,
                 construction tools, safety products, motors, pumps and spare parts. Browse the Makita models
                 currently listed below, or send the model number, required quantity and delivery location for a
-                quotation. If the exact model is not shown, ask the team to check sourcing availability.
+                quotation. If the exact model is not shown, ask the team to source the required model.
               </p>
               <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-mist">
-                Product pricing and availability are confirmed per quotation.
+                Product pricing is confirmed per quotation.
               </p>
             </div>
           )}
@@ -166,13 +166,13 @@ export function BrandDetailPage() {
 
       <section className="grid-light bg-paper py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <SectionHead index="01" title={`${brand.name} — Listed Products`} lead="Catalogue entries currently published. More items from this brand are available on request." />
+          <SectionHead index="01" title={`${brand.name} — Listed Products`} lead="Catalogue entries currently published. Ask us about additional models from this brand." />
           {items === null ? (
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="border border-ink/10 bg-card"><div className="skel aspect-[4/3]" /><div className="space-y-3 p-4"><div className="skel h-4 w-2/3" /><div className="skel h-3 w-full" /></div></div>)}</div>
           ) : items.length === 0 ? (
             <div className="border border-dashed border-ink/30 bg-card px-6 py-14 text-center">
-              <h2 className="font-display text-3xl font-semibold uppercase">{brand.name} items are available on request</h2>
-              <p className="mx-auto mt-3 max-w-lg text-smoke">Catalogue entries for this brand are being verified before publication. Send us the model you need — pricing and availability are confirmed per quote.</p>
+              <h2 className="font-display text-3xl font-semibold uppercase">Ask us about {brand.name} products</h2>
+              <p className="mx-auto mt-3 max-w-lg text-smoke">Catalogue entries for this brand are being verified before publication. Send us the model you need — pricing is confirmed per quotation.</p>
               <div className="mt-6 flex justify-center gap-3"><CTAButton href={waHref(waBrandMessage(brand.name))} variant="wa"><IcWhatsApp /> Ask on WhatsApp</CTAButton><CTAButton to="/request-quote/" variant="dark">Request a quote</CTAButton></div>
             </div>
           ) : (
