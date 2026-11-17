@@ -241,7 +241,7 @@ export function ProductDetailPage() {
   usePageMeta({
     title: siteTitle(product ? product.productName : "Product"),
     description: product
-      ? `${product.productName} (model ${product.modelNumber}) — supplied by ${business.name} in Oman. Request price and availability.`
+      ? `${product.productName}${product.modelNumber && product.modelNumber !== "—" ? ` (model ${product.modelNumber})` : ""} — supplied by ${business.name} in Oman. Request price and availability.`
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
     image: product?.imageUrl || undefined,
@@ -321,7 +321,7 @@ export function ProductDetailPage() {
           <span className="text-safety">/</span>
           <Link to="/products" className="hover:text-safety">Products</Link>
           <span className="text-safety">/</span>
-          <span className="text-paper">{p.modelNumber}</span>
+          <span className="text-paper">{p.modelNumber && p.modelNumber !== "—" ? p.modelNumber : p.productName}</span>
         </div>
       </div>
 
@@ -362,7 +362,7 @@ export function ProductDetailPage() {
                   </span>
                   <AvailabilityBadge text={p.availability} />
                 </div>
-                <p className="mt-5 max-w-xl leading-relaxed text-smoke">{p.shortDescription}</p>
+                <p className="mt-5 max-w-xl leading-relaxed text-smoke">{p.shortDescription || p.description || "Contact us to confirm the specifications and suitability of this product."}</p>
               </Reveal>
               <Reveal delay={80}>
                 <div className="mt-8 border-y border-ink/10 py-6">
@@ -400,7 +400,7 @@ export function ProductDetailPage() {
           <SectionHead eyebrow="Product details" title="Specifications" />
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
             <div className="border border-ink/10 bg-card p-6 lg:col-span-2">
-              <p className="leading-relaxed text-smoke">{p.description || p.shortDescription}</p>
+              <p className="leading-relaxed text-smoke">{p.description || p.shortDescription || "Detailed specifications are confirmed against the exact make and model before quotation."}</p>
               {specificationEntries.length ? (
                 <dl className="mt-8 divide-y divide-ink/10 border-y border-ink/10">
                   {specificationEntries.map(([label, value]) => (
