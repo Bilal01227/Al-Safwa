@@ -168,13 +168,13 @@ for (const [route, details] of pages) {
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
   const isArabicRoute = route === "/ar" || route.startsWith("/ar/");
-  const englishRoute = isArabicRoute ? (route.replace(/^\\/ar(?=\\/|$)/, "") || "/") : route;
+  const englishRoute = isArabicRoute ? (route.replace(/^\/ar(?=\/|$)/, "") || "/") : route;
   const arabicRoute = isArabicRoute ? route : (route === "/" ? "/ar" : "/ar" + route);
   const alternateLinks = [
     '<link rel="alternate" hreflang="en-OM" href="' + site + (englishRoute === "/" ? "/" : englishRoute + "/") + '" />',
     '<link rel="alternate" hreflang="ar-OM" href="' + site + (arabicRoute === "/" ? "/" : arabicRoute + "/") + '" />',
     '<link rel="alternate" hreflang="x-default" href="' + site + (englishRoute === "/" ? "/" : englishRoute + "/") + '" />',
-  ].join("\\n    ");
+  ].join("\n    ");
   let html = rootHtml.replace(/<link rel="alternate" hreflang="[^"]+" href="[^"]+" \/>/g, "");
   if (isArabicRoute) {
     html = html.replace('<html lang="en-OM">', '<html lang="ar-OM" dir="rtl">');
