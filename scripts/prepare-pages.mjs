@@ -198,16 +198,16 @@ for (const [route, details] of pages) {
 }
 const sitemapRoutes = ["/", ...Array.from(pages.keys())];
 const urls = sitemapRoutes.map((route) => site + (route === "/" ? "/" : route + "/"));
-const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\\n' +
+const sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' +
   sitemapRoutes.map((route) => {
     const isArabicRoute = route === "/ar" || route.startsWith("/ar/");
-    const englishRoute = isArabicRoute ? (route.replace(/^\\/ar(?=\\/|$)/, "") || "/") : route;
+    const englishRoute = isArabicRoute ? (route.replace(/^\/ar(?=\/|$)/, "") || "/") : route;
     const arabicRoute = isArabicRoute ? route : (route === "/" ? "/ar" : "/ar" + route);
     const englishUrl = site + (englishRoute === "/" ? "/" : englishRoute + "/");
     const arabicUrl = site + (arabicRoute === "/" ? "/" : arabicRoute + "/");
     const url = site + (route === "/" ? "/" : route + "/");
     return '  <url><loc>' + url + '</loc><xhtml:link rel="alternate" hreflang="en-OM" href="' + englishUrl + '" /><xhtml:link rel="alternate" hreflang="ar-OM" href="' + arabicUrl + '" /><xhtml:link rel="alternate" hreflang="x-default" href="' + englishUrl + '" /></url>';
-  }).join("\\n") + "\\n</urlset>\\n";
+  }).join("\n") + "\n</urlset>\n";
 if (urls.length > 50000) throw new Error("Sitemap exceeds the 50,000 URL limit.");
 await writeFile(path.join(dist, "sitemap.xml"), sitemap, "utf8");
 console.log("Generated " + pages.size + " route pages and " + urls.length + " sitemap URLs.");
