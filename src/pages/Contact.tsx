@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 export default function ContactPage() {
   usePageMeta({
     title: siteTitle("Contact"),
-    description: `Contact ${business.name} in Oman — verified business phone, WhatsApp, shop address and opening hours. Request quotes, rental and repair support.`,
+    description: `Contact ${business.name} in Oman by phone or WhatsApp, or find the shop in Karsha, Nizwa. Request quotes, rental and repair support.`,
     path: "/contact",
   });
 
@@ -25,7 +25,7 @@ export default function ContactPage() {
       label: "Google Maps",
       value: "Open map",
       sub: "Shop location",
-      href: business.googleMapsUrl || "https://maps.google.com/?q=Muscat,Oman",
+      href: business.googleMapsUrl || "https://maps.google.com/?q=Karsha,Nizwa,Oman",
       external: true,
     },
   ];
