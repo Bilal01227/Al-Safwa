@@ -15,8 +15,10 @@ export function waHref(message?: string): string {
 export const waGeneralMessage = (): string =>
   `Hello ${business.name}, I would like to enquire about industrial equipment supply in Oman.`;
 
-export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber">): string =>
-  `Hello, I am interested in ${p.productName}, model ${p.modelNumber}. Please provide price and availability from ${business.name}.`;
+export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber">): string => {
+  const model = p.modelNumber && p.modelNumber !== "—" ? `, model ${p.modelNumber}` : "";
+  return `Hello, I am interested in ${p.productName}${model}. Please provide price and availability from ${business.name}.`;
+};
 
 export const waBrandMessage = (brandName: string): string =>
   `Hello, I would like to enquire about ${brandName} products available from ${business.name} in Oman.`;
