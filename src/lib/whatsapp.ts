@@ -17,14 +17,14 @@ export const waGeneralMessage = (): string =>
 
 export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber">): string => {
   const model = p.modelNumber && p.modelNumber !== "—" ? `, model ${p.modelNumber}` : "";
-  return `Hello, I am interested in ${p.productName}${model}. Please provide price and availability from ${business.name}.`;
+  return `Hello, I am interested in ${p.productName}${model}. Please share the price and product details from ${business.name}.`;
 };
 
 export const waBrandMessage = (brandName: string): string =>
   `Hello, I would like to enquire about ${brandName} products available from ${business.name} in Oman.`;
 
 export const waRentalMessage = (r: Pick<RentalItem, "name" | "model">): string =>
-  `Hello, I would like a rental quote for ${r.name} (${r.model}) from ${business.name}. Please share availability and rental terms.`;
+  `Hello, I would like a rental quote for ${r.name} (${r.model}) from ${business.name}. Please share rental pricing and terms.`;
 
 export const waRepairMessage = (): string =>
   `Hello, I would like to request an equipment repair through ${business.name}.`;
