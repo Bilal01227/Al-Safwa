@@ -6,6 +6,7 @@ import { CTAButton } from "./components/kit";
 
 const Home = lazy(() => import("./pages/Home"));
 const ArabicHome = lazy(() => import("./pages/ArabicHome"));
+const ArabicPages = lazy(() => import("./pages/ArabicPages"));
 const ProductsPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductsPage })));
 const ProductDetailPage = lazy(() => import("./pages/Products").then((m) => ({ default: m.ProductDetailPage })));
 const BrandsPage = lazy(() => import("./pages/Brands").then((m) => ({ default: m.BrandsPage })));
@@ -76,16 +77,7 @@ export default function App() {
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/ar" element={<ArabicHome />} />
         <Route path="/ar/" element={<ArabicHome />} />
-        <Route path="/ar/products" element={<Layout locale="ar"><ProductsPage /></Layout>} />
-        <Route path="/ar/products/:slug" element={<Layout locale="ar"><ProductDetailPage /></Layout>} />
-        <Route path="/ar/brands" element={<Layout locale="ar"><BrandsPage /></Layout>} />
-        <Route path="/ar/brands/:brand" element={<Layout locale="ar"><BrandDetailPage /></Layout>} />
-        <Route path="/ar/rental" element={<Layout locale="ar"><RentalPage /></Layout>} />
-        <Route path="/ar/services" element={<Layout locale="ar"><ServicesPage /></Layout>} />
-        <Route path="/ar/services/:slug" element={<Layout locale="ar"><ServiceDetailPage /></Layout>} />
-        <Route path="/ar/repair" element={<Layout locale="ar"><RepairPage /></Layout>} />
-        <Route path="/ar/request-quote" element={<Layout locale="ar"><RequestQuotePage /></Layout>} />
-        <Route path="/ar/contact" element={<Layout locale="ar"><ContactPage /></Layout>} />
+        <Route path="/ar/*" element={<Layout locale="ar"><ArabicPages /></Layout>} />
         <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
         <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
         <Route path="/brands" element={<Layout><BrandsPage /></Layout>} />
