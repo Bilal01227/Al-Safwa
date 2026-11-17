@@ -106,9 +106,6 @@ export default function RentalPage() {
                       <span className="absolute left-3 top-3">
                         <MonoTag>{r.category}</MonoTag>
                       </span>
-                      <span className="absolute bottom-3 left-3">
-                        <MonoTag>REFERENCE IMAGE</MonoTag>
-                      </span>
                     </div>
                     <div className="flex flex-1 flex-col p-5">
                       <h2 className="font-display text-2xl font-semibold uppercase leading-tight">{r.name}</h2>
