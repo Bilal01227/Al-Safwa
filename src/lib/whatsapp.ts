@@ -21,7 +21,7 @@ export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber">
 };
 
 export const waBrandMessage = (brandName: string): string =>
-  `Hello, I would like to enquire about ${brandName} products available from ${business.name} in Oman.`;
+  `Hello, I would like to enquire about ${brandName} products listed by ${business.name} in Oman.`;
 
 export const waRentalMessage = (r: Pick<RentalItem, "name" | "model">): string =>
   `Hello, I would like a rental quote for ${r.name} (${r.model}) from ${business.name}. Please share rental pricing and terms.`;
