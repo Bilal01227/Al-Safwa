@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "../lib/supabase";
 import { rentalCategories } from "../lib/data/rental";
 
@@ -52,7 +52,7 @@ export default function AdminRentalEquipment() {
 
   function reset() { setForm({ ...blank }); setNotice(""); setError(""); }
 
-  async function save(event: React.FormEvent) {
+  async function save(event: FormEvent) {
     event.preventDefault();
     setSaving(true); setError(""); setNotice("");
     const name = form.name.trim();
