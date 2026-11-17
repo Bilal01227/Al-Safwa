@@ -370,7 +370,7 @@ export function RepairPage() {
                 </Field>
               </div>
 
-              {/* Photo upload placeholder — Supabase Storage phase */}
+              {/* Photos are shared directly through WhatsApp until native upload is implemented. */}
               <div className="sm:col-span-2">
                 <span className="flabel">Photos (optional)</span>
                 <div className="flex flex-wrap items-center justify-between gap-4 border border-dashed border-ink/30 bg-paper-2/60 px-5 py-6">
@@ -379,9 +379,9 @@ export function RepairPage() {
                       <IcCamera width={20} height={20} />
                     </span>
                     <div>
-                      <p className="font-display text-lg font-medium uppercase">Photo upload coming soon</p>
+                      <p className="font-display text-lg font-medium uppercase">Share photos through WhatsApp</p>
                       <p className="text-[13px] text-smoke">
-                        Cloud photo upload is planned with the Supabase phase — meanwhile, send photos on WhatsApp.
+                        Use WhatsApp to send equipment photos to our team. Submit this form separately to create your request.
                       </p>
                     </div>
                   </div>
