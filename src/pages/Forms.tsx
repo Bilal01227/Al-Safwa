@@ -24,7 +24,7 @@ function FormShell({ title, children, aside }: { title: string; children: ReactN
             <ol className="mt-4 space-y-4">
               {[
                 ["01", "We review the details", "Your request is logged and checked by the team."],
-                ["02", "You get a real answer", "Pricing, availability or a diagnosis quote — confirmed per request."],
+                ["02", "You get a real answer", "Pricing or a diagnosis quotation — confirmed per request."],
                 ["03", "We coordinate", "Supply, delivery, workshop slot or site visit is arranged."],
               ].map(([n, t, d]) => (
                 <li key={n} className="flex gap-3">
@@ -149,7 +149,7 @@ export function RequestQuotePage() {
       <PageHeader
         crumb={isRental ? "Rental Quote" : "Request Quote"}
         title={isRental ? "Request Rental Quote" : "Request a Quote"}
-        lead={`${business.name} confirms pricing and availability per request — send the details and the team responds with a real quotation.`}
+        lead={`${business.name} confirms pricing per request — send the details and the team responds with a real quotation.`}
         ghost={isRental ? "RENT" : "RFQ"}
       />
       <FormShell title="What happens next">
@@ -158,7 +158,7 @@ export function RequestQuotePage() {
             id={done.id}
             heading={isRental ? "Rental request logged" : "Quote request logged"}
             message={`Thank you — ${business.name} will review the request and respond with ${
-              isRental ? "rental terms and availability" : "pricing and availability"
+              isRental ? "rental terms and availability" : "pricing and rental details"
             }. For the fastest answer, continue on WhatsApp with your reference number.`}
             waMessage={waQuoteMessage(form.product || undefined, form.model || undefined)}
           />
