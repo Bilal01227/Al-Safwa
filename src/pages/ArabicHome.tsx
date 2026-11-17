@@ -48,31 +48,9 @@ export default function ArabicHome() {
     const previousDir = root.dir;
     root.lang = "ar-OM";
     root.dir = "rtl";
-    let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.rel = "canonical";
-      document.head.appendChild(canonical);
-    }
-    canonical.href = "https://alsafwaoman.com/ar/";
-    const alternates = [
-      { hreflang: "ar-OM", href: "https://alsafwaoman.com/ar/" },
-      { hreflang: "en-OM", href: "https://alsafwaoman.com/" },
-      { hreflang: "x-default", href: "https://alsafwaoman.com/" },
-    ];
-    const added: HTMLLinkElement[] = [];
-    alternates.forEach((item) => {
-      const link = document.createElement("link");
-      link.rel = "alternate";
-      link.hreflang = item.hreflang;
-      link.href = item.href;
-      document.head.appendChild(link);
-      added.push(link);
-    });
     return () => {
       root.lang = previousLang || "en-OM";
       root.dir = previousDir || "ltr";
-      added.forEach((link) => link.remove());
     };
   }, []);
 
