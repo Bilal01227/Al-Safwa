@@ -9,7 +9,7 @@ const pages = new Map([
   ["/rental", ["Industrial Equipment Rental — Al Safwa Trading Oman", "Explore equipment rental options for contractors and industrial operations across Oman."]],
   ["/services", ["Equipment Repair & Maintenance Services — Al Safwa Trading Oman", "Equipment repair, power tool repair, preventive maintenance and spare parts support in Oman."]],
   ["/repair", ["Equipment Repair Request — Al Safwa Trading Oman", "Request equipment inspection, repair and maintenance support from Al Safwa Trading in Oman."]],
-  ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing and availability for industrial tools, machinery, rental and spare parts in Oman."]],
+  ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing for industrial tools, machinery, rental and spare parts in Oman."]],
   ["/contact", ["Contact Al Safwa Trading — Oman", "Contact Al Safwa Trading for industrial equipment supply, rental, repair and maintenance enquiries."]],
   ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
@@ -111,6 +111,47 @@ for (const record of productRecords) {
 }
 for (const slug of products) {
   if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Request product pricing and availability."]);
+}
+
+const arabicStaticPages = new Map([
+  ["/ar/products", ["كتالوج المنتجات الصناعية | الصفوة للتجارة", "تصفح الأدوات والمعدات الصناعية. تواصل معنا لمعرفة الأسعار وطلب عرض سعر."]],
+  ["/ar/brands", ["العلامات التجارية | الصفوة للتجارة", "العلامات التجارية المدرجة في كتالوج الصفوة للتجارة في سلطنة عُمان."]],
+  ["/ar/rental", ["تأجير المعدات والآليات | الصفوة للتجارة", "خيارات تأجير المعدات للمشاريع والمواقع والورش. تواصل معنا لمعرفة الأسعار." ]],
+  ["/ar/services", ["خدمات المعدات | الصفوة للتجارة", "خدمات إصلاح المعدات والصيانة وقطع الغيار والدعم الميداني في سلطنة عُمان."]],
+  ["/ar/repair", ["طلب إصلاح أو صيانة | الصفوة للتجارة", "أرسل تفاصيل المعدة والعطل لطلب خدمات الإصلاح والصيانة."]],
+  ["/ar/request-quote", ["طلب عرض سعر | الصفوة للتجارة", "اطلب عرض سعر للأدوات والمعدات الصناعية وقطع الغيار وخيارات التأجير."]],
+  ["/ar/contact", ["تواصل معنا | الصفوة للتجارة", "تواصل مع الصفوة للتجارة في كرشة، نزوى، سلطنة عُمان."]],
+]);
+for (const [route, details] of arabicStaticPages) pages.set(route, details);
+
+const serviceArabicTitles = {
+  "equipment-repair": "إصلاح المعدات",
+  "power-tool-repair": "إصلاح الأدوات الكهربائية",
+  "preventive-maintenance": "الصيانة الوقائية",
+  "machinery-maintenance": "صيانة الآلات",
+  "field-service": "الخدمة الميدانية",
+  "spare-parts": "توريد قطع الغيار",
+};
+for (const [route, details] of Array.from(pages.entries())) {
+  if (route === "/ar" || route.startsWith("/ar/")) continue;
+  const arRoute = route === "/" ? "/ar" : "/ar" + route;
+  if (pages.has(arRoute)) continue;
+  let title = details[0];
+  let description = "الصفوة للتجارة في سلطنة عُمان. تواصل معنا لمعرفة الأسعار وطلب عرض سعر.";
+  if (route.startsWith("/products/")) {
+    const productName = title.split(" — Al Safwa")[0];
+    title = productName + " | تفاصيل المنتج - الصفوة للتجارة";
+    description = "اطلب معلومات السعر والمواصفات الفنية لهذا المنتج من الصفوة للتجارة في عُمان.";
+  } else if (route.startsWith("/brands/")) {
+    const brandName = title.split(" Products")[0];
+    title = "منتجات " + brandName + " | الصفوة للتجارة";
+    description = "تصفح المنتجات المدرجة لهذه العلامة التجارية وتواصل معنا لمعرفة الأسعار.";
+  } else if (route.startsWith("/services/")) {
+    const serviceSlug = route.split("/").pop();
+    title = (serviceArabicTitles[serviceSlug] || "خدمات المعدات") + " | الصفوة للتجارة";
+    description = "تواصل مع الصفوة للتجارة لتأكيد نطاق الخدمة والتكلفة.";
+  }
+  pages.set(arRoute, [title, description, details[2]]);
 }
 
 const rootHtml = await readFile(path.join(dist, "index.html"), "utf8");
