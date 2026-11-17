@@ -357,9 +357,11 @@ export function ProductDetailPage() {
                   {p.productName}
                 </h1>
                 <div className="mt-4 flex flex-wrap items-center gap-4">
-                  <span className="border border-ink/15 bg-paper-2 px-3 py-1.5 font-mono text-[12px] uppercase tracking-[0.1em]">
-                    Model · {p.modelNumber}
-                  </span>
+                  {p.modelNumber && p.modelNumber !== "—" && (
+                    <span className="border border-ink/15 bg-paper-2 px-3 py-1.5 font-mono text-[12px] uppercase tracking-[0.1em]">
+                      Model · {p.modelNumber}
+                    </span>
+                  )}
                   <AvailabilityBadge text={p.availability} />
                 </div>
                 <p className="mt-5 max-w-xl leading-relaxed text-smoke">{p.shortDescription || p.description || "Contact us to confirm the specifications and suitability of this product."}</p>
@@ -375,7 +377,7 @@ export function ProductDetailPage() {
                     </div>
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Availability</p>
-                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability}</p>
+                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability === "contact_for_availability" ? "Contact for availability" : p.availability.replace(/[_-]+/g, " ")}</p>
                     </div>
                   </div>
                 </div>
