@@ -37,6 +37,9 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_1e9TK7R2CSPP7190qxO2jg_9emlfwgy
         run: npm run build -- --base=/
 
+      - name: Check static route generator syntax
+        run: node --check scripts/prepare-pages.mjs
+
       - name: Generate static route entry points
         env:
           VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
