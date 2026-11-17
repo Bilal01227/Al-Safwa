@@ -92,7 +92,7 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
         }`}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-          <Link to="/" className="group flex items-center gap-3" aria-label={`${business.name} — home`}>
+          <Link to={`${prefix}/`} className="group flex items-center gap-3" aria-label={`${business.name} — home`}>
             <LogoMark size={38} />
           </Link>
 
@@ -165,7 +165,7 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
           </button>
         </div>
         <nav className="flex flex-1 flex-col justify-center gap-1 overflow-y-auto px-6 py-8" aria-label="Mobile">
-          {navItems.map((item, i) => (
+          {localizedNavItems.map((item, i) => (
             <NavLink
               key={item.to}
               to={item.to}
@@ -189,7 +189,7 @@ function Header({ theme, onToggleTheme, locale = "en" }: { theme: "light" | "dar
             <IcWhatsApp /> WhatsApp
           </CTAButton>
           <CTAButton href={telHref} variant="outlineLight" className="flex-1">
-            <IcPhone /> Call Us
+            <IcPhone /> {arabic ? "اتصل بنا" : "Call"} Us
           </CTAButton>
         </div>
       </div>
@@ -205,14 +205,14 @@ function Footer({ locale = "en" }: { locale?: "en" | "ar" }) {
       <HazardBar className="h-2.5" />
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
-          <Link to="/" className="flex items-center gap-3">
+          <Link to={`${prefix}/`} className="flex items-center gap-3">
             <LogoMark size={38} />
             <span className="flex flex-col leading-none">
               <span className="font-display text-2xl font-semibold tracking-[0.06em] text-paper">AL SAFWA</span>
               <span className="mt-1 font-mono text-[9px] tracking-[0.32em]">TRADING — OMAN</span>
             </span>
           </Link>
-          <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist/85">{business.descriptor}</p>
+          <p className="mt-5 max-w-xs text-sm leading-relaxed text-mist/85">{arabic ? "توريد الأدوات والمعدات الصناعية وخيارات التأجير والإصلاح والصيانة للمقاولين والورش والمنشآت في سلطنة عُمان." : business.descriptor}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <CTAButton href={waHref(waGeneralMessage())} variant="wa" className="h-10 px-4 text-[15px]">
               <IcWhatsApp /> WhatsApp
@@ -257,11 +257,10 @@ function Footer({ locale = "en" }: { locale?: "en" | "ar" }) {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-[12px] text-mist/70 sm:px-6 md:flex-row md:items-center md:justify-between">
           <p>
-            © {new Date().getFullYear()} <span className="text-paper">{business.name}</span> — {business.country}. All
-            rights reserved.
+            © {new Date().getFullYear()} <span className="text-paper">{business.name}</span> — {business.country}. {arabic ? "جميع الحقوق محفوظة." : "All rights reserved."}
           </p>
-          <p>Product brands & trademarks belong to their respective owners.</p>
-          <p>Specifications compiled from public sources — verify before ordering.</p>
+          <p>{arabic ? "العلامات التجارية ملك لأصحابها." : "Product brands & trademarks belong to their respective owners."}</p>
+          <p>{arabic ? "يرجى تأكيد المواصفات والتفاصيل قبل الطلب." : "Specifications compiled from public sources — verify before ordering."}</p>
         </div>
       </div>
     </footer>
