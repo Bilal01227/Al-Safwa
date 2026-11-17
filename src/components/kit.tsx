@@ -146,15 +146,25 @@ export function CTAButton({
 }
 
 /* ── Badges & tags ─────────────────────────────────────────────── */
-export const AvailabilityBadge = ({ text = "Contact for availability" }: { text?: string }) => (
-  <span className="inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.14em] text-caution">
-    <span className="relative flex h-2 w-2">
-      <span className="absolute inline-flex h-full w-full animate-ping bg-caution opacity-60" />
-      <span className="relative inline-flex h-2 w-2 bg-caution" />
+export const AvailabilityBadge = ({ text = "Contact for availability" }: { text?: string }) => {
+  const labels: Record<string, string> = {
+    in_stock: "In stock",
+    low_stock: "Limited stock",
+    out_of_stock: "Out of stock",
+    contact_for_availability: "Contact for availability",
+    discontinued: "Discontinued",
+  };
+  const label = labels[text] || text.replace(/[_-]+/g, " ");
+  return (
+    <span className="inline-flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.14em] text-caution">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping bg-caution opacity-60" />
+        <span className="relative inline-flex h-2 w-2 bg-caution" />
+      </span>
+      {label}
     </span>
-    {text}
-  </span>
-);
+  );
+};
 
 export const MonoTag = ({ children, tone = "dark" }: { children: ReactNode; tone?: "dark" | "light" | "safety" }) => (
   <span
