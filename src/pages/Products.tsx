@@ -370,12 +370,8 @@ export function ProductDetailPage() {
                     <div>
                       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Price</p>
                       <p className="mt-1 font-display text-2xl font-semibold uppercase">
-                        {showPrice ? `${p.currency} ${p.price}` : "Price on request"}
+                        {showPrice ? `${p.currency} ${p.price}` : "Contact for price"}
                       </p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-smoke">Availability</p>
-                      <p className="mt-1 font-display text-2xl font-semibold uppercase">{p.availability === "contact_for_availability" || p.availability === "contact_for_price" ? "Contact for price" : p.availability.replace(/[_-]+/g, " ")}</p>
                     </div>
                   </div>
                 </div>
