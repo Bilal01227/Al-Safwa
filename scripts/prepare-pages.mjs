@@ -98,16 +98,19 @@ const productRecords = await fetchProductRecords();
 for (const record of productRecords) {
   products.add(record.slug);
   const name = String(record.name || humanize(record.slug));
-  const description = String(record.short_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+  const model = String(record.model_number || "").trim();
+  const productTitle = model ? name + " (" + model + ")" : name;
+  const description = String(record.short_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.")
+    .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Product",
     name,
     description,
-    model: record.model_number || undefined,
+    model: model || undefined,
   };
-  pages.set(route, [name + " — Al Safwa Trading Oman", description, structuredData]);
+  pages.set(route, [productTitle + " — Al Safwa Trading Oman", description, structuredData]);
 }
 for (const slug of products) {
   if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Contact us for product pricing."]);
