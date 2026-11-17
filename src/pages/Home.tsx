@@ -491,12 +491,12 @@ export default function Home() {
               {
                 icon: <IcShield width={24} height={24} />,
                 title: "Brands supplied by name",
-                body: "Bosch, Makita, DeWalt, Stanley, Dongcheng, Texmo and more — sourced through verified channels.",
+                body: "Bosch, Makita, DeWalt, Stanley, Dongcheng, Texmo and more — brand and model sourcing confirmed per quotation.",
               },
               {
                 icon: <IcFileCheck width={24} height={24} />,
-                title: "Verified before publishing",
-                body: "Catalogue data is checked against manufacturer information before it is treated as confirmed.",
+                title: "Specifications checked",
+                body: "Product specifications are checked against manufacturer information before the verified label is applied.",
               },
               {
                 icon: <IcGear width={24} height={24} />,
