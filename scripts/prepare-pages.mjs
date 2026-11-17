@@ -167,11 +167,20 @@ for (const [route, details] of pages) {
   const output = path.join(dist, route.slice(1), "index.html");
   await mkdir(path.dirname(output), { recursive: true });
   const canonical = site + route + "/";
-  let html = route === "/ar" ? rootHtml : rootHtml.replaceAll('<link rel="alternate" hreflang="en-OM" href="https://alsafwaoman.com/" />', "").replaceAll('<link rel="alternate" hreflang="ar-OM" href="https://alsafwaoman.com/ar/" />', "").replaceAll('<link rel="alternate" hreflang="x-default" href="https://alsafwaoman.com/" />', "");
-  if (route === "/ar") {
+  const isArabicRoute = route === "/ar" || route.startsWith("/ar/");
+  const englishRoute = isArabicRoute ? (route.replace(/^\\/ar(?=\\/|$)/, "") || "/") : route;
+  const arabicRoute = isArabicRoute ? route : (route === "/" ? "/ar" : "/ar" + route);
+  const alternateLinks = [
+    '<link rel="alternate" hreflang="en-OM" href="' + site + (englishRoute === "/" ? "/" : englishRoute + "/") + '" />',
+    '<link rel="alternate" hreflang="ar-OM" href="' + site + (arabicRoute === "/" ? "/" : arabicRoute + "/") + '" />',
+    '<link rel="alternate" hreflang="x-default" href="' + site + (englishRoute === "/" ? "/" : englishRoute + "/") + '" />',
+  ].join("\\n    ");
+  let html = rootHtml.replace(/<link rel="alternate" hreflang="[^"]+" href="[^"]+" \/>/g, "");
+  if (isArabicRoute) {
     html = html.replace('<html lang="en-OM">', '<html lang="ar-OM" dir="rtl">');
     html = replaceMeta(html, "og:locale", "ar_OM", "property");
   }
+
   html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>" + escapeHtml(title) + "</title>");
   html = html.replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?\s*>/i, '<link rel="canonical" href="' + canonical + '" />');
   html = replaceMeta(html, "description", description);
@@ -184,6 +193,7 @@ for (const [route, details] of pages) {
     const safeJson = JSON.stringify(structuredData).replaceAll("</", "<\\/");
     html = html.replace("</head>", '<script id="route-jsonld" type="application/ld+json">' + safeJson + "</script></head>");
   }
+  html = html.replace("</head>", alternateLinks + "</head>");
   await writeFile(output, html, "utf8");
 }
 const urls = [site + "/", ...Array.from(pages.keys(), (route) => site + route + "/")];
