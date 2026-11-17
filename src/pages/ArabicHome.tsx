@@ -105,8 +105,8 @@ export default function ArabicHome() {
                 توفر {business.name} خيارات لتوريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، إلى جانب خدمات التأجير والإصلاح والصيانة للمقاولين والورش والمنشآت الصناعية في عُمان.
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link to="/request-quote/" className="inline-flex items-center bg-safety px-5 py-3 font-semibold text-white transition hover:bg-safety-deep">اطلب عرض سعر</Link>
-                <Link to="/products/" className="inline-flex items-center border border-white/40 px-5 py-3 font-semibold text-white transition hover:border-white">استعرض المنتجات</Link>
+                <Link to="/ar/request-quote/" className="inline-flex items-center bg-safety px-5 py-3 font-semibold text-white transition hover:bg-safety-deep">اطلب عرض سعر</Link>
+                <Link to="/ar/products/" className="inline-flex items-center border border-white/40 px-5 py-3 font-semibold text-white transition hover:border-white">استعرض المنتجات</Link>
               </div>
               <p className="mt-8 text-xs text-mist">تواصل معنا لتأكيد الأسعار والتوافر ومواعيد الخدمة حسب الطلب.</p>
             </div>
@@ -126,7 +126,7 @@ export default function ArabicHome() {
                 <h2 className="mt-2 font-display text-3xl font-bold md:text-4xl">الأدوات والمعدات حسب الفئة</h2>
                 <p className="mt-2 max-w-2xl leading-8 text-smoke">تصفح فئات المعدات والمنتجات المتاحة، ثم اطلب معلومات الأسعار والتوافر.</p>
               </div>
-              <Link to="/products/" className="border border-ink/25 px-4 py-2 text-sm font-semibold hover:border-safety hover:text-safety">جميع المنتجات ←</Link>
+              <Link to="/ar/products/" className="border border-ink/25 px-4 py-2 text-sm font-semibold hover:border-safety hover:text-safety">جميع المنتجات ←</Link>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {categories.filter((c) => c.slug !== "rental-equipment").map((c) => (
@@ -150,7 +150,7 @@ export default function ArabicHome() {
             <div className="mt-8 flex flex-wrap gap-3">
               {brands.map((brand) => <Link key={brand.slug} to={`/brands/${brand.slug}/`} className="border border-white/20 px-4 py-3 text-sm text-paper transition hover:border-safety hover:text-safety">{brand.name}</Link>)}
             </div>
-            <Link to="/brands/" className="mt-8 inline-flex border border-white/30 px-4 py-2 text-sm hover:border-safety">عرض جميع العلامات التجارية</Link>
+            <Link to="/ar/brands/" className="mt-8 inline-flex border border-white/30 px-4 py-2 text-sm hover:border-safety">عرض جميع العلامات التجارية</Link>
           </div>
         </section>
 
@@ -160,14 +160,14 @@ export default function ArabicHome() {
               <p className="font-mono text-xs text-safety">03 / تأجير المعدات</p>
               <h2 className="mt-2 font-display text-3xl font-bold">تأجير المعدات والآليات</h2>
               <p className="mt-3 leading-8 text-smoke">استفسر عن خيارات تأجير معدات المواقع والمولدات وأدوات العمل. يتم تأكيد نوع المعدة والتوافر ومدة التأجير عند تقديم الطلب.</p>
-              <Link to="/rental/" className="mt-6 inline-flex bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-safety">استكشف خيارات التأجير</Link>
+              <Link to="/ar/rental/" className="mt-6 inline-flex bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-safety">استكشف خيارات التأجير</Link>
             </div>
             <div id="services" className="card-hard p-7">
               <p className="font-mono text-xs text-safety">04 / خدمات المعدات</p>
               <h2 className="mt-2 font-display text-3xl font-bold">الإصلاح والصيانة وقطع الغيار</h2>
               <p className="mt-3 leading-8 text-smoke">استكشف خدمات إصلاح المعدات والأدوات الكهربائية والصيانة الوقائية وقطع الغيار، وتواصل معنا لتأكيد نطاق الخدمة قبل الحجز.</p>
               <div className="mt-5 flex flex-wrap gap-2">
-                {services.map((service) => <Link key={service.slug} to={`/services/${service.slug}/`} className="border border-ink/20 px-3 py-2 text-xs hover:border-safety hover:text-safety">{serviceArabic[service.slug] || service.name}</Link>)}
+                {services.map((service) => <Link key={service.slug} to={`/ar/services/${service.slug}/`} className="border border-ink/20 px-3 py-2 text-xs hover:border-safety hover:text-safety">{serviceArabic[service.slug] || service.name}</Link>)}
               </div>
             </div>
           </div>
@@ -181,8 +181,8 @@ export default function ArabicHome() {
               <p className="mt-3 max-w-2xl leading-8 text-mist">أرسل تفاصيل المنتج أو المعدة والكمية وموقع التسليم المطلوب، وسنراجع طلبك ونؤكد المعلومات المتاحة.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link to="/request-quote/" className="bg-safety px-5 py-3 text-sm font-bold text-white hover:bg-safety-deep">طلب عرض سعر</Link>
-              <Link to="/contact/" className="border border-white/40 px-5 py-3 text-sm font-bold text-white hover:border-safety">صفحة التواصل</Link>
+              <Link to="/ar/request-quote/" className="bg-safety px-5 py-3 text-sm font-bold text-white hover:bg-safety-deep">طلب عرض سعر</Link>
+              <Link to="/ar/contact/" className="border border-white/40 px-5 py-3 text-sm font-bold text-white hover:border-safety">صفحة التواصل</Link>
               <Link to="/" lang="en" className="border border-white/40 px-5 py-3 text-sm font-bold text-white hover:border-safety">English</Link>
             </div>
           </div>
