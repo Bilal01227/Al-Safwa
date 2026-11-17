@@ -27,9 +27,9 @@ export function usePageMeta({ title, description, path, image, type = "website",
   useEffect(() => {
     const canonicalUrl = window.location.origin + (path === "/" ? "/" : path + "/");
     const isArabic = path === "/ar" || path.startsWith("/ar/");
-    const englishPath = isArabic ? (path.replace(/^\\/ar(?=\\/|$)/, "") || "/") : path;
+    const englishPath = isArabic ? (path.replace(/^\/ar(?=\/|$)/, "") || "/") : path;
     const arabicPath = isArabic ? path : (path === "/" ? "/ar" : "/ar" + path);
-    const localizedUrl = (value: string) => window.location.origin + (value === "/" ? "/" : value.replace(/\\/$/, "") + "/");
+    const localizedUrl = (value: string) => window.location.origin + (value === "/" ? "/" : value.replace(/\/$/, "") + "/");
     document.title = title;
 
     upsertMeta('meta[name="description"]', { name: "description" }, description);
