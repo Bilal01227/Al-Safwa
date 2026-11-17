@@ -40,20 +40,20 @@ async function fetchSlugs(table) {
   const key = process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!base || !key) throw new Error('Supabase URL and publishable key are required for complete sitemap generation.');
   const result = [];
-  for (let offset = 0; offset < 10000; offset += 1000) {
+  for (let offset = 0; offset < 10000; offset += 250) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/" + table);
     url.searchParams.set("select", "slug");
     url.searchParams.set("active", "eq.true");
-    url.searchParams.set("limit", "1000");
+    url.searchParams.set("limit", "250");
     url.searchParams.set("offset", String(offset));
     const response = await fetch(url, {
       headers: { apikey: key, Authorization: "Bearer " + key, Accept: "application/json" },
-      signal: AbortSignal.timeout(15000),
+      signal: AbortSignal.timeout(30000),
     });
     if (!response.ok) throw new Error(table + " HTTP " + response.status);
     const rows = await response.json();
     result.push(...rows.map((row) => row.slug).filter((slug) => typeof slug === "string" && /^[A-Za-z0-9-]+$/.test(slug)));
-    if (rows.length < 1000) break;
+    if (rows.length < 250) break;
   }
   return result;
 }
@@ -65,7 +65,7 @@ async function fetchProductRecords() {
   const records = [];
   for (let offset = 0; ; offset += 1000) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/products");
-    url.searchParams.set("select", "slug,name,model_number,short_description,full_description");
+    url.searchParams.set("select", "slug,name,model_number,short_description");
     url.searchParams.set("active", "eq.true");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
@@ -98,7 +98,7 @@ const productRecords = await fetchProductRecords();
 for (const record of productRecords) {
   products.add(record.slug);
   const name = String(record.name || humanize(record.slug));
-  const description = String(record.full_description || record.short_description || name + " supplied by Al Safwa Trading in Oman. Request product pricing and availability.").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+  const description = String(record.short_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
   const structuredData = {
     "@context": "https://schema.org",
