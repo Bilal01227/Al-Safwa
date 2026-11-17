@@ -54,7 +54,7 @@ export default function RentalPage() {
       <PageHeader
         crumb="Rental"
         title="Machinery & Equipment Rental"
-        lead="Browse a broad equipment rental enquiry catalogue for construction, industrial and infrastructure projects. Specifications, fleet availability, transport, operators and rates are confirmed per project."
+        lead="Browse a broad equipment rental enquiry catalogue for construction, industrial and infrastructure projects. Specifications, transport, operators and rental rates are confirmed per project."
         ghost="RENT"
       />
 
@@ -120,8 +120,8 @@ export default function RentalPage() {
                           <dd className="text-right text-ink">{r.condition}</dd>
                         </div>
                         <div className="flex justify-between gap-3">
-                          <dt className="text-smoke">Availability</dt>
-                          <dd className="text-right text-caution">{r.availability}</dd>
+                          <dt className="text-smoke">Pricing</dt>
+                          <dd className="text-right text-caution">Contact for price</dd>
                         </div>
                       </dl>
 
@@ -158,7 +158,7 @@ export default function RentalPage() {
 
           <Reveal>
             <p className="mt-10 border border-dashed border-ink/25 bg-card px-4 py-3 font-mono text-[10.5px] uppercase leading-relaxed tracking-[0.1em] text-smoke">
-              Product images are reference photographs from equipment manufacturers and suppliers, selected to match each equipment type. They do not represent confirmed Al Safwa-owned units. Fleet availability, exact make/model, condition, operators, transport and rental rates are confirmed individually before quotation.
+              Product images are reference photographs from equipment manufacturers and suppliers, selected to match each equipment type. They do not represent confirmed Al Safwa-owned units. Exact make/model, condition, operators, transport and rental rates are confirmed individually before quotation.
             </p>
           </Reveal>
 
@@ -168,10 +168,10 @@ export default function RentalPage() {
                 <h2 className="font-display text-3xl font-semibold uppercase text-paper">
                   Need equipment on site this week?
                 </h2>
-                <p className="mt-1 text-mist">Send the equipment class and site location — {business.name} responds with availability.</p>
+                <p className="mt-1 text-mist">Send the equipment type, rental period and site location to request pricing.</p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <CTAButton href={waHref("Hello, I need to rent equipment for a site in Oman. Please advise availability.")} variant="wa">
+                <CTAButton href={waHref("Hello, I need to rent equipment for a site in Oman. Please provide rental pricing and terms.")} variant="wa">
                   <IcWhatsApp /> WhatsApp rental desk
                 </CTAButton>
                 <CTAButton href={telHref} variant="outlineLight">
