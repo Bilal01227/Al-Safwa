@@ -193,10 +193,10 @@ async function fromSupabase(): Promise<Product[]> {
   });
 }
 
-/** Count product subcategories under the curated homepage division using their shared category-art mapping. */
+/** Count products only in their normalized parent division. Images are presentation fallbacks,
+ * never category identifiers: using them here incorrectly merged unrelated catalogue counts. */
 export function productMatchesDivision(product: Product, divisionSlug: string): boolean {
-  const divisionFallback = categoryFallbackImages[divisionSlug];
-  return product.category === divisionSlug || (!!divisionFallback && product.fallbackImageUrl === divisionFallback);
+  return product.category === divisionSlug;
 }
 
 export async function fetchProducts(): Promise<Product[]> {
