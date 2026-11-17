@@ -24,7 +24,7 @@ export const waBrandMessage = (brandName: string): string =>
   `Hello, I would like to enquire about ${brandName} products listed by ${business.name} in Oman.`;
 
 export const waRentalMessage = (r: Pick<RentalItem, "name" | "model">): string =>
-  `Hello, I would like a rental quote for ${r.name} (${r.model}) from ${business.name}. Please share rental pricing and terms.`;
+  `Hello, I would like a rental quote for ${r.name}${r.model ? ` (model ${r.model})` : ""} from ${business.name}. Please share rental pricing and terms.`;
 
 export const waRepairMessage = (): string =>
   `Hello, I would like to request an equipment repair through ${business.name}.`;
