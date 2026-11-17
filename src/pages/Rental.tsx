@@ -109,9 +109,6 @@ export default function RentalPage() {
                     </div>
                     <div className="flex flex-1 flex-col p-5">
                       <h2 className="font-display text-2xl font-semibold uppercase leading-tight">{r.name}</h2>
-                      <p className="mt-1.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                        Brand · {r.brand} — {r.model}
-                      </p>
                       <p className="mt-3 text-sm leading-relaxed text-smoke">{r.description}</p>
 
                       <dl className="mt-4 space-y-1.5 border-t border-ink/10 pt-3 font-mono text-[10.5px] uppercase tracking-[0.1em]">
