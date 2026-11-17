@@ -6,7 +6,7 @@ import { usePageMeta } from "../lib/seo";
 import { siteTitle } from "../lib/seo";
 import { categories } from "../lib/data/categories";
 import { brands, fetchBrands, getBrandLogoUrl } from "../lib/data/brands";
-import { products, fetchProducts, fetchFeaturedProducts, productMatchesDivision } from "../lib/data/products";
+import { products, fetchProducts, productMatchesDivision } from "../lib/data/products";
 import { rentalItems } from "../lib/data/rental";
 import { services } from "../lib/data/services";
 import { IMG } from "../lib/data/images";
@@ -48,9 +48,13 @@ export default function Home() {
     let live = true;
     // Load the authoritative catalogue immediately; do not leave the
     // homepage on its small emergency fallback dataset for the first paint.
-    fetchBrands().then((items) => live && setLiveBrands(items));
-    fetchProducts().then((items) => live && setLiveProducts(items));
-    fetchFeaturedProducts().then((items) => live && setFeatured(items));
+    Promise.all([fetchBrands(), fetchProducts()]).then(([brandItems, productItems]) => {
+      if (!live) return;
+      setLiveBrands(brandItems);
+      setLiveProducts(productItems);
+      setFeatured(productItems.filter((product) => product.featured));
+      setLiveDataLoaded(true);
+    });
     return () => {
       live = false;
     };
@@ -162,7 +166,7 @@ export default function Home() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((c, i) => {
               const isRental = c.slug === "rental-equipment";
-              const count = isRental ? rentalItems.length : liveProducts.filter((pr) => productMatchesDivision(pr, c.slug)).length;
+              const count = isRental ? rentalItems.length : liveDataLoaded ? liveProducts.filter((pr) => productMatchesDivision(pr, c.slug)).length : "—";
               return (
                 <Reveal key={c.slug} delay={i * 60}>
                   <Link
@@ -249,7 +253,7 @@ export default function Home() {
                     {b.logoPath && <img src={getBrandLogoUrl(b.logoPath)} alt={`${b.name} logo`} loading="lazy" onError={(e) => { e.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full bg-white p-1 object-contain" />}
                   </span>
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mist">
-                    {liveProducts.filter((pr) => pr.brandSlug === b.slug).length || "—"} items
+                    {liveDataLoaded ? liveProducts.filter((pr) => pr.brandSlug === b.slug).length || "—" : "—"} items
                   </span>
                 </div>
                 <h3 className="mt-4 font-display text-2xl font-semibold uppercase text-paper transition-colors group-hover:text-safety">
