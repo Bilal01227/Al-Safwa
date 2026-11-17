@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      - name: TypeScript type check
+        run: npm run typecheck
+
       - name: Build production app
         env:
           VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
@@ -64,6 +67,14 @@ jobs:
           test -f dist/repair/index.html
           test -f dist/request-quote/index.html
           test -f dist/contact/index.html
+          test -f dist/ar/index.html
+          test -f dist/ar/products/index.html
+          test -f dist/ar/brands/index.html
+          test -f dist/ar/rental/index.html
+          test -f dist/ar/services/index.html
+          test -f dist/ar/repair/index.html
+          test -f dist/ar/request-quote/index.html
+          test -f dist/ar/contact/index.html
           test -f dist/sitemap.xml
           test -f dist/robots.txt
           grep -q 'wdxjlfxepiqvklxlxwkw.supabase.co' dist/assets/*.js
