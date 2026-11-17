@@ -26,6 +26,10 @@ const upsertMeta = (selector: string, attrs: Record<string, string>, content: st
 export function usePageMeta({ title, description, path, image, type = "website", keywords, jsonLd, indexable = true }: PageMeta): void {
   useEffect(() => {
     const canonicalUrl = window.location.origin + (path === "/" ? "/" : path + "/");
+    const isArabic = path === "/ar" || path.startsWith("/ar/");
+    const englishPath = isArabic ? (path.replace(/^\\/ar(?=\\/|$)/, "") || "/") : path;
+    const arabicPath = isArabic ? path : (path === "/" ? "/ar" : "/ar" + path);
+    const localizedUrl = (value: string) => window.location.origin + (value === "/" ? "/" : value.replace(/\\/$/, "") + "/");
     document.title = title;
 
     upsertMeta('meta[name="description"]', { name: "description" }, description);
@@ -36,7 +40,22 @@ export function usePageMeta({ title, description, path, image, type = "website",
     if (indexable) upsertMeta('meta[property="og:url"]', { property: "og:url" }, canonicalUrl);
     else document.querySelector('meta[property="og:url"]')?.remove();
     upsertMeta('meta[property="og:site_name"]', { property: "og:site_name" }, business.name);
-    upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, "en_OM");
+    upsertMeta('meta[property="og:locale"]', { property: "og:locale" }, isArabic ? "ar_OM" : "en_OM");
+
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((node) => node.remove());
+    if (indexable) {
+      [
+        { lang: "en-OM", href: localizedUrl(englishPath) },
+        { lang: "ar-OM", href: localizedUrl(arabicPath) },
+        { lang: "x-default", href: localizedUrl(englishPath) },
+      ].forEach(({ lang, href }) => {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.hreflang = lang;
+        link.href = href;
+        document.head.appendChild(link);
+      });
+    }
     if (image) upsertMeta('meta[property="og:image"]', { property: "og:image" }, image);
     upsertMeta('meta[name="twitter:card"]', { name: "twitter:card" }, "summary_large_image");
     upsertMeta('meta[name="twitter:title"]', { name: "twitter:title" }, title);
