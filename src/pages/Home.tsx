@@ -152,7 +152,7 @@ export default function Home() {
           <SectionHead
             index="01"
             title="Product & Equipment Divisions"
-            lead="Seven supply divisions cover the tools, equipment and machinery an industrial operation runs on."
+            lead="Browse industrial tools, safety products, power equipment, machinery, spare parts and site essentials."
             right={
               <CTAButton to="/products/" variant="outlineDark" className="h-10 px-4 text-[15px]">
                 Full catalogue <IcArrowRight width={16} height={16} />
@@ -273,7 +273,7 @@ export default function Home() {
           <SectionHead
             index="03"
             title="Featured Products"
-            lead="A working selection from the catalogue. Every item is quoted with real pricing and availability."
+            lead="A working selection from the catalogue. Pricing and availability are confirmed for each enquiry."
             right={
               <CTAButton to="/products/" variant="outlineDark" className="h-10 px-4 text-[15px]">
                 View catalogue <IcArrowRight width={16} height={16} />
@@ -351,7 +351,7 @@ export default function Home() {
               <div className="mt-8">
                 {[
                   ["Machinery Rental", "Excavators, loaders and plant", "Heavy Machinery"],
-                  ["Equipment Rental", "Generators, welding sets, compressors", "Generators"],
+                  ["Equipment Rental", "Generators, welding sets, compressors", "Generators & Power"],
                   ["Power Tool Rental", "Breakers, grinders and site tools", "Power Tools"],
                 ].map(([name, sub, cat]) => (
                   <Link
