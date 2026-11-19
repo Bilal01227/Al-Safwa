@@ -61,6 +61,13 @@ jobs:
           ! grep -q 'rel="canonical"' dist/404.html
           test -d dist/assets
           test -f dist/products/index.html
+          # Regression guard for the exact product URL reported with a 5xx in Search Console.
+          PRODUCT_ROUTE="products/texmo-motors-tspp-2-0-swimming-pool-pump-tspp-2-0"
+          test -s "dist/$PRODUCT_ROUTE/index.html"
+          grep -Fq 'rel="canonical" href="https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/"' "dist/$PRODUCT_ROUTE/index.html"
+          grep -Fq 'Swimming Pool Pump TSPP 2.0' "dist/$PRODUCT_ROUTE/index.html"
+          grep -Fq '"@type":"Product"' "dist/$PRODUCT_ROUTE/index.html"
+          grep -Fq '<loc>https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/' "dist/sitemap.xml"
           test -f dist/brands/index.html
           test -f dist/rental/index.html
           test -f dist/services/index.html
