@@ -1,6 +1,7 @@
 /**
  * Single source of truth for public business identity and contact details.
- * Business phone and map pin are aligned with the verified Google Maps listing.
+ * The website's direct-call and WhatsApp contact is the original customer line.
+ * Google Maps is used only to identify the physical shop location.
  */
 export const business = {
   name: "Al Safwa Trading",
@@ -9,10 +10,8 @@ export const business = {
   descriptor:
     "Industrial equipment supply, rental, repair and maintenance for contractors, workshops and industrial businesses across Oman.",
 
-  // Primary business phone confirmed against the Google Maps business listing.
-  phone: "+968 9742 0541",
-  // Existing website WhatsApp line retained separately; the map listing confirms
-  // the phone number, not that this number is WhatsApp-enabled.
+  // Original business contact line: direct calls and WhatsApp.
+  phone: "+968 9016 7345",
   whatsappNumber: "96890167345",
 
   email: "",
