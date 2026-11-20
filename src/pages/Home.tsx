@@ -39,7 +39,7 @@ export default function Home() {
     path: "/",
   });
 
-  const [featured, setFeatured] = useState<Product[] | null>(null);
+  const whatsappDisplay = `+${business.whatsappNumber.replace(/^(\\d{3})(\\d{4})(\\d+)$/, "$1 $2 $3")}`;\n\n  const [featured, setFeatured] = useState<Product[] | null>(null);
   const [liveProducts, setLiveProducts] = useState<Product[]>(products);
   const [liveBrands, setLiveBrands] = useState(brands);
   const [liveDataLoaded, setLiveDataLoaded] = useState(false);
@@ -80,7 +80,7 @@ export default function Home() {
             <Reveal>
               <p className="mb-5 font-mono text-[11px] uppercase tracking-[0.22em] text-mist">
                 <span className="mr-3 inline-block h-2 w-2 bg-safety align-middle" />
-                Karsha · Nizwa · Al Dakhiliyah · Oman — Supply / Rental / Repair
+                Nizwa · Sinaya · Al Dakhiliyah · Oman — Supply / Rental / Repair
               </p>
             </Reveal>
             <h1 className="font-display text-[clamp(2.9rem,6.5vw,5.4rem)] font-semibold uppercase leading-[0.95] tracking-[0.005em] text-paper">
@@ -586,7 +586,7 @@ export default function Home() {
           <SectionHead
             index="07"
             title="Find Us in Oman"
-            lead="Visit Al Safwa Trading in Karsha, Nizwa, Al Dakhiliyah Governorate, Oman, or contact our team by phone and WhatsApp."
+            lead="Visit Al Safwa Trading in Nizwa, Sinaya, Al Dakhiliyah Governorate, Oman, or contact our team by phone and WhatsApp."
           />
           <div className="grid gap-8 lg:grid-cols-5">
             <Reveal className="lg:col-span-2">
@@ -595,7 +595,7 @@ export default function Home() {
                   { icon: <IcPin width={20} height={20} />, label: "Address", value: `${business.addressLine1}, ${business.addressLine2}` },
                   { icon: <IcClock width={20} height={20} />, label: "Opening hours", value: business.hours },
                   
-                  { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: business.phone },
+                  { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: whatsappDisplay },
                 ].map((row) => (
                   <div key={row.label} className="flex items-start gap-4 border-b border-ink/10 pb-4 last:border-0 last:pb-0">
                     <span className="grid h-10 w-10 shrink-0 place-items-center bg-ink text-safety">{row.icon}</span>
@@ -619,13 +619,13 @@ export default function Home() {
               <div className="h-full border border-ink/15 bg-card p-2">
                 <iframe
                   src={business.googleMapsEmbedUrl}
-                  title="Map — Karsha, Nizwa, Oman"
+                  title="Al Safwa Trading — verified Google Maps location, Nizwa Sinaya, Oman"
                   loading="lazy"
                   className="h-[320px] w-full border-0 grayscale-[35%] md:h-[420px]"
                   referrerPolicy="no-referrer-when-downgrade"
                 />
                 <p className="px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                  Al Safwa Trading, Karsha, Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman.
+                  Al Safwa Trading, RGVW+9WM, Nizwa, Sinaya, Al Dakhiliyah Governorate, Sultanate of Oman.
                 </p>
               </div>
             </Reveal>
