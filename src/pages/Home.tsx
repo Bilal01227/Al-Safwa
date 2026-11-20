@@ -39,7 +39,8 @@ export default function Home() {
     path: "/",
   });
 
-  const whatsappDisplay = `+${business.whatsappNumber.replace(/^(\\d{3})(\\d{4})(\\d+)$/, "$1 $2 $3")}`;\n\n  const [featured, setFeatured] = useState<Product[] | null>(null);
+  const whatsappDisplay = `+${business.whatsappNumber.replace(/^(\d{3})(\d{4})(\d+)$/, "$1 $2 $3")}`;
+
   const [liveProducts, setLiveProducts] = useState<Product[]>(products);
   const [liveBrands, setLiveBrands] = useState(brands);
   const [liveDataLoaded, setLiveDataLoaded] = useState(false);
