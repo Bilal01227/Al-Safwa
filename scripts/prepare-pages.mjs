@@ -92,7 +92,16 @@ for (const [table, target] of [["brands", brands], ["products", products]]) {
     throw new Error("Could not fetch complete " + table + " slugs; refusing to publish an incomplete sitemap: " + error.message);
   }
 }
-for (const slug of brands) pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Contact us for price."]);
+for (const slug of brands) {
+  if (slug.toLowerCase() === "makita") {
+    pages.set("/brands/" + slug, [
+      "Makita Power Tools in Oman | Al Safwa Trading",
+      "Browse listed Makita power tools and models from Al Safwa Trading in Karsha, Nizwa, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.",
+    ]);
+  } else {
+    pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Contact us for price."]);
+  }
+}
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
 const productRecords = await fetchProductRecords();
 for (const record of productRecords) {
