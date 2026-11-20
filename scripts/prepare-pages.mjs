@@ -11,7 +11,7 @@ const pages = new Map([
   ["/repair", ["Equipment Repair Request — Al Safwa Trading Oman", "Request equipment inspection, repair and maintenance support from Al Safwa Trading in Oman."]],
   ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing for industrial tools, machinery, rental and spare parts in Oman."]],
   ["/contact", ["Contact Al Safwa Trading — Nizwa, Sinaya, Oman", "Contact Al Safwa Trading in Nizwa, Sinaya, Oman. Call the shop, use WhatsApp, or open the verified Google Maps location for product, rental and repair enquiries."]],
-  ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
+  ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في الصناعية، نزوى، سلطنة عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
 
 async function collectTs(dir) {
