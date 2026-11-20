@@ -96,7 +96,7 @@ for (const slug of brands) {
   if (slug.toLowerCase() === "makita") {
     pages.set("/brands/" + slug, [
       "Makita Power Tools in Oman | Al Safwa Trading",
-      "Browse listed Makita power tools and models from Al Safwa Trading in Karsha, Nizwa, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.",
+      "Browse listed Makita power tools and models from Al Safwa Trading in Nizwa, Sinaya, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.",
     ]);
   } else {
     pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Contact us for price."]);
