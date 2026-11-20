@@ -31,5 +31,5 @@ export const business = {
   placeholdersPending: false,
 } as const;
 
-export const telHref = `tel:${business.phone.replace(/[^+\\d]/g, "")}`;
+export const telHref = `tel:${business.phone.replace(/[^+\d]/g, "")}`;
 export const mailHref = `mailto:${business.email}`;
