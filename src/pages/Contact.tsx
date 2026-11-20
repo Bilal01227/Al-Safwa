@@ -8,24 +8,24 @@ import type { ReactNode } from "react";
 export default function ContactPage() {
   usePageMeta({
     title: siteTitle("Contact"),
-    description: `Contact ${business.name} in Oman by phone or WhatsApp, or find the shop in Karsha, Nizwa. Request quotes, rental and repair support.`,
+    description: `Contact ${business.name} in Nizwa, Sinaya, Oman by phone or WhatsApp, or find our shop using its Google Maps location. Request quotes, rental and repair support.`,
     path: "/contact",
   });
 
   const waDisplay = `+${business.whatsappNumber.replace(/\D/g, "")}`;
 
   const cards: { icon: ReactNode; label: string; value: string; sub?: string; href?: string; external?: boolean }[] = [
-    { icon: <IcPhone width={20} height={20} />, label: "Business phone", value: business.phone, sub: "Official Oman line", href: telHref },
-    { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: waDisplay, sub: "Fastest for quotes", href: waHref(waGeneralMessage()), external: true },
+    { icon: <IcPhone width={20} height={20} />, label: "Business phone", value: business.phone, sub: "Primary shop contact", href: telHref },
+    { icon: <IcWhatsApp width={20} height={20} />, label: "WhatsApp", value: waDisplay, sub: "WhatsApp enquiries", href: waHref(waGeneralMessage()), external: true },
     ...(business.email ? [{ icon: <IcMail width={20} height={20} />, label: "Email", value: business.email, sub: "Written quotations", href: mailHref }] : []),
     { icon: <IcPin width={20} height={20} />, label: "Address", value: business.addressLine1, sub: business.addressLine2 },
     { icon: <IcClock width={20} height={20} />, label: "Opening hours", value: business.hours },
     {
       icon: <IcArrowUpRight width={20} height={20} />,
       label: "Google Maps",
-      value: "Open map",
-      sub: "Shop location",
-      href: business.googleMapsUrl || "https://maps.google.com/?q=Karsha,Nizwa,Oman",
+      value: "Open verified shop location",
+      sub: "Nizwa, Sinaya — RGVW+9WM",
+      href: business.googleMapsUrl,
       external: true,
     },
   ];
@@ -35,7 +35,7 @@ export default function ContactPage() {
       <PageHeader
         crumb="Contact"
         title={`Contact ${business.name}`}
-        lead="Quotes, rental, repair and maintenance — contact our team by phone or WhatsApp, or visit our shop in Karsha, Nizwa."
+        lead="Quotes, rental, repair and maintenance — contact our team by phone or WhatsApp, or find our shop in Nizwa, Sinaya."
         ghost="TEL"
       />
 
@@ -70,13 +70,13 @@ export default function ContactPage() {
             <div className="mt-12 border border-ink/15 bg-card p-2">
               <iframe
                 src={business.googleMapsEmbedUrl}
-                title="Map — Karsha, Nizwa, Oman"
+                title="Al Safwa Trading — verified Google Maps location, Nizwa Sinaya, Oman"
                 loading="lazy"
                 className="h-[340px] w-full border-0 grayscale-[35%] md:h-[440px]"
                 referrerPolicy="no-referrer-when-downgrade"
               />
               <p className="px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-smoke">
-                Shop address: Karsha, Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman.
+                Shop location: RGVW+9WM, Nizwa, Sinaya, Al Dakhiliyah Governorate, Oman.
               </p>
             </div>
           </Reveal>
@@ -84,21 +84,13 @@ export default function ContactPage() {
           <Reveal>
             <div className="mt-12 flex flex-wrap items-center justify-between gap-6 bg-ink p-6 md:p-8">
               <div>
-                <h2 className="font-display text-3xl font-semibold uppercase text-paper">
-                  Start with a quote request
-                </h2>
+                <h2 className="font-display text-3xl font-semibold uppercase text-paper">Start with a quote request</h2>
                 <p className="mt-1 text-mist">Product, quantity and location — we respond with real pricing.</p>
               </div>
               <div className="flex flex-wrap gap-3">
-                <CTAButton to="/request-quote" variant="safety">
-                  Request a quote
-                </CTAButton>
-                <CTAButton href={waHref(waGeneralMessage())} variant="wa">
-                  <IcWhatsApp /> WhatsApp
-                </CTAButton>
-                <CTAButton href={telHref} variant="outlineLight">
-                  <IcPhone /> Call
-                </CTAButton>
+                <CTAButton to="/request-quote" variant="safety">Request a quote</CTAButton>
+                <CTAButton href={waHref(waGeneralMessage())} variant="wa"><IcWhatsApp /> WhatsApp</CTAButton>
+                <CTAButton href={telHref} variant="outlineLight"><IcPhone /> Call</CTAButton>
               </div>
             </div>
           </Reveal>
@@ -107,4 +99,3 @@ export default function ContactPage() {
     </>
   );
 }
-

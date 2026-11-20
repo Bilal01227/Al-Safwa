@@ -1,10 +1,6 @@
 /**
- * ─────────────────────────────────────────────────────────────────
- *  SINGLE SOURCE OF TRUTH for business identity & contact details.
- *  Replace every TODO(verify) placeholder with official verified
- *  information before launch. Nothing here is invented silently —
- *  unverified fields are explicitly marked.
- * ─────────────────────────────────────────────────────────────────
+ * Single source of truth for public business identity and contact details.
+ * Business phone and map pin are aligned with the verified Google Maps listing.
  */
 export const business = {
   name: "Al Safwa Trading",
@@ -13,29 +9,25 @@ export const business = {
   descriptor:
     "Industrial equipment supply, rental, repair and maintenance for contractors, workshops and industrial businesses across Oman.",
 
-  // Official Oman business phone / WhatsApp
-  phone: "+968 90167345",
+  // Primary business phone confirmed against the Google Maps business listing.
+  phone: "+968 9742 0541",
+  // Existing website WhatsApp line retained separately; the map listing confirms
+  // the phone number, not that this number is WhatsApp-enabled.
   whatsappNumber: "96890167345",
 
-  // TODO(verify): official business email
   email: "",
 
-  // TODO(verify): registered physical address
-  addressLine1: "Karsha",
-  addressLine2: "Nizwa, Al Dakhiliyah Governorate, Sultanate of Oman",
+  // Exact locality and pin from the confirmed Google Maps listing.
+  addressLine1: "RGVW+9WM, Nizwa, Sinaya",
+  addressLine2: "Al Dakhiliyah Governorate, Sultanate of Oman",
 
-  // TODO(verify): official opening hours
+  // Public directory sources conflict on Friday hours; do not publish guessed hours.
   hours: "Contact us for current opening hours",
 
-  // Locality-level map only; exact shop pin has not been supplied.
-  googleMapsEmbedUrl: "https://www.google.com/maps?q=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman&output=embed",
-  // Exact street-level pin not supplied; link resolves the verified locality.
-  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Karsha%2C+Nizwa%2C+Al+Dakhiliyah%2C+Oman",
+  googleMapsEmbedUrl: "https://www.google.com/maps?output=embed&q=place_id%3AChIJJ2Frsf77jj4RyRewZBd2WIY",
+  googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=place_id%3AChIJJ2Frsf77jj4RyRewZBd2WIY",
 
-  // TODO(verify): commercial registration — publish only if verified
   registration: "",
-
-  /** Public contact details are verified; email is intentionally unpublished. */
   placeholdersPending: false,
 } as const;
 

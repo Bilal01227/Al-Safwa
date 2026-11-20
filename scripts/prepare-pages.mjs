@@ -10,7 +10,7 @@ const pages = new Map([
   ["/services", ["Equipment Repair & Maintenance Services — Al Safwa Trading Oman", "Equipment repair, power tool repair, preventive maintenance and spare parts support in Oman."]],
   ["/repair", ["Equipment Repair Request — Al Safwa Trading Oman", "Request equipment inspection, repair and maintenance support from Al Safwa Trading in Oman."]],
   ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing for industrial tools, machinery, rental and spare parts in Oman."]],
-  ["/contact", ["Contact Al Safwa Trading — Oman", "Contact Al Safwa Trading for industrial equipment supply, rental, repair and maintenance enquiries."]],
+  ["/contact", ["Contact Al Safwa Trading — Nizwa, Sinaya, Oman", "Contact Al Safwa Trading in Nizwa, Sinaya, Oman. Call the shop, use WhatsApp, or open the verified Google Maps location for product, rental and repair enquiries."]],
   ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
 
@@ -132,7 +132,7 @@ const arabicStaticPages = new Map([
   ["/ar/services", ["خدمات المعدات | الصفوة للتجارة", "خدمات إصلاح المعدات والصيانة وقطع الغيار والدعم الميداني في سلطنة عُمان."]],
   ["/ar/repair", ["طلب إصلاح أو صيانة | الصفوة للتجارة", "أرسل تفاصيل المعدة والعطل لطلب خدمات الإصلاح والصيانة."]],
   ["/ar/request-quote", ["طلب عرض سعر | الصفوة للتجارة", "اطلب عرض سعر للأدوات والمعدات الصناعية وقطع الغيار وخيارات التأجير."]],
-  ["/ar/contact", ["تواصل معنا | الصفوة للتجارة", "تواصل مع الصفوة للتجارة في كرشة، نزوى، سلطنة عُمان."]],
+  ["/ar/contact", ["تواصل معنا | الصفوة للتجارة في نزوى", "تواصل مع الصفوة للتجارة في منطقة الصناعية، نزوى، سلطنة عُمان عبر الهاتف أو واتساب أو موقع المتجر على خرائط Google."]],
 ]);
 for (const [route, details] of arabicStaticPages) pages.set(route, details);
 
