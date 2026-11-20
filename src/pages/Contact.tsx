@@ -12,7 +12,7 @@ export default function ContactPage() {
     path: "/contact",
   });
 
-  const waDisplay = `+${business.whatsappNumber.replace(/\\D/g, "")}`;
+  const waDisplay = `+${business.whatsappNumber.replace(/\D/g, "")}`;
 
   const cards: { icon: ReactNode; label: string; value: string; sub?: string; href?: string; external?: boolean }[] = [
     { icon: <IcPhone width={20} height={20} />, label: "Business phone", value: business.phone, sub: "Primary shop contact", href: telHref },
