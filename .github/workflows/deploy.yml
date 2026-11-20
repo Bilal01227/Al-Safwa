@@ -74,6 +74,12 @@ jobs:
           test -f dist/repair/index.html
           test -f dist/request-quote/index.html
           test -f dist/contact/index.html
+          # Business identity must stay aligned with the verified Google Maps listing.
+          grep -Fq '+968 9742 0541' dist/index.html
+          grep -Fq 'RGVW+9WM' dist/index.html
+          grep -Fq 'ChIJJ2Frsf77jj4RyRewZBd2WIY' dist/index.html
+          grep -Fq 'Nizwa, Sinaya' dist/contact/index.html
+          grep -Fq 'الصناعية، نزوى' dist/ar/index.html
           test -f dist/ar/index.html
           test -f dist/ar/products/index.html
           test -f dist/ar/brands/index.html
