@@ -40,6 +40,7 @@ export default function Home() {
   });
 
   const whatsappDisplay = `+${business.whatsappNumber.replace(/^(\d{3})(\d{4})(\d+)$/, "$1 $2 $3")}`;
+  const [featured, setFeatured] = useState<Product[] | null>(null);
 
   const [liveProducts, setLiveProducts] = useState<Product[]>(products);
   const [liveBrands, setLiveBrands] = useState(brands);
