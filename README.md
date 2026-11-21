@@ -27,12 +27,12 @@ src/
   lib/
     business.ts          ← single business config (name, phone, WhatsApp, email…)
     whatsapp.ts          ← WhatsApp link + message builders
-    submissions.ts       ← Supabase-ready submission adapter (localStorage for MVP)
+    submissions.ts       ← secure Supabase Edge Function enquiry adapter
     seo.ts               ← per-page title / meta / canonical
     data/
       types.ts           ← Product / Brand / Category / RentalItem / Service models
       products/          ← one file per division (power-tools, safety, motors…)
-        index.ts         ← aggregates records + fetch adapters (swap for Supabase later)
+        index.ts         ← aggregates records + Supabase fetch adapters
       brands.ts
       categories.ts
       rental.ts
@@ -67,6 +67,10 @@ GA4 event tracking is implemented in `src/lib/analytics.ts`. To enable productio
 - Unknown stock remains unconfirmed; product pages must not promise current inventory.
 - Do not claim authorized-dealer status, certifications, warranties, reviews or company history unless verified.
 - Product specifications must be checked against the exact model and manufacturer source.
+
+## Encrypted database backups
+
+The Supabase project is on the Free plan, which does not include managed daily backups. `.github/workflows/backup.yml` defines a daily encrypted logical database export. It uploads ciphertext only and skips safely until the owner configures the `SUPABASE_DB_URL` repository secret and the `BACKUP_AGE_RECIPIENT` repository variable. Setup, restore instructions and important exclusions (Auth users and Storage files are not included) are documented in [`docs/backup-and-restore.md`](./docs/backup-and-restore.md). Do not treat a skipped workflow run as a backup.
 
 ## Conversion points
 
