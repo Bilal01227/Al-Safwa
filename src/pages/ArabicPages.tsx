@@ -100,13 +100,21 @@ export default function ArabicPages() {
   },[section,slug,isProductDetail,isBrandDetail]);
 
   const pageMeta = useMemo(()=>{
-    const title = section==="products" ? (isProductDetail ? product?.productName || "تفاصيل المنتج" : "كتالوج المنتجات")
+    const title = section==="products" ? (isProductDetail
+      ? (product ? `${product.productName}${product.modelNumber && product.modelNumber!=="—" ? " — "+product.modelNumber : ""} | تفاصيل المنتج` : "تفاصيل المنتج")
+      : "كتالوج المنتجات")
       : section==="brands" ? (isBrandDetail ? brand?.name || "العلامة التجارية" : "العلامات التجارية")
       : section==="rental" ? "تأجير المعدات والآليات"
       : section==="services" ? (isServiceDetail ? serviceNames[slug] || service?.name || "الخدمات" : "خدمات المعدات")
       : isRepair ? "طلب إصلاح أو صيانة" : isQuote ? (isRental ? "طلب عرض سعر للتأجير" : "طلب عرض سعر") : "تواصل معنا";
+    const productFacts = product
+      ? `${product.brand} ${product.modelNumber && product.modelNumber!=="—" ? product.modelNumber : ""}. ${product.shortDescription || product.description || ""}`
+      : "";
+    const description = isProductDetail && product
+      ? `تفاصيل ${productFacts} من الصفوة للتجارة في عُمان. تواصل معنا لتأكيد السعر والتوفر وطلب عرض سعر.`.replace(/\\s+/g," ").trim().slice(0,300)
+      : "الصفوة للتجارة في عُمان. تواصل معنا لمعرفة الأسعار وطلب عرض سعر للمنتجات والمعدات والخدمات.";
     const path = location.pathname.replace(/\/$/,"") || "/ar";
-    return {title,description:"الصفوة للتجارة في عُمان. تواصل معنا لمعرفة الأسعار وطلب عرض سعر للمنتجات والمعدات والخدمات.",path};
+    return {title,description,path};
   },[section,isProductDetail,product,isBrandDetail,brand,isServiceDetail,slug,service,isRepair,isQuote,isRental,location.pathname]);
   usePageMeta({title:siteTitle(pageMeta.title),description:pageMeta.description,path:pageMeta.path});
 
@@ -132,8 +140,8 @@ export default function ArabicPages() {
     {loading ? <p>جارٍ تحميل المنتجات...</p> : <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{visibleProducts.map(p=><ProductTile key={p.id} p={p}/>)}</div>}
   </Page>;
 
-  if(isProductDetail) return <Page title={product?.productName || "تفاصيل المنتج"} lead="تفاصيل المنتج وطلب السعر من الصفوة للتجارة.">
-    {!product ? <p>{loading?"جارٍ تحميل المنتج...":"لم يتم العثور على هذا المنتج."}</p> : <div className="grid gap-8 md:grid-cols-2"><div className="bg-paper-2"><img src={product.imageUrl} alt={product.productName} className="w-full object-contain"/></div><div><p className="text-safety">{product.brand}</p><h2 className="mt-3 font-display text-3xl font-bold">{product.productName}</h2>{product.modelNumber && product.modelNumber!=="—" && <p className="mt-3 text-sm text-smoke">رقم الطراز: {product.modelNumber}</p>}<p className="mt-5 leading-8 text-smoke">يرجى التواصل معنا لتأكيد تفاصيل المنتج والمواصفات الفنية والسعر وفقاً للعلامة التجارية ورقم الطراز المطلوب.</p><div className="mt-5"><PriceLabel/></div><Link to={`/ar/request-quote/?product=${encodeURIComponent(product.productName)}`} className="mt-6 inline-block bg-safety px-5 py-3 font-semibold text-white">اطلب عرض سعر</Link></div></div>}
+  if(isProductDetail) return <Page title={product?.productName || "تفاصيل المنتج"} lead={product ? `${product.brand} · ${product.modelNumber && product.modelNumber!=="—" ? product.modelNumber : "منتج صناعي"} · اطلب السعر والتوفر من الصفوة للتجارة.` : "تفاصيل المنتج وطلب السعر من الصفوة للتجارة."}>
+    {!product ? <p>{loading?"جارٍ تحميل المنتج...":"لم يتم العثور على هذا المنتج."}</p> : <div className="grid gap-8 md:grid-cols-2"><div className="bg-paper-2"><img src={product.imageUrl} alt={product.productName} className="w-full object-contain"/></div><div><p className="text-safety">{product.brand}</p><h2 className="mt-3 font-display text-3xl font-bold">{product.productName}</h2>{product.modelNumber && product.modelNumber!=="—" && <p className="mt-3 text-sm text-smoke">رقم الطراز: {product.modelNumber}</p>}<p className="mt-5 leading-8 text-smoke">{product.shortDescription || product.description || "يرجى التواصل معنا لتأكيد تفاصيل المنتج والمواصفات الفنية."}</p>{product.description && product.description!==product.shortDescription && <p className="mt-3 leading-8 text-smoke">{product.description}</p>}{Object.keys(product.specifications || {}).length>0 && <dl className="mt-5 divide-y divide-ink/10 border-y border-ink/10">{Object.entries(product.specifications).map(([label,value])=><div key={label} className="grid grid-cols-2 gap-3 py-3 text-sm"><dt className="text-smoke">{label}</dt><dd className="font-semibold">{value}</dd></div>)}</dl>}<div className="mt-5"><PriceLabel/></div><Link to={`/ar/request-quote/?product=${encodeURIComponent(product.productName)}`} className="mt-6 inline-block bg-safety px-5 py-3 font-semibold text-white">اطلب عرض سعر</Link></div></div>}
   </Page>;
 
   if(section==="brands" && !isBrandDetail) return <Page title="العلامات التجارية" lead="العلامات التجارية المدرجة في كتالوج الصفوة للتجارة."><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{brands.map(b=><Link key={b.slug} to={`/ar/brands/${b.slug}/`} className="card-hard flex min-h-28 items-center gap-4 p-5"><img src={getBrandLogoUrl(b.logoPath)} alt={b.name} className="h-14 w-20 object-contain"/><span className="font-display text-xl font-semibold">{b.name}</span></Link>)}</div></Page>;
