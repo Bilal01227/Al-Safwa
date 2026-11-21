@@ -35,7 +35,16 @@ jobs:
         env:
           VITE_SUPABASE_URL: https://wdxjlfxepiqvklxlxwkw.supabase.co
           VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_1e9TK7R2CSPP7190qxO2jg_9emlfwgy
-        run: npm run build -- --base=/
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+        run: |
+          npm run build -- --base=/
+          if [ -n "${VITE_GA_MEASUREMENT_ID:-}" ]; then
+            case "$VITE_GA_MEASUREMENT_ID" in G-[A-Z0-9]*) ;; *) echo "Invalid GA4 measurement ID"; exit 1 ;; esac
+            grep -R -Fq "$VITE_GA_MEASUREMENT_ID" dist/assets
+            echo "GA4 measurement ID is included in the production bundle."
+          else
+            echo "::warning::GA4 remains inactive until the VITE_GA_MEASUREMENT_ID repository secret is set."
+          fi
 
       - name: Check static route generator syntax
         run: node --check scripts/prepare-pages.mjs
