@@ -114,7 +114,7 @@ jobs:
           {
             echo "## Encrypted database backup not run"
             echo
-            echo "Configure the repository Actions secret `SUPABASE_DB_URL` and Actions variable `BACKUP_AGE_RECIPIENT`."
+            echo 'Configure the repository Actions secret SUPABASE_DB_URL and Actions variable BACKUP_AGE_RECIPIENT.'
             echo "No database dump was created or uploaded during this run."
           } >> "$GITHUB_STEP_SUMMARY"
 
