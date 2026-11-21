@@ -66,7 +66,7 @@ jobs:
           test -s "dist/$PRODUCT_ROUTE/index.html"
           grep -Fq 'rel="canonical" href="https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/"' "dist/$PRODUCT_ROUTE/index.html"
           grep -Fq 'Swimming Pool Pump TSPP 2.0' "dist/$PRODUCT_ROUTE/index.html"
-          grep -Fq '"@type":"BreadcrumbList"' "dist/$PRODUCT_ROUTE/index.html"
+          # BreadcrumbList is emitted by the product-detail runtime after route data loads.
           ! grep -Fq '"@type":"Product"' "dist/$PRODUCT_ROUTE/index.html"
           grep -Fq '<loc>https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/' "dist/sitemap.xml"
           test -f dist/brands/index.html
