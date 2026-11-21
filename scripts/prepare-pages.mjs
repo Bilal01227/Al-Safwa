@@ -11,6 +11,8 @@ const pages = new Map([
   ["/repair", ["Power Tool & Equipment Repair in Nizwa, Oman — Al Safwa Trading", "Request equipment diagnosis and repair from Al Safwa Trading in Nizwa, Oman. Send the model and fault details for a service quotation."]],
   ["/request-quote", ["Request an Industrial Equipment Quote in Oman — Al Safwa Trading", "Request pricing for industrial tools, machinery, rental and spare parts from Al Safwa Trading in Nizwa, Oman. Prices are confirmed per enquiry."]],
   ["/contact", ["Contact Al Safwa Trading — Nizwa, Sinaya, Oman", "Contact Al Safwa Trading in Nizwa, Al Dakhiliyah, Oman by phone or WhatsApp, or open the verified Google Maps shop location for product, rental and repair enquiries."]],
+  ["/catalogue-qr", ["Product Catalogue QR Code — Al Safwa Trading Nizwa, Oman", "Download or print the Al Safwa Trading product catalogue QR code in Nizwa, Oman. Share the live tools and equipment catalogue with customers and request a quotation."]],
+  ["/industrial-tools-nizwa", ["Industrial Tools & Equipment in Nizwa, Oman — Al Safwa Trading", "Find industrial tools and equipment listed by Al Safwa Trading in Nizwa, Sinaya, Oman. Browse power tools, hand tools, safety equipment, motors, pumps and spare parts, then request a quotation."]],
   ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في الصناعية، نزوى، سلطنة عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
 
@@ -134,6 +136,8 @@ const arabicStaticPages = new Map([
   ["/ar/repair", ["إصلاح الأدوات والمعدات في نزوى | الصفوة للتجارة", "أرسل طراز المعدة وتفاصيل العطل لطلب التشخيص والإصلاح من الصفوة للتجارة في نزوى، سلطنة عُمان."]],
   ["/ar/request-quote", ["طلب عرض سعر للمعدات الصناعية في عُمان | الصفوة للتجارة", "اطلب تسعير الأدوات والمعدات الصناعية وقطع الغيار والتأجير من الصفوة للتجارة في نزوى، سلطنة عُمان."]],
   ["/ar/contact", ["تواصل مع الصفوة للتجارة في نزوى، عُمان", "تواصل مع الصفوة للتجارة في نزوى، محافظة الداخلية، سلطنة عُمان عبر الهاتف أو واتساب أو موقع المتجر على خرائط Google."]],
+  ["/ar/catalogue-qr", ["رمز QR لكتالوج الصفوة للتجارة في عُمان", "احفظ أو اطبع رمز QR لفتح كتالوج الأدوات والمعدات الصناعية لدى الصفوة للتجارة في نزوى، سلطنة عُمان. شارك الكتالوج واطلب عرض سعر."]],
+  ["/ar/industrial-tools-nizwa", ["الأدوات والمعدات الصناعية في نزوى، عُمان | الصفوة للتجارة", "تصفح الأدوات الكهربائية واليدوية ومعدات السلامة والمحركات والمضخات وقطع الغيار المدرجة لدى الصفوة للتجارة في نزوى، سلطنة عُمان."]],
 ]);
 for (const [route, details] of arabicStaticPages) pages.set(route, details);
 
