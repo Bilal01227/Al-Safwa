@@ -98,7 +98,7 @@ jobs:
           name: al-safwa-encrypted-db-backup-${{ github.run_id }}
           path: |
             ${{ steps.encrypt.outputs.path }}
-            ${{ env.ENCRYPTED_BACKUP }}.sha256
+            ${{ steps.encrypt.outputs.path }}.sha256
           if-no-files-found: error
           retention-days: 30
 
