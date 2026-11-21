@@ -20,8 +20,8 @@ export const business = {
   addressLine1: "RGVW+9WM, Nizwa, Sinaya",
   addressLine2: "Al Dakhiliyah Governorate, Sultanate of Oman",
 
-  // Public directory sources conflict on Friday hours; do not publish guessed hours.
-  hours: "Contact us for current opening hours",
+  // Published Google Maps hours: daytime split shifts, with a short Friday morning session.
+  hours: "Sun–Thu & Sat: 7:00 AM–1:00 PM and 3:30 PM–8:00 PM · Fri: 8:30 AM–11:00 AM",
 
   googleMapsEmbedUrl: "https://www.google.com/maps?output=embed&q=place_id%3AChIJJ2Frsf77jj4RyRewZBd2WIY",
   googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=place_id%3AChIJJ2Frsf77jj4RyRewZBd2WIY",
