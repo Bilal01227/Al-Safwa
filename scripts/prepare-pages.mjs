@@ -65,7 +65,7 @@ async function fetchProductRecords() {
   const records = [];
   for (let offset = 0; ; offset += 1000) {
     const url = new URL(base.replace(/\/$/, "") + "/rest/v1/products");
-    url.searchParams.set("select", "slug,name,model_number,short_description");
+    url.searchParams.set("select", "slug,name,model_number,short_description,full_description");
     url.searchParams.set("active", "eq.true");
     url.searchParams.set("limit", "1000");
     url.searchParams.set("offset", String(offset));
@@ -109,7 +109,7 @@ for (const record of productRecords) {
   const name = String(record.name || humanize(record.slug));
   const model = String(record.model_number || "").trim();
   const productTitle = model ? name + " (" + model + ")" : name;
-  const description = String(record.short_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.")
+  const description = String(record.short_description || record.full_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.")
     .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
   // Do not emit Product rich-result markup until this catalogue has a real,
