@@ -18,6 +18,8 @@ const ServiceDetailPage = lazy(() => import("./pages/Services").then((m) => ({ d
 const RequestQuotePage = lazy(() => import("./pages/Forms").then((m) => ({ default: m.RequestQuotePage })));
 const RepairPage = lazy(() => import("./pages/Forms").then((m) => ({ default: m.RepairPage })));
 const ContactPage = lazy(() => import("./pages/Contact"));
+const CatalogueQRPage = lazy(() => import("./pages/CatalogueQR"));
+const LocalLandingPage = lazy(() => import("./pages/LocalLandingPage"));
 const Admin = lazy(() => import("./pages/Admin"));
 
 function ScrollToTop() {
@@ -96,6 +98,8 @@ export default function App() {
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/ar" element={<ArabicHome />} />
         <Route path="/ar/" element={<ArabicHome />} />
+        <Route path="/ar/catalogue-qr" element={<Layout locale="ar"><CatalogueQRPage locale="ar" /></Layout>} />
+        <Route path="/ar/industrial-tools-nizwa" element={<Layout locale="ar"><LocalLandingPage locale="ar" /></Layout>} />
         <Route path="/ar/*" element={<Layout locale="ar"><ArabicPages /></Layout>} />
         <Route path="/products" element={<Layout><ProductsPage /></Layout>} />
         <Route path="/products/:slug" element={<Layout><ProductDetailPage /></Layout>} />
@@ -107,6 +111,8 @@ export default function App() {
         <Route path="/repair" element={<Layout><RepairPage /></Layout>} />
         <Route path="/request-quote" element={<Layout><RequestQuotePage /></Layout>} />
         <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
+        <Route path="/catalogue-qr" element={<Layout><CatalogueQRPage /></Layout>} />
+        <Route path="/industrial-tools-nizwa" element={<Layout><LocalLandingPage /></Layout>} />
         <Route path="/403" element={<Forbidden />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
