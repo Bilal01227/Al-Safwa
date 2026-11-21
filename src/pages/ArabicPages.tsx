@@ -112,13 +112,15 @@ export default function ArabicPages() {
       : section==="brands" ? (isBrandDetail ? brand?.name || "العلامة التجارية" : "العلامات التجارية")
       : section==="rental" ? "تأجير المعدات والآليات"
       : section==="services" ? (isServiceDetail ? serviceNames[slug] || service?.name || "الخدمات" : "خدمات المعدات")
-      : isRepair ? "طلب إصلاح أو صيانة" : isQuote ? (isRental ? "طلب عرض سعر للتأجير" : "طلب عرض سعر") : "تواصل معنا";
+      : isRepair ? "طلب إصلاح أو صيانة" : isQuote ? (isRental ? "طلب عرض سعر للتأجير" : "طلب عرض سعر") : section === "contact" ? "تواصل مع الصفوة للتجارة في نزوى" : "تواصل معنا";
     const productFacts = product
       ? `${product.brand} ${product.modelNumber && product.modelNumber!=="—" ? product.modelNumber : ""}. ${product.shortDescription || product.description || ""}`
       : "";
     const description = isProductDetail && product
-      ? `تفاصيل ${productFacts} من الصفوة للتجارة في عُمان. تواصل معنا لتأكيد السعر والتوفر وطلب عرض سعر.`.replace(/\\s+/g," ").trim().slice(0,300)
-      : "الصفوة للتجارة في عُمان. تواصل معنا لمعرفة الأسعار وطلب عرض سعر للمنتجات والمعدات والخدمات.";
+      ? `تفاصيل ${productFacts} من الصفوة للتجارة في نزوى، سلطنة عُمان. تواصل معنا لتأكيد السعر والتوفر وطلب عرض سعر.`.replace(/\\s+/g," ").trim().slice(0,300)
+      : section === "contact"
+        ? "تواصل مع الصفوة للتجارة في نزوى، محافظة الداخلية، سلطنة عُمان عبر الهاتف أو واتساب لاستفسارات المنتجات والتأجير والإصلاح وطلب عروض الأسعار."
+        : "الصفوة للتجارة في نزوى، سلطنة عُمان. تصفح الأدوات والمعدات والخدمات واطلب عرض سعر بعد تأكيد المواصفات والتوفر.";
     const path = location.pathname.replace(/\/$/,"") || "/ar";
     return {title,description,path};
   },[section,isProductDetail,product,isBrandDetail,brand,isServiceDetail,slug,service,isRepair,isQuote,isRental,location.pathname]);
@@ -185,7 +187,7 @@ export default function ArabicPages() {
   </Page>;
 
   if(section==="contact") return <Page title="تواصل معنا" lead="يسعد فريق الصفوة للتجارة بمساعدتك في استفسارات المنتجات والتأجير والإصلاح والصيانة.">
-    <div className="grid gap-6 md:grid-cols-2"><div className="card-hard space-y-4 p-6"><h2 className="font-display text-2xl font-bold">معلومات التواصل</h2><p>{business.name}</p><p>كرشة، نزوى، محافظة الداخلية، سلطنة عُمان</p><a className="block text-safety" href={telHref}>{business.phone}</a><a className="block text-wa" href={waHref()} target="_blank" rel="noopener noreferrer">التواصل عبر واتساب</a><p className="text-sm text-smoke">يرجى التواصل معنا لمعرفة أوقات العمل الحالية.</p></div><iframe title="موقع الصفوة للتجارة في نزوى" src="https://www.google.com/maps?q=Karsha%2C%20Nizwa%2C%20Al%20Dakhiliyah%2C%20Oman&output=embed" className="min-h-80 w-full border-0" loading="lazy"/></div>
+    <div className="grid gap-6 md:grid-cols-2"><div className="card-hard space-y-4 p-6"><h2 className="font-display text-2xl font-bold">معلومات التواصل</h2><p>{business.name}</p><p>كرشة، نزوى، محافظة الداخلية، سلطنة عُمان</p><a className="block text-safety" href={telHref}>{business.phone}</a><a className="block text-wa" href={waHref()} target="_blank" rel="noopener noreferrer">التواصل عبر واتساب</a><p className="text-sm text-smoke">الأحد إلى الخميس والسبت: 7:00 صباحاً–1:00 ظهراً و3:30–8:00 مساءً · الجمعة: 8:30–11:00 صباحاً.</p></div><iframe title="موقع الصفوة للتجارة في نزوى" src="https://www.google.com/maps?q=Karsha%2C%20Nizwa%2C%20Al%20Dakhiliyah%2C%20Oman&output=embed" className="min-h-80 w-full border-0" loading="lazy"/></div>
   </Page>;
 
   return <Page title="الصفحة غير موجودة" lead="عذراً، الصفحة المطلوبة غير متاحة."><div className="flex flex-wrap gap-3"><Link className="bg-ink px-5 py-3 text-white" to="/ar/">الرئيسية</Link><Link className="bg-safety px-5 py-3 text-white" to="/ar/products/">المنتجات</Link></div></Page>;
