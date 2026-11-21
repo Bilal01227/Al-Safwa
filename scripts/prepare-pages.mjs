@@ -4,13 +4,13 @@ import path from "node:path";
 const dist = path.resolve("dist");
 const site = "https://alsafwaoman.com";
 const pages = new Map([
-  ["/products", ["Industrial Products Catalogue — Al Safwa Trading Oman", "Browse industrial power tools, safety equipment, motors, pumps and spare parts supplied by Al Safwa Trading in Oman."]],
-  ["/brands", ["Industrial Brands We Supply — Al Safwa Trading Oman", "Explore industrial brands supplied by Al Safwa Trading in Oman."]],
-  ["/rental", ["Industrial Equipment Rental — Al Safwa Trading Oman", "Explore equipment rental options for contractors and industrial operations across Oman."]],
-  ["/services", ["Equipment Repair & Maintenance Services — Al Safwa Trading Oman", "Equipment repair, power tool repair, preventive maintenance and spare parts support in Oman."]],
-  ["/repair", ["Equipment Repair Request — Al Safwa Trading Oman", "Request equipment inspection, repair and maintenance support from Al Safwa Trading in Oman."]],
-  ["/request-quote", ["Request an Industrial Equipment Quote — Al Safwa Trading Oman", "Request pricing for industrial tools, machinery, rental and spare parts in Oman."]],
-  ["/contact", ["Contact Al Safwa Trading — Nizwa, Sinaya, Oman", "Contact Al Safwa Trading in Nizwa, Sinaya, Oman. Call the shop, use WhatsApp, or open the verified Google Maps location for product, rental and repair enquiries."]],
+  ["/products", ["Power Tools & Industrial Equipment Catalogue in Nizwa, Oman — Al Safwa Trading", "Browse industrial power tools, safety equipment, motors, pumps and spare parts in Nizwa, Oman. Al Safwa Trading supplies contractors across the Sultanate."]],
+  ["/brands", ["Industrial & Power Tool Brands in Oman — Al Safwa Trading", "Explore power tool and industrial equipment brands listed by Al Safwa Trading in Nizwa, Oman. Contact the shop to confirm model availability and request a quotation."]],
+  ["/rental", ["Equipment Rental in Nizwa & Oman — Al Safwa Trading", "Ask about power tool, generator and site equipment rental from Al Safwa Trading in Nizwa, Oman, for projects across the Sultanate."]],
+  ["/services", ["Industrial Equipment Repair & Maintenance in Nizwa — Al Safwa Trading", "Arrange equipment repair, power tool repair, preventive maintenance, field service and spare parts support in Nizwa, Oman."]],
+  ["/repair", ["Power Tool & Equipment Repair in Nizwa, Oman — Al Safwa Trading", "Request equipment diagnosis and repair from Al Safwa Trading in Nizwa, Oman. Send the model and fault details for a service quotation."]],
+  ["/request-quote", ["Request an Industrial Equipment Quote in Oman — Al Safwa Trading", "Request pricing for industrial tools, machinery, rental and spare parts from Al Safwa Trading in Nizwa, Oman. Prices are confirmed per enquiry."]],
+  ["/contact", ["Contact Al Safwa Trading — Nizwa, Sinaya, Oman", "Contact Al Safwa Trading in Nizwa, Al Dakhiliyah, Oman by phone or WhatsApp, or open the verified Google Maps shop location for product, rental and repair enquiries."]],
   ["/ar", ["الصفوة للتجارة | الأدوات والمعدات والآلات الصناعية في عُمان", "الصفوة للتجارة في الصناعية، نزوى، سلطنة عُمان: توريد الأدوات والمعدات الصناعية ومستلزمات السلامة والمحركات والمضخات، مع خيارات التأجير والإصلاح والصيانة."]],
 ]);
 
@@ -95,11 +95,11 @@ for (const [table, target] of [["brands", brands], ["products", products]]) {
 for (const slug of brands) {
   if (slug.toLowerCase() === "makita") {
     pages.set("/brands/" + slug, [
-      "Makita Power Tools in Oman | Al Safwa Trading",
-      "Browse listed Makita power tools and models from Al Safwa Trading in Nizwa, Sinaya, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.",
+      "Makita Power Tools in Nizwa, Oman | Al Safwa Trading",
+      "Browse listed Makita power tools and models from Al Safwa Trading in Nizwa, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.",
     ]);
   } else {
-    pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading Oman", humanize(slug) + " products supplied by Al Safwa Trading in Oman. Contact us for price."]);
+    pages.set("/brands/" + slug, [humanize(slug) + " Products — Al Safwa Trading, Nizwa Oman", humanize(slug) + " products supplied by Al Safwa Trading in Nizwa, Oman. Contact us for a quotation and current availability."]);
   }
 }
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
@@ -113,13 +113,13 @@ for (const record of productRecords) {
   const name = String(record.name || humanize(record.slug));
   const model = String(record.model_number || "").trim();
   const productTitle = model ? name + " (" + model + ")" : name;
-  const description = String(record.short_description || record.full_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.")
+  const description = String(record.short_description || record.full_description || name + " supplied by Al Safwa Trading in Nizwa, Oman. Contact us for a quotation.")
     .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
   // Do not emit Product rich-result markup until this catalogue has a real,
   // publicly verifiable price or genuine review data. Quote-only products must
   // not be given fabricated Offer prices or review signals.
-  pages.set(route, [productTitle + " — Al Safwa Trading Oman", description]);
+  pages.set(route, [productTitle + " — Al Safwa Trading, Nizwa Oman", description]);
 }
 for (const slug of products) {
   if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Contact us for product pricing."]);
