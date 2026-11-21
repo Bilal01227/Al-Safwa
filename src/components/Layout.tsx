@@ -251,6 +251,8 @@ function Footer({ locale = "en" }: { locale?: "en" | "ar" }) {
               {s.name}
             </FooterLink>
           ))}
+          <FooterLink to={`${prefix}/industrial-tools-nizwa/`}>{arabic ? "الأدوات الصناعية في نزوى" : "Industrial tools in Nizwa"}</FooterLink>
+          <FooterLink to={`${prefix}/catalogue-qr/`}>{arabic ? "رمز QR للكتالوج" : "Catalogue QR code"}</FooterLink>
         </FooterCol>
       </div>
 
