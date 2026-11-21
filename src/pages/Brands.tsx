@@ -103,7 +103,7 @@ export function BrandDetailPage() {
     title: siteTitle(brand ? (brand.slug === "makita" ? "Makita Power Tools in Oman" : `${brand.name} in Oman`) : "Brand"),
     description: brand
       ? brand.slug === "makita"
-        ? `Browse listed Makita power tools and models from ${business.name} in Karsha, Nizwa, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.`
+        ? `Browse listed Makita power tools and models from ${business.name} in Nizwa, Sinaya, Oman. Send the model number and quantity for a quotation; pricing and availability are confirmed per enquiry.`
         : `${brand.name} products supplied by ${business.name} in Oman — contact us for price by quotation or WhatsApp.`
       : `Brands supplied by ${business.name}, Oman.`,
     path: `/brands/${brandSlug ?? ""}`,
