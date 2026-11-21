@@ -244,18 +244,11 @@ export function ProductDetailPage() {
     path: `/products/${slug ?? ""}`,
     image: product?.imageUrl || undefined,
     type: "product",
+    // Quote-only products have no public price or genuine review data.
+    // Keep breadcrumb markup, but omit Product rich-result markup until valid
+    // Offer or review information is available.
     jsonLd: product
       ? [
-          {
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: product.productName,
-            description: product.description || product.shortDescription,
-            model: product.modelNumber !== "—" ? product.modelNumber : undefined,
-            image: product.imageUrl || undefined,
-            brand: { "@type": "Brand", name: product.brand },
-            category: product.subcategory,
-          },
           {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
