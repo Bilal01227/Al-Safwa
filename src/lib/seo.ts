@@ -88,4 +88,4 @@ export function usePageMeta({ title, description, path, image, type = "website",
 }
 
 export const siteTitle = (page?: string): string =>
-  page ? `${page} — ${business.name} Oman` : `${business.name} — Industrial Tools, Equipment & Machinery in Oman`;
+  page ? `${page} — ${business.name} Nizwa, Oman` : `${business.name} — Power Tools & Industrial Equipment in Nizwa, Oman`;
