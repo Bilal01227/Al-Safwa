@@ -239,7 +239,7 @@ export function ProductDetailPage() {
   usePageMeta({
     title: siteTitle(product ? product.productName : "Product"),
     description: product
-      ? `${product.productName}${product.modelNumber && product.modelNumber !== "—" ? ` (model ${product.modelNumber})` : ""} — supplied by ${business.name} in Oman. Contact us for price.`
+      ? `${product.shortDescription || product.description || product.productName} ${product.brand}${product.modelNumber && product.modelNumber !== "—" ? ` (${product.modelNumber})` : ""} — supplied by ${business.name} in Oman. Request an OMR quotation on WhatsApp.`.replace(/\s+/g, " ").trim().slice(0, 300)
       : `Product details from ${business.name}, Oman.`,
     path: `/products/${slug ?? ""}`,
     image: product?.imageUrl || undefined,
