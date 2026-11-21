@@ -104,6 +104,10 @@ for (const slug of brands) {
 }
 for (const slug of services) pages.set("/services/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " and industrial equipment services arranged by Al Safwa Trading in Oman."]);
 const productRecords = await fetchProductRecords();
+const incompleteDescriptions = productRecords.filter((record) => !String(record.short_description || '').trim() || !String(record.full_description || '').trim());
+if (incompleteDescriptions.length) {
+  throw new Error('Refusing to publish product pages with missing catalogue descriptions: ' + incompleteDescriptions.map((record) => record.slug).join(', '));
+}
 for (const record of productRecords) {
   products.add(record.slug);
   const name = String(record.name || humanize(record.slug));
