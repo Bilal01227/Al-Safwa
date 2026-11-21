@@ -91,6 +91,10 @@ jobs:
           test -f dist/repair/index.html
           test -f dist/request-quote/index.html
           test -f dist/contact/index.html
+          test -f dist/catalogue-qr/index.html
+          test -f dist/industrial-tools-nizwa/index.html
+          test -f dist/ar/catalogue-qr/index.html
+          test -f dist/ar/industrial-tools-nizwa/index.html
           # Customer contact must remain the original direct-call and WhatsApp line.
           grep -Fq '+968 9016 7345' dist/index.html
           # Verified Google Maps opening hours must remain in the public entity schema.
@@ -143,7 +147,11 @@ jobs:
             /repair/ \
             /request-quote/ \
             /contact/ \
+            /catalogue-qr/ \
+            /industrial-tools-nizwa/ \
             /ar/ \
+            /ar/catalogue-qr/ \
+            /ar/industrial-tools-nizwa/ \
             /ar/products/ \
             /ar/brands/ \
             /ar/rental/ \
