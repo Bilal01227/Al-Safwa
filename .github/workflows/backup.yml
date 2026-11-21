@@ -1,0 +1,124 @@
+name: Encrypted Supabase database backup
+
+on:
+  schedule:
+    - cron: "17 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  encrypted-backup:
+    name: Export and encrypt database backup
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      BACKUP_AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+
+    steps:
+      - name: Check backup configuration
+        id: config
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$SUPABASE_DB_URL" || -z "$BACKUP_AGE_RECIPIENT" ]]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Encrypted backup skipped. Configure SUPABASE_DB_URL (Actions secret) and BACKUP_AGE_RECIPIENT (Actions variable) to activate it."
+            exit 0
+          fi
+          case "$SUPABASE_DB_URL" in
+            postgresql://*|postgres://*) ;;
+            *) echo "::error::SUPABASE_DB_URL must be a PostgreSQL connection URI."; exit 1 ;;
+          esac
+          case "$BACKUP_AGE_RECIPIENT" in
+            age1*) ;;
+            *) echo "::error::BACKUP_AGE_RECIPIENT must be an age public recipient (age1...)."; exit 1 ;;
+          esac
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Check out repository
+        if: steps.config.outputs.ready == 'true'
+        uses: actions/checkout@v5
+
+      - name: Install Supabase CLI
+        if: steps.config.outputs.ready == 'true'
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Install age encryption tool
+        if: steps.config.outputs.ready == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes age
+
+      - name: Export database schema, data and custom roles
+        if: steps.config.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          work_dir="$(mktemp -d "$RUNNER_TEMP/al-safwa-backup.XXXXXX")"
+          echo "$work_dir" > "$RUNNER_TEMP/al-safwa-backup-workdir"
+          supabase db dump --remote="$SUPABASE_DB_URL" --file="$work_dir/roles.sql" --role-only
+          supabase db dump --remote="$SUPABASE_DB_URL" --file="$work_dir/schema.sql"
+          supabase db dump --remote="$SUPABASE_DB_URL" --file="$work_dir/data.sql" --data-only --use-copy -x "storage.buckets_vectors" -x "storage.vector_indexes"
+          test -s "$work_dir/roles.sql"
+          test -s "$work_dir/schema.sql"
+          test -s "$work_dir/data.sql"
+          cat > "$work_dir/backup-info.txt" <<EOF
+          Project: Al Safwa Trading
+          Supabase project ref: wdxjlfxepiqvklxlxwkw
+          Created UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+          Contents: Supabase CLI custom roles, non-managed schema, and data dumps.
+          Exclusions: Supabase-managed auth/storage schemas, extension-managed schemas, and Storage API object files.
+          EOF
+          tar --create --gzip --file="$RUNNER_TEMP/al-safwa-db-backup.tar.gz" -C "$work_dir" roles.sql schema.sql data.sql backup-info.txt
+
+      - name: Encrypt backup before it leaves the runner
+        if: steps.config.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          encrypted="$RUNNER_TEMP/al-safwa-db-backup-$GITHUB_RUN_ID.tar.gz.age"
+          age --recipient "$BACKUP_AGE_RECIPIENT" --output "$encrypted" "$RUNNER_TEMP/al-safwa-db-backup.tar.gz"
+          test -s "$encrypted"
+          sha256sum "$encrypted" > "$encrypted.sha256"
+          rm -f "$RUNNER_TEMP/al-safwa-db-backup.tar.gz"
+          echo "ENCRYPTED_BACKUP=$encrypted" >> "$GITHUB_ENV"
+
+      - name: Upload encrypted backup artifact only
+        if: steps.config.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: al-safwa-encrypted-db-backup-${{ github.run_id }}
+          path: |
+            ${{ env.ENCRYPTED_BACKUP }}
+            ${{ env.ENCRYPTED_BACKUP }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Report configuration requirement
+        if: steps.config.outputs.ready != 'true'
+        shell: bash
+        run: |
+          {
+            echo "## Encrypted database backup not run"
+            echo
+            echo "Configure the repository Actions secret `SUPABASE_DB_URL` and Actions variable `BACKUP_AGE_RECIPIENT`."
+            echo "No database dump was created or uploaded during this run."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove temporary plaintext files
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          if [[ -f "$RUNNER_TEMP/al-safwa-backup-workdir" ]]; then
+            work_dir="$(cat "$RUNNER_TEMP/al-safwa-backup-workdir")"
+            rm -rf -- "$work_dir"
+          fi
+          rm -f "$RUNNER_TEMP/al-safwa-backup-workdir" "$RUNNER_TEMP/al-safwa-db-backup.tar.gz"
