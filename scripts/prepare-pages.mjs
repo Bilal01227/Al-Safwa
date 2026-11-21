@@ -112,14 +112,10 @@ for (const record of productRecords) {
   const description = String(record.short_description || name + " supplied by Al Safwa Trading in Oman. Contact us for price.")
     .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
   const route = "/products/" + record.slug;
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name,
-    description,
-    model: model || undefined,
-  };
-  pages.set(route, [productTitle + " — Al Safwa Trading Oman", description, structuredData]);
+  // Do not emit Product rich-result markup until this catalogue has a real,
+  // publicly verifiable price or genuine review data. Quote-only products must
+  // not be given fabricated Offer prices or review signals.
+  pages.set(route, [productTitle + " — Al Safwa Trading Oman", description]);
 }
 for (const slug of products) {
   if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Contact us for product pricing."]);
