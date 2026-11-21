@@ -101,6 +101,7 @@ jobs:
           grep -Fq '"openingHoursSpecification"' dist/index.html
           grep -Fq '"opens": "07:00"' dist/index.html
           grep -Fq '"opens": "15:30"' dist/index.html
+          grep -Fq '"opens": "13:30"' dist/index.html
           grep -Fq '"opens": "08:30"' dist/index.html
           ! grep -Fq '+968 9742 0541' dist/index.html
           grep -Fq 'RGVW+9WM' dist/index.html
