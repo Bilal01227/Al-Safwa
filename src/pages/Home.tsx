@@ -35,7 +35,7 @@ export default function Home() {
   usePageMeta({
     title: siteTitle(),
     description:
-      "Al Safwa Trading supplies industrial power tools, safety equipment, motors & pumps and machinery across Oman — with rental, repair and maintenance support. Request a quote or chat on WhatsApp.",
+      "Power tools, industrial equipment, safety gear, motors and pumps in Nizwa, Oman. Al Safwa Trading also supports equipment rental, repair and maintenance across Oman.",
     path: "/",
   });
 
