@@ -15,9 +15,10 @@ export function waHref(message?: string): string {
 export const waGeneralMessage = (): string =>
   `Hello ${business.name}, I would like to enquire about industrial equipment supply in Oman.`;
 
-export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber">): string => {
+export const waProductMessage = (p: Pick<Product, "productName" | "modelNumber" | "slug">): string => {
   const model = p.modelNumber && p.modelNumber !== "—" ? `, model ${p.modelNumber}` : "";
-  return `Hello, I am interested in ${p.productName}${model}. Please share the price and product details from ${business.name}.`;
+  const productUrl = `https://alsafwaoman.com/products/${encodeURIComponent(p.slug)}/`;
+  return `Hello, I am interested in ${p.productName}${model}. Please share the current price, availability and product details from ${business.name}. Product page: ${productUrl}`;
 };
 
 export const waBrandMessage = (brandName: string): string =>

@@ -4,7 +4,15 @@ import { waHref, waProductMessage } from "../lib/whatsapp";
 import { AvailabilityBadge } from "./kit";
 import { IcWhatsApp } from "./icons";
 
-export default function ProductCard({ product, index }: { product: Product; index?: number }) {
+type ProductCardProps = {
+  product: Product;
+  index?: number;
+  onCompareToggle?: (slug: string) => void;
+  isCompared?: boolean;
+  compareDisabled?: boolean;
+};
+
+export default function ProductCard({ product, index, onCompareToggle, isCompared = false, compareDisabled = false }: ProductCardProps) {
   const specs = Object.entries(product.specifications).slice(0, 2);
   return (
     <article className="card-hard group flex flex-col">
@@ -28,6 +36,7 @@ export default function ProductCard({ product, index }: { product: Product; inde
         {specs.length > 0 && <div className="mt-auto space-y-1 border-t border-ink/10 pt-2.5">{specs.map(([k,v])=><div key={k} className="flex items-baseline justify-between gap-3 font-mono text-[10.5px] uppercase tracking-[0.06em]"><span className="text-smoke">{k}</span><span className="truncate font-medium text-ink">{v}</span></div>)}</div>}
         <div className="pt-1"><AvailabilityBadge text={product.availability} /></div>
         <div className="mt-2 grid grid-cols-[1fr_44px] gap-2"><Link to={`/request-quote/?product=${encodeURIComponent(product.productName)}${product.modelNumber && product.modelNumber !== "—" ? `&model=${encodeURIComponent(product.modelNumber)}` : ""}`} className="grid h-10 place-items-center bg-ink font-display text-[15px] font-medium uppercase tracking-[0.08em] text-paper transition-colors hover:bg-safety">Request Quote</Link><a href={waHref(waProductMessage(product))} target="_blank" rel="noopener noreferrer" aria-label={`Ask about ${product.productName} on WhatsApp`} className="grid h-10 place-items-center border border-wa/50 text-wa transition-colors hover:bg-wa hover:text-white"><IcWhatsApp width={18} height={18} /></a></div>
+        {onCompareToggle && <button type="button" onClick={() => onCompareToggle(product.slug)} disabled={compareDisabled && !isCompared} aria-pressed={isCompared} className={"mt-2 w-full border px-3 py-2 text-left font-mono text-[10px] uppercase tracking-[0.12em] transition-colors " + (isCompared ? "border-safety bg-safety/10 text-safety" : "border-ink/15 text-smoke hover:border-safety hover:text-safety") + " disabled:cursor-not-allowed disabled:opacity-40"}>{isCompared ? "✓ Added to comparison" : "＋ Compare product"}</button>}
       </div>
     </article>
   );

@@ -4,6 +4,7 @@ import { business, telHref } from "../lib/business";
 import { waHref, waGeneralMessage, waQuoteMessage, waRepairMessage } from "../lib/whatsapp";
 import { usePageMeta, siteTitle } from "../lib/seo";
 import { saveSubmission, type SubmissionType } from "../lib/submissions";
+import { trackEvent } from "../lib/analytics";
 import { brands } from "../lib/data/brands";
 import { CTAButton, PageHeader, Field } from "../components/kit";
 import { IcWhatsApp, IcPhone, IcCheck, IcCamera, IcArrowRight } from "../components/icons";
@@ -137,6 +138,7 @@ export function RequestQuotePage() {
     const type: SubmissionType = isRental ? "rental" : "quote";
     try {
       const rec = await saveSubmission(type, { ...form, intent: type });
+      trackEvent(isRental ? "rental_quote_submitted" : "quote_submitted", { request_type: type });
       setDone({ id: rec.id });
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "Your request could not be saved. Please try again or contact us on WhatsApp.");
@@ -287,6 +289,7 @@ export function RepairPage() {
     setSending(true);
     try {
       const rec = await saveSubmission("repair", { ...form, intent: isMaintenance ? "maintenance" : "repair" });
+      trackEvent(isMaintenance ? "maintenance_request_submitted" : "repair_request_submitted");
       setDone({ id: rec.id });
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "Your request could not be saved. Please try again or contact us on WhatsApp.");

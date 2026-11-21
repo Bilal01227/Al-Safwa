@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation, Link } from "react-router-do
 import Layout from "./components/Layout";
 import { business } from "./lib/business";
 import { CTAButton } from "./components/kit";
+import { trackEvent, trackPageView } from "./lib/analytics";
 
 const Home = lazy(() => import("./pages/Home"));
 const ArabicHome = lazy(() => import("./pages/ArabicHome"));
@@ -22,6 +23,23 @@ const Admin = lazy(() => import("./pages/Admin"));
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior }); }, [pathname]);
+  return null;
+}
+
+function RouteAnalytics() {
+  const location = useLocation();
+  useEffect(() => { trackPageView(location.pathname + location.search); }, [location.pathname, location.search]);
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      const anchor = event.target instanceof Element ? event.target.closest("a") : null;
+      const href = anchor?.getAttribute("href") || "";
+      if (href.startsWith("tel:")) trackEvent("phone_click", { link_url: href });
+      else if (href.includes("wa.me/")) trackEvent("whatsapp_click", { link_url: href.split("?")[0] });
+      else if (href.startsWith("mailto:")) trackEvent("email_click");
+    };
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, []);
   return null;
 }
 
@@ -70,6 +88,7 @@ function Forbidden() {
 
 export default function App() {
   return <BrowserRouter>
+    <RouteAnalytics />
     <ScrollToTop />
     <Suspense fallback={null}>
       <Routes>

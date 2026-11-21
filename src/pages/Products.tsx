@@ -10,6 +10,7 @@ import { Reveal, CTAButton, PageHeader, AvailabilityBadge, MonoTag, SectionHead 
 import { IcSearch, IcFilter, IcWhatsApp, IcPhone, IcArrowRight, IcX } from "../components/icons";
 import { telHref } from "../lib/business";
 import ProductCard from "../components/ProductCard";
+import { trackEvent } from "../lib/analytics";
 
 /* ── Catalogue page ────────────────────────────────────────────── */
 export function ProductsPage() {
@@ -24,6 +25,8 @@ export function ProductsPage() {
   const price = params.get("price") ?? "";
 
   const [all, setAll] = useState<Product[] | null>(null);
+  const [compareSlugs, setCompareSlugs] = useState<string[]>([]);
+  const [compareOpen, setCompareOpen] = useState(false);
 
   useEffect(() => {
     let live = true;
@@ -68,6 +71,20 @@ export function ProductsPage() {
       return true;
     });
   }, [all, q, brand, cat, sub, price]);
+
+  const compared = useMemo(() => all ? all.filter((p) => compareSlugs.includes(p.slug)) : [], [all, compareSlugs]);
+  const compareSpecLabels = useMemo(
+    () => Array.from(new Set(compared.flatMap((p) => Object.keys(p.specifications || {})))).sort(),
+    [compared],
+  );
+  const toggleCompare = (slug: string) => {
+    setCompareSlugs((current) => {
+      if (current.includes(slug)) return current.filter((item) => item !== slug);
+      if (current.length >= 3) return current;
+      trackEvent("product_added_to_compare", { product_slug: slug });
+      return [...current, slug];
+    });
+  };
 
   const hasFilters = Boolean(q || brand || cat || sub || price);
 
@@ -184,7 +201,13 @@ export function ProductsPage() {
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((p, i) => (
                 <Reveal key={p.slug} delay={(i % 4) * 60}>
-                  <ProductCard product={p} index={i} />
+                  <ProductCard
+                    product={p}
+                    index={i}
+                    onCompareToggle={toggleCompare}
+                    isCompared={compareSlugs.includes(p.slug)}
+                    compareDisabled={compareSlugs.length >= 3}
+                  />
                 </Reveal>
               ))}
             </div>
@@ -212,6 +235,36 @@ export function ProductsPage() {
           </Reveal>
         </div>
       </section>
+      {compared.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/20 bg-ink px-4 py-3 text-paper shadow-[0_-10px_35px_rgba(0,0,0,0.2)]">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3">
+            <div className="min-w-0"><p className="font-mono text-[10px] uppercase tracking-[0.16em] text-mist">Product shortlist · {compared.length}/3 selected</p><p className="mt-1 truncate text-sm text-paper">{compared.map((p) => p.productName).join(" · ")}</p></div>
+            <div className="flex items-center gap-2"><button type="button" disabled={compared.length < 2} onClick={() => setCompareOpen(true)} className="border border-safety bg-safety px-4 py-2 font-display text-sm font-semibold uppercase text-white disabled:cursor-not-allowed disabled:opacity-40">Compare ({compared.length})</button><button type="button" onClick={() => { setCompareSlugs([]); setCompareOpen(false); }} className="border border-white/25 px-3 py-2 font-mono text-[10px] uppercase text-paper hover:border-white">Clear</button></div>
+          </div>
+        </div>
+      )}
+      {compareOpen && compared.length >= 2 && (
+        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-2 sm:items-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="product-compare-title">
+          <div className="max-h-[90vh] w-full max-w-6xl overflow-hidden border border-ink/20 bg-paper shadow-2xl">
+            <div className="flex items-center justify-between gap-4 border-b border-ink/15 bg-ink px-5 py-4 text-paper"><div><h2 id="product-compare-title" className="font-display text-2xl font-semibold uppercase">Compare products</h2><p className="font-mono text-[10px] uppercase tracking-[0.12em] text-mist">Compare catalogue information · confirm final specifications with the shop</p></div><button type="button" onClick={() => setCompareOpen(false)} className="border border-white/30 px-3 py-2 font-mono text-xs uppercase text-white hover:border-safety" aria-label="Close comparison">Close</button></div>
+            <div className="max-h-[calc(90vh-76px)] overflow-auto p-4 sm:p-5">
+              <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+                <thead><tr><th className="w-36 border-b border-ink/15 p-3 font-mono text-[10px] uppercase text-smoke">Attribute</th>{compared.map((p) => <th key={p.slug} className="border-b border-ink/15 p-3 align-top"><Link to={"/products/" + p.slug + "/"} onClick={() => setCompareOpen(false)} className="font-display text-lg font-semibold uppercase hover:text-safety">{p.productName}</Link><button type="button" onClick={() => toggleCompare(p.slug)} className="mt-2 block font-mono text-[10px] uppercase text-safety underline">Remove</button></th>)}</tr></thead>
+                <tbody>
+                  <tr><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">Brand</th>{compared.map((p) => <td key={p.slug + "-brand"} className="border-b border-ink/10 p-3">{p.brand}</td>)}</tr>
+                  <tr><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">Model</th>{compared.map((p) => <td key={p.slug + "-model"} className="border-b border-ink/10 p-3">{p.modelNumber || "Not listed"}</td>)}</tr>
+                  <tr><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">Category</th>{compared.map((p) => <td key={p.slug + "-category"} className="border-b border-ink/10 p-3">{p.category.replace(/-/g, " ")}</td>)}</tr>
+                  <tr><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">Description</th>{compared.map((p) => <td key={p.slug + "-description"} className="border-b border-ink/10 p-3 align-top">{p.shortDescription || p.description || "Contact the shop for details."}</td>)}</tr>
+                  <tr><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">Availability</th>{compared.map((p) => <td key={p.slug + "-availability"} className="border-b border-ink/10 p-3">{p.availability}</td>)}</tr>
+                  {compareSpecLabels.map((label) => <tr key={label}><th className="border-b border-ink/10 p-3 font-mono text-[10px] uppercase text-smoke">{label}</th>{compared.map((p) => <td key={p.slug + "-" + label} className="border-b border-ink/10 p-3">{p.specifications?.[label] || "Not listed"}</td>)}</tr>)}
+                  <tr><th className="p-3 font-mono text-[10px] uppercase text-smoke">Enquiry</th>{compared.map((p) => <td key={p.slug + "-enquiry"} className="p-3"><a target="_blank" rel="noopener noreferrer" href={waHref(waProductMessage(p))} className="inline-flex border border-wa/40 px-3 py-2 font-mono text-[10px] uppercase text-wa hover:bg-wa hover:text-white">Ask on WhatsApp</a></td>)}</tr>
+                </tbody>
+              </table>
+              <p className="mt-4 text-xs text-smoke">Only catalogue fields are compared. Missing specifications are shown as “Not listed”; no technical values or prices are inferred.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -374,7 +427,7 @@ export function ProductDetailPage() {
                   <CTAButton href={waHref(waProductMessage(p))} variant="wa">
                     <IcWhatsApp /> Request on WhatsApp
                   </CTAButton>
-                  <CTAButton to={`/request-quote?product=${encodeURIComponent(p.slug)}`} variant="safety">
+                  <CTAButton to={`/request-quote?product=${encodeURIComponent(p.productName)}${p.modelNumber && p.modelNumber !== "—" ? `&model=${encodeURIComponent(p.modelNumber)}` : ""}`} variant="safety">
                     Request a quote <IcArrowRight width={16} height={16} />
                   </CTAButton>
                 </div>
