@@ -1,6 +1,11 @@
 name: Encrypted Supabase database backup
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/backup.yml"
+      - "docs/backup-and-restore.md"
   schedule:
     - cron: "17 1 * * *"
   workflow_dispatch:
@@ -122,4 +127,4 @@ jobs:
             work_dir="$(cat "$RUNNER_TEMP/al-safwa-backup-workdir")"
             rm -rf -- "$work_dir"
           fi
-          rm -f "$RUNNER_TEMP/al-safwa-backup-workdir" "$RUNNER_TEMP/al-safwa-db-backup.tar.gz"
+          rm -f "$RUNNER_TEMP/al-safwa-backup-workdir" "$RUNNER_TEMP/al-safwa-db-backup.tar.gz" "$RUNNER_TEMP"/al-safwa-db-backup-*.tar.gz.age*
