@@ -49,6 +49,9 @@ jobs:
       - name: Prepare 403 and 404 error documents
         run: node scripts/prepare-error-pages.mjs
 
+      - name: Audit sitemap, canonicals, metadata and language alternates
+        run: node scripts/validate-seo-artifacts.mjs
+
       - name: Verify production artifact
         run: |
           set -eu
