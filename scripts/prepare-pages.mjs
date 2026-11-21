@@ -147,9 +147,13 @@ for (const [route, details] of Array.from(pages.entries())) {
   let title = details[0];
   let description = "الصفوة للتجارة في سلطنة عُمان. تواصل معنا لمعرفة الأسعار وطلب عرض سعر.";
   if (route.startsWith("/products/")) {
-    const productName = title.split(" — Al Safwa")[0];
-    title = productName + " | تفاصيل المنتج - الصفوة للتجارة";
-    description = "اطلب معلومات السعر والمواصفات الفنية لهذا المنتج من الصفوة للتجارة في عُمان.";
+    const productSlug = route.slice("/products/".length);
+    const productRecord = productRecords.find((record) => record.slug === productSlug);
+    const productName = String(productRecord?.name || title.split(" — Al Safwa")[0]).trim();
+    const model = String(productRecord?.model_number || "").trim();
+    const productLabel = productName + (model ? "، موديل " + model : "");
+    title = productLabel + " | مواصفات المنتج - الصفوة للتجارة";
+    description = "تعرف على تفاصيل " + productLabel + " واطلب المواصفات الفنية والسعر والتوافر من الصفوة للتجارة في سلطنة عُمان.";
   } else if (route.startsWith("/brands/")) {
     const brandName = title.split(" Products")[0];
     title = "منتجات " + brandName + " | الصفوة للتجارة";
