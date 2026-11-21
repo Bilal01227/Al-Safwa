@@ -113,8 +113,9 @@ for (const record of productRecords) {
   const name = String(record.name || humanize(record.slug));
   const model = String(record.model_number || "").trim();
   const productTitle = model ? name + " (" + model + ")" : name;
-  const description = String(record.short_description || record.full_description || name + " supplied by Al Safwa Trading in Nizwa, Oman. Contact us for a quotation.")
-    .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+  const productSummary = String(record.short_description || record.full_description || name)
+    .replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 185).replace(/[\s.,;:!?-]+$/, "");
+  const description = (productSummary + ". Listed by Al Safwa Trading in Nizwa, Oman. Contact us for a quotation; price and availability are confirmed per enquiry.").slice(0, 300);
   const route = "/products/" + record.slug;
   // Do not emit Product rich-result markup until this catalogue has a real,
   // publicly verifiable price or genuine review data. Quote-only products must
@@ -122,17 +123,17 @@ for (const record of productRecords) {
   pages.set(route, [productTitle + " — Al Safwa Trading, Nizwa Oman", description]);
 }
 for (const slug of products) {
-  if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading Oman", humanize(slug) + " supplied by Al Safwa Trading in Oman. Contact us for product pricing."]);
+  if (!pages.has("/products/" + slug)) pages.set("/products/" + slug, [humanize(slug) + " — Al Safwa Trading, Nizwa Oman", humanize(slug) + " listed by Al Safwa Trading in Nizwa, Oman. Contact us for a quotation."]);
 }
 
 const arabicStaticPages = new Map([
-  ["/ar/products", ["كتالوج المنتجات الصناعية | الصفوة للتجارة", "تصفح الأدوات والمعدات الصناعية. تواصل معنا لمعرفة الأسعار وطلب عرض سعر."]],
-  ["/ar/brands", ["العلامات التجارية | الصفوة للتجارة", "العلامات التجارية المدرجة في كتالوج الصفوة للتجارة في سلطنة عُمان."]],
-  ["/ar/rental", ["تأجير المعدات والآليات | الصفوة للتجارة", "خيارات تأجير المعدات للمشاريع والمواقع والورش. تواصل معنا لمعرفة الأسعار." ]],
-  ["/ar/services", ["خدمات المعدات | الصفوة للتجارة", "خدمات إصلاح المعدات والصيانة وقطع الغيار والدعم الميداني في سلطنة عُمان."]],
-  ["/ar/repair", ["طلب إصلاح أو صيانة | الصفوة للتجارة", "أرسل تفاصيل المعدة والعطل لطلب خدمات الإصلاح والصيانة."]],
-  ["/ar/request-quote", ["طلب عرض سعر | الصفوة للتجارة", "اطلب عرض سعر للأدوات والمعدات الصناعية وقطع الغيار وخيارات التأجير."]],
-  ["/ar/contact", ["تواصل معنا | الصفوة للتجارة في نزوى", "تواصل مع الصفوة للتجارة في منطقة الصناعية، نزوى، سلطنة عُمان عبر الهاتف أو واتساب أو موقع المتجر على خرائط Google."]],
+  ["/ar/products", ["كتالوج الأدوات والمعدات الصناعية في نزوى | الصفوة للتجارة", "تصفح الأدوات الكهربائية ومعدات السلامة والمحركات والمضخات وقطع الغيار في نزوى، سلطنة عُمان. تواصل معنا لطلب عرض سعر."]],
+  ["/ar/brands", ["العلامات التجارية للأدوات الصناعية في عُمان | الصفوة للتجارة", "تصفح العلامات التجارية للأدوات والمعدات الصناعية المدرجة لدى الصفوة للتجارة في نزوى، سلطنة عُمان."]],
+  ["/ar/rental", ["تأجير المعدات في نزوى وعُمان | الصفوة للتجارة", "استفسر عن تأجير الأدوات والمولدات ومعدات المواقع من الصفوة للتجارة في نزوى، سلطنة عُمان، لمشاريعك في مختلف المحافظات."]],
+  ["/ar/services", ["إصلاح المعدات والصيانة في نزوى | الصفوة للتجارة", "خدمات إصلاح المعدات والأدوات الكهربائية والصيانة الوقائية وقطع الغيار والدعم الميداني في نزوى، سلطنة عُمان."]],
+  ["/ar/repair", ["إصلاح الأدوات والمعدات في نزوى | الصفوة للتجارة", "أرسل طراز المعدة وتفاصيل العطل لطلب التشخيص والإصلاح من الصفوة للتجارة في نزوى، سلطنة عُمان."]],
+  ["/ar/request-quote", ["طلب عرض سعر للمعدات الصناعية في عُمان | الصفوة للتجارة", "اطلب تسعير الأدوات والمعدات الصناعية وقطع الغيار والتأجير من الصفوة للتجارة في نزوى، سلطنة عُمان."]],
+  ["/ar/contact", ["تواصل مع الصفوة للتجارة في نزوى، عُمان", "تواصل مع الصفوة للتجارة في نزوى، محافظة الداخلية، سلطنة عُمان عبر الهاتف أو واتساب أو موقع المتجر على خرائط Google."]],
 ]);
 for (const [route, details] of arabicStaticPages) pages.set(route, details);
 
@@ -157,7 +158,7 @@ for (const [route, details] of Array.from(pages.entries())) {
     const model = String(productRecord?.model_number || "").trim();
     const productLabel = productName + (model ? "، موديل " + model : "");
     title = productLabel + " | مواصفات المنتج - الصفوة للتجارة";
-    description = "تعرف على تفاصيل " + productLabel + " واطلب المواصفات الفنية والسعر والتوافر من الصفوة للتجارة في سلطنة عُمان.";
+    description = "تعرف على تفاصيل " + productLabel + " واطلب المواصفات الفنية والسعر والتوافر من الصفوة للتجارة في نزوى، سلطنة عُمان.";
   } else if (route.startsWith("/brands/")) {
     const brandName = title.split(" Products")[0];
     title = "منتجات " + brandName + " | الصفوة للتجارة";
