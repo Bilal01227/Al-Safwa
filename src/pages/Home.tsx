@@ -197,7 +197,7 @@ export default function Home() {
                       <p className="mt-2 text-sm leading-relaxed text-smoke line-clamp-2">{c.blurb}</p>
                       <div className="mt-4 flex items-center justify-between border-t border-ink/10 pt-3 font-mono text-[11px] uppercase tracking-[0.14em]">
                         <span className="text-smoke">
-                          {count} {isRental ? "fleet classes" : "items"}
+                          {isRental ? `${count} fleet classes` : count === 0 ? "Source on request" : `${count} items`}
                         </span>
                         <IcArrowUpRight
                           width={16}
