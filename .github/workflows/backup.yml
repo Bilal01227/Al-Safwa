@@ -79,6 +79,7 @@ jobs:
           tar --create --gzip --file="$RUNNER_TEMP/al-safwa-db-backup.tar.gz" -C "$work_dir" roles.sql schema.sql data.sql backup-info.txt
 
       - name: Encrypt backup before it leaves the runner
+        id: encrypt
         if: steps.config.outputs.ready == 'true'
         shell: bash
         run: |
@@ -88,7 +89,7 @@ jobs:
           test -s "$encrypted"
           sha256sum "$encrypted" > "$encrypted.sha256"
           rm -f "$RUNNER_TEMP/al-safwa-db-backup.tar.gz"
-          echo "ENCRYPTED_BACKUP=$encrypted" >> "$GITHUB_ENV"
+          echo "path=$encrypted" >> "$GITHUB_OUTPUT"
 
       - name: Upload encrypted backup artifact only
         if: steps.config.outputs.ready == 'true'
@@ -96,7 +97,7 @@ jobs:
         with:
           name: al-safwa-encrypted-db-backup-${{ github.run_id }}
           path: |
-            ${{ env.ENCRYPTED_BACKUP }}
+            ${{ steps.encrypt.outputs.path }}
             ${{ env.ENCRYPTED_BACKUP }}.sha256
           if-no-files-found: error
           retention-days: 30
