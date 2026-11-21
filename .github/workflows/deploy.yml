@@ -115,6 +115,10 @@ jobs:
           test -f dist/ar/repair/index.html
           test -f dist/ar/request-quote/index.html
           test -f dist/ar/contact/index.html
+          test -s dist/images/catalogue-qr.svg
+          ! grep -Fq "PATH_PLACEHOLDER" dist/images/catalogue-qr.svg
+          grep -Fq "https://alsafwaoman.com/products/" dist/images/catalogue-qr.svg
+          grep -Fq '<path d="M' dist/images/catalogue-qr.svg
           test -f dist/sitemap.xml
           test -f dist/robots.txt
           grep -q 'wdxjlfxepiqvklxlxwkw.supabase.co' dist/assets/*.js
@@ -176,6 +180,13 @@ jobs:
           grep -Fq '/products/texmo-motors-tspp-2-0-swimming-pool-pump-tspp-2-0/' "$sitemap"
           grep -Fq '/products/makita-4100nh-marble-cutter/' "$sitemap"
           rm -f "$sitemap"
+          qr="$(mktemp)"
+          curl --fail --show-error --silent --location --retry 6 --retry-all-errors --retry-delay 5 --max-time 30 \
+            https://alsafwaoman.com/images/catalogue-qr.svg -o "$qr"
+          ! grep -Fq "PATH_PLACEHOLDER" "$qr"
+          grep -Fq "https://alsafwaoman.com/products/" "$qr"
+          grep -Fq '<path d="M' "$qr"
+          rm -f "$qr"
           robots="$(mktemp)"
           curl --fail --show-error --silent --location --retry 6 --retry-all-errors --retry-delay 5 --max-time 30 \
             https://alsafwaoman.com/robots.txt -o "$robots"
