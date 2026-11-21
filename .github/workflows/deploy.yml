@@ -61,14 +61,18 @@ jobs:
           ! grep -q 'rel="canonical"' dist/404.html
           test -d dist/assets
           test -f dist/products/index.html
-          # Regression guard for the exact product URL reported with a 5xx in Search Console.
-          PRODUCT_ROUTE="products/texmo-motors-tspp-2-0-swimming-pool-pump-tspp-2-0"
-          test -s "dist/$PRODUCT_ROUTE/index.html"
-          grep -Fq 'rel="canonical" href="https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/"' "dist/$PRODUCT_ROUTE/index.html"
-          grep -Fq 'Swimming Pool Pump TSPP 2.0' "dist/$PRODUCT_ROUTE/index.html"
+          # Regression guards for both product URLs reported in Search Console.
+          TEXMO_ROUTE="products/texmo-motors-tspp-2-0-swimming-pool-pump-tspp-2-0"
+          MAKITA_ROUTE="products/makita-4100nh-marble-cutter"
+          for PRODUCT_ROUTE in "$TEXMO_ROUTE" "$MAKITA_ROUTE"; do
+            test -s "dist/$PRODUCT_ROUTE/index.html"
+            grep -Fq 'rel="canonical" href="https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/"' "dist/$PRODUCT_ROUTE/index.html"
+            grep -Fq '<loc>https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/' "dist/sitemap.xml"
+          done
+          grep -Fq 'Swimming Pool Pump TSPP 2.0' "dist/$TEXMO_ROUTE/index.html"
+          grep -Fq 'Makita 4100NH Marble Cutter' "dist/$MAKITA_ROUTE/index.html"
           # BreadcrumbList is emitted by the product-detail runtime after route data loads.
-          ! grep -Fq '"@type":"Product"' "dist/$PRODUCT_ROUTE/index.html"
-          grep -Fq '<loc>https://alsafwaoman.com/'"$PRODUCT_ROUTE"'/' "dist/sitemap.xml"
+          ! grep -Fq '"@type":"Product"' "dist/$TEXMO_ROUTE/index.html"
           test -f dist/brands/index.html
           test -f dist/rental/index.html
           test -f dist/services/index.html
@@ -110,3 +114,19 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify live product URLs after deployment
+        run: |
+          set -eu
+          for path in \
+            /products/makita-4100nh-marble-cutter/ \
+            /products/texmo-motors-tspp-2-0-swimming-pool-pump-tspp-2-0/; do
+            output="$(mktemp)"
+            curl --fail --show-error --silent --location \
+              --retry 6 --retry-all-errors --retry-delay 5 --max-time 30 \
+              "https://alsafwaoman.com$path" -o "$output"
+            grep -qi '<title>' "$output"
+            grep -qi 'rel="canonical"' "$output"
+            rm -f "$output"
+            echo "HTTP 200 verified: $path"
+          done
+
